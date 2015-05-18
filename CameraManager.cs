@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SarcusImaging
 {
+    //
+    // Camera manager class
+    //
     class CameraManager
     {
         private static CameraManager instance;
