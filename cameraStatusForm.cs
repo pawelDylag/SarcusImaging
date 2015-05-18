@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SarcusImaging
 {
-    public partial class cameraStatusForm : Form
+    public partial class CameraStatusForm : Form
     {
-        public cameraStatusForm()
+        public CameraStatusForm()
         {
             InitializeComponent();
         }
@@ -21,5 +21,36 @@ namespace SarcusImaging
         {
 
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonExpose_Click(object sender, EventArgs e)
+        {
+            CameraManager.Instance.manualExpose(0.001, false);
+            while (!CameraManager.Instance.hasNewImage()) { }
+            Bitmap image = CameraManager.Instance.getImage();
+            SingleImageForm singleImageForm = new SingleImageForm(image);
+            singleImageForm.Show();
+
+        }
+
+        private void buttonGetImage_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

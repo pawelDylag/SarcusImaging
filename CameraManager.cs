@@ -1,6 +1,8 @@
 ﻿using APOGEELib;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +40,10 @@ namespace SarcusImaging
             }
         }
 
+        /// <summary>
+        /// Shows connect camera dialog and returns if camera was selected or not
+        /// </summary>
+        /// <returns></returns>
         public bool showCameraSelectionDialog() {
             bool result = false;
             if (cameraFinder != null)
@@ -52,6 +58,7 @@ namespace SarcusImaging
                     // if user selected valid camera
                     System.Diagnostics.Debug.WriteLine("Succesfully selected camera");
                     camera.Init(cameraFinder.SelectedInterface, cameraFinder.SelectedCamIdOne, cameraFinder.SelectedCamIdTwo, 0);
+                    System.Diagnostics.Debug.WriteLine(camera.ToString());
                     result = true;
                 }
                 else
@@ -66,7 +73,34 @@ namespace SarcusImaging
         {
             // TO DO
         }
-          
+
+        public void manualExpose(Double time, bool light)
+        {
+            System.Diagnostics.Debug.WriteLine( "Exposing manually camera (time: " + time + ", light: " + light);
+            camera.Expose(time, light);
+        }
+
+        public bool hasNewImage()
+        {
+            return camera.ImagingStatus == APOGEELib.Apn_Status.Apn_Status_ImageReady;
+        }
+
+        /// <summary>
+        /// Gets image from camera, and returns bitmap
+        /// </summary>
+        /// <returns></returns>
+        public Bitmap getImage()
+        {
+            System.Diagnostics.Debug.WriteLine("Getting camera image...");
+            int imgXSize = camera.ImagingColumns;
+            int imgYSize = camera.ImagingRows;
+            byte[] buffer = new byte[imgXSize * imgYSize];
+            System.Diagnostics.Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")" );
+            buffer = camera.Image;
+            MemoryStream stream = new MemoryStream(buffer);
+            Bitmap bitmap = new Bitmap(stream);
+            return bitmap;
+        }
 
     }
 }

@@ -22,3 +22,4 @@ C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\Sa
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.cameraStatusForm.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
