@@ -10,3 +10,15 @@ c:\users\paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImagin
 c:\users\paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.pdb
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SarcusImaging.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.cameraStatusForm.resources
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\bin\Debug\SarcusImaging.exe.config
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\Interop.APOGEELib.dll
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csproj.ResolveComReference.cache
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.exe
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.pdb
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\bin\Debug\SarcusImaging.exe
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\bin\Debug\SarcusImaging.pdb
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csprojResolveAssemblyReference.cache
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.SarcusImaging.resources
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.cameraStatusForm.resources
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
