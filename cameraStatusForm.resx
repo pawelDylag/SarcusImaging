@@ -117,41 +117,95 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonGetImage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="buttonGetImage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 48</value>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 41</value>
   </data>
-  <data name="buttonGetImage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 23</value>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 20</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonGetImage.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="buttonGetImage.Text" xml:space="preserve">
-    <value>Get image</value>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Exposure time</value>
   </data>
-  <data name="&gt;&gt;buttonGetImage.Name" xml:space="preserve">
-    <value>buttonGetImage</value>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
   </data>
-  <data name="&gt;&gt;buttonGetImage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;buttonGetImage.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>groupBoxCameraStatus</value>
   </data>
-  <data name="&gt;&gt;buttonGetImage.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="checkBox1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="checkBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 125</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="checkBox1.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+    <value>Yes</value>
+  </data>
+  <data name="checkBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 24</value>
+  </data>
+  <data name="checkBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="checkBox1.Text" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.Name" xml:space="preserve">
+    <value>checkBox1</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.Parent" xml:space="preserve">
+    <value>groupBoxCameraStatus</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="textBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>162, 38</value>
+  </data>
+  <data name="textBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 26</value>
+  </data>
+  <data name="textBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Name" xml:space="preserve">
+    <value>textBox1</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox1.Parent" xml:space="preserve">
+    <value>groupBoxCameraStatus</value>
+  </data>
+  <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="buttonExpose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 19</value>
+    <value>8, 157</value>
+  </data>
+  <data name="buttonExpose.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="buttonExpose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 23</value>
+    <value>282, 35</value>
   </data>
   <data name="buttonExpose.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -169,19 +223,25 @@
     <value>groupBoxCameraStatus</value>
   </data>
   <data name="&gt;&gt;buttonExpose.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="groupBoxCameraStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>18, 18</value>
+  </data>
+  <data name="groupBoxCameraStatus.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
+  </data>
+  <data name="groupBoxCameraStatus.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="groupBoxCameraStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 82</value>
+    <value>300, 202</value>
   </data>
   <data name="groupBoxCameraStatus.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="groupBoxCameraStatus.Text" xml:space="preserve">
-    <value>Manual camera actions:</value>
+    <value>Manual expose</value>
   </data>
   <data name="&gt;&gt;groupBoxCameraStatus.Name" xml:space="preserve">
     <value>groupBoxCameraStatus</value>
@@ -199,10 +259,13 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>9, 20</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>224, 550</value>
+    <value>336, 846</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Camera status</value>

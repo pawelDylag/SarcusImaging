@@ -29,11 +29,11 @@ namespace SarcusImaging
         //
         public static CameraManager Instance
         {
-            get 
+            get
             {
                 if (instance == null)
                 {
-                    instance =  new CameraManager();
+                    instance = new CameraManager();
                 }
                 return instance;
 
@@ -44,11 +44,11 @@ namespace SarcusImaging
         /// Shows connect camera dialog and returns if camera was selected or not
         /// </summary>
         /// <returns></returns>
-        public bool showCameraSelectionDialog() {
+        public bool showCameraSelectionDialog()
+        {
             bool result = false;
             if (cameraFinder != null)
             {
-                cameraFinder.DlgCheckEthernet = true;
                 cameraFinder.DlgCheckUsb = true;
                 cameraFinder.DlgTitleBarText = "Select camera device";
                 System.Diagnostics.Debug.WriteLine("Showing camera selection dialog");
@@ -57,6 +57,9 @@ namespace SarcusImaging
                 {
                     // if user selected valid camera
                     System.Diagnostics.Debug.WriteLine("Succesfully selected camera");
+                    System.Diagnostics.Debug.WriteLine("SelectedInterface: " + cameraFinder.SelectedInterface.ToString());
+                    System.Diagnostics.Debug.WriteLine("SelectedCamIdOne: " + cameraFinder.SelectedCamIdOne.ToString());
+                    System.Diagnostics.Debug.WriteLine("SelectedCamIdTwo: " + cameraFinder.SelectedCamIdTwo.ToString());
                     camera.Init(cameraFinder.SelectedInterface, cameraFinder.SelectedCamIdOne, cameraFinder.SelectedCamIdTwo, 0);
                     System.Diagnostics.Debug.WriteLine(camera.ToString());
                     result = true;
@@ -76,7 +79,7 @@ namespace SarcusImaging
 
         public void manualExpose(Double time, bool light)
         {
-            System.Diagnostics.Debug.WriteLine( "Exposing manually camera (time: " + time + ", light: " + light);
+            System.Diagnostics.Debug.WriteLine("Exposing manually camera (time: " + time + ", light: " + light);
             camera.Expose(time, light);
         }
 
@@ -92,15 +95,37 @@ namespace SarcusImaging
         public Bitmap getImage()
         {
             System.Diagnostics.Debug.WriteLine("Getting camera image...");
-            int imgXSize = camera.ImagingColumns;
-            int imgYSize = camera.ImagingRows;
-            byte[] buffer = new byte[imgXSize * imgYSize];
-            System.Diagnostics.Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")" );
-            buffer = camera.Image;
-            MemoryStream stream = new MemoryStream(buffer);
-            Bitmap bitmap = new Bitmap(stream);
-            return bitmap;
+            long imgXSize = camera.ImagingColumns;
+            long imgYSize = camera.ImagingRows;
+            long[] imgSize = new long[2] { imgXSize, imgYSize };
+            System.Diagnostics.Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")");
+            Array array = Array.CreateInstance(typeof(short), imgSize);
+            array = camera.Image;
+            System.Diagnostics.Debug.WriteLine("Image array lenght: " + array.Length);
+            System.Collections.IEnumerator enumerator = array.GetEnumerator();
+            enumerator.MoveNext();
+            System.Diagnostics.Debug.WriteLine("First pixel: " + enumerator.Current);
+            enumerator.MoveNext();
+            System.Diagnostics.Debug.WriteLine("Second pixel: " + enumerator.Current);
+
+            Bitmap bm = new Bitmap((int)imgXSize, (int)imgYSize, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
+            System.Drawing.Imaging.ColorPalette palette = bm.Palette;
+            for (int i = 0; i < 256; i++ )
+            {
+                
+            }
+            for (int i = array.GetLowerBound(0); i < array.GetUpperBound(0); i++)
+            {
+                for (int j = array.GetLowerBound(1); j < array.GetUpperBound(1); j++)
+                {
+                    int value = (int)(short)array.GetValue(i, j);
+                    Color c = palette.Entries[value];
+                    bm.SetPixel(i, j, c);
+                }
+            }
+            return bm;
         }
 
     }
+        
 }

@@ -39,15 +39,34 @@ namespace SarcusImaging
 
         private void buttonExpose_Click(object sender, EventArgs e)
         {
-            CameraManager.Instance.manualExpose(0.001, false);
+            double exposeTime = Double.Parse(textBox1.Text);
+            bool withLights = checkBox1.Checked;
+            System.Diagnostics.Debug.WriteLine("Exposing with time: " + exposeTime + ", with lights: " + withLights);
+            CameraManager.Instance.manualExpose(exposeTime, withLights);
             while (!CameraManager.Instance.hasNewImage()) { }
-            Bitmap image = CameraManager.Instance.getImage();
-            SingleImageForm singleImageForm = new SingleImageForm(image);
+            System.Diagnostics.Debug.WriteLine("Got new image");
+            Bitmap img = CameraManager.Instance.getImage();
+            SingleImageForm singleImageForm = new SingleImageForm(img);
             singleImageForm.Show();
 
         }
 
         private void buttonGetImage_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }

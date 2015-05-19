@@ -30,26 +30,23 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraStatusForm));
             this.groupBoxCameraStatus = new System.Windows.Forms.GroupBox();
-            this.buttonGetImage = new System.Windows.Forms.Button();
             this.buttonExpose = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBoxCameraStatus.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxCameraStatus
             // 
-            this.groupBoxCameraStatus.Controls.Add(this.buttonGetImage);
+            this.groupBoxCameraStatus.Controls.Add(this.label1);
+            this.groupBoxCameraStatus.Controls.Add(this.checkBox1);
+            this.groupBoxCameraStatus.Controls.Add(this.textBox1);
             this.groupBoxCameraStatus.Controls.Add(this.buttonExpose);
             resources.ApplyResources(this.groupBoxCameraStatus, "groupBoxCameraStatus");
             this.groupBoxCameraStatus.Name = "groupBoxCameraStatus";
             this.groupBoxCameraStatus.TabStop = false;
             this.groupBoxCameraStatus.Enter += new System.EventHandler(this.groupBox1_Enter);
-            // 
-            // buttonGetImage
-            // 
-            resources.ApplyResources(this.buttonGetImage, "buttonGetImage");
-            this.buttonGetImage.Name = "buttonGetImage";
-            this.buttonGetImage.UseVisualStyleBackColor = true;
-            this.buttonGetImage.Click += new System.EventHandler(this.buttonGetImage_Click);
             // 
             // buttonExpose
             // 
@@ -57,6 +54,25 @@
             this.buttonExpose.Name = "buttonExpose";
             this.buttonExpose.UseVisualStyleBackColor = true;
             this.buttonExpose.Click += new System.EventHandler(this.buttonExpose_Click);
+            // 
+            // textBox1
+            // 
+            resources.ApplyResources(this.textBox1, "textBox1");
+            this.textBox1.Name = "textBox1";
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // checkBox1
+            // 
+            resources.ApplyResources(this.checkBox1, "checkBox1");
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            this.label1.Click += new System.EventHandler(this.label1_Click_2);
             // 
             // CameraStatusForm
             // 
@@ -66,6 +82,7 @@
             this.Name = "CameraStatusForm";
             this.Load += new System.EventHandler(this.cameraStatusForm_Load);
             this.groupBoxCameraStatus.ResumeLayout(false);
+            this.groupBoxCameraStatus.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -74,7 +91,9 @@
 
         private System.Windows.Forms.GroupBox groupBoxCameraStatus;
         private System.Windows.Forms.Button buttonExpose;
-        private System.Windows.Forms.Button buttonGetImage;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox textBox1;
 
     }
 }
