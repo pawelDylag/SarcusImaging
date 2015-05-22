@@ -61,6 +61,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraManager.cs" />
+    <Compile Include="ImageConverter.cs" />
+    <Compile Include="ImageSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImageSettings.Designer.cs">
+      <DependentUpon>ImageSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +88,9 @@
     <Compile Include="SingleImageForm.Designer.cs">
       <DependentUpon>SingleImageForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ImageSettings.resx">
+      <DependentUpon>ImageSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

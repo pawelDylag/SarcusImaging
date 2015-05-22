@@ -81,7 +81,7 @@ namespace SarcusImaging
         public void manualExpose(Double time, bool light)
         {
             System.Diagnostics.Debug.WriteLine("Exposing manually camera (time: " + time + ", light: " + light);
-            camera.Expose(time, light);
+            camera.Expose(time, true);
         }
 
         public bool hasNewImage()
@@ -93,40 +93,16 @@ namespace SarcusImaging
         /// Gets image from camera, and returns bitmap
         /// </summary>
         /// <returns></returns>
-        public Bitmap getSingleImage()
+        public ushort[] getSingleImage()
         {
-            System.Diagnostics.Debug.WriteLine("Getting camera image...");
+            System.Diagnostics.Debug.WriteLine("GetSingleImage()");
             long imgXSize = camera.ImagingColumns;
             long imgYSize = camera.ImagingRows;
             System.Diagnostics.Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")");
             // get raw data array from camera
-            ushort[] pixels = getImageToMemory(imgXSize, imgYSize);
-            System.Diagnostics.Debug.WriteLine("Image array lenght: " + pixels.Length);
-            byte[] pixelsByte = convertShortToByte(pixels, imgXSize, imgYSize);
-            Bitmap bitmap = generateBitmap(pixelsByte, imgXSize, imgYSize);
-            return bitmap;
-        }
-
-        public Bitmap getDebugImage(int x, int y)
-        {
-            int width = x;
-            int height = y;
-            System.Diagnostics.Debug.WriteLine("Getting debug camera image...");
-            System.Diagnostics.Debug.WriteLine("Image size = (" + width + "*" + height + ")");
-            byte[] pixels = generateRandom16BitArray(width, height);
-            byte[] pixelsForDisplay = Convert16BitGrayScaleToRgb48(pixels, width, height);
-            return generateBitmap(pixelsForDisplay, width, height);
-        }
-
-        private Bitmap generateBitmap(byte[] pixels, long width, long height)
-        {
-            Bitmap bitmap = new Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format48bppRgb);
-            Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            IntPtr pixelStartAddress = picData.Scan0;
-            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, pixelStartAddress, pixels.Length);
-            bitmap.UnlockBits(picData);
-            return bitmap;
+            ushort[] image = getImageToMemory(imgXSize, imgYSize);
+            System.Diagnostics.Debug.WriteLine("Image array lenght: " + image.Length);
+            return image;
         }
 
         /// <summary>
@@ -153,77 +129,33 @@ namespace SarcusImaging
                 // long ptrValue = (long)ptr;
                 // camera.GetImage(ptrValue);
             }
+
             return pixels;
         }
 
         /// <summary>
-        /// Generates random byte[] array.
+        /// Returns number of pixels in a row
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
         /// <returns></returns>
-        public byte[] generateRandom16BitArray(int width, int height)
+        public int getImagingRows()
         {
-            Random r = new Random();
-            byte[] pixels = new byte[width * height * 2];
-            for (int i = 0; i < pixels.Length; ++i)
-            {
-                byte value = (byte)r.Next(0, 256);
-                pixels[i] = value;
-            }
-            return pixels; 
+            return (int)camera.ImagingRows;
         }
 
         /// <summary>
-        /// Converts 16 bit Greyscale image to 48bit RGB for display.
+        /// Returns numer of pixels in a column
         /// </summary>
-        /// <param name="inBuffer"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
         /// <returns></returns>
-        private static byte[] Convert16BitGrayScaleToRgb48(byte[] inBuffer, int width, int height)
+        public int getImagingColumns()
         {
-            int inBytesPerPixel = 2;
-            int outBytesPerPixel = 6;
-
-            byte[] outBuffer = new byte[width * height * outBytesPerPixel];
-            int inStep = width * inBytesPerPixel;
-            int outStep = width * outBytesPerPixel;
-
-            // Step through the image by row  
-            for (int y = 0; y < height; y++)
-            {
-                // Step through the image by column  
-                for (int x = 0; x < width; x++)
-                {
-                    // Get inbuffer index and outbuffer index 
-                    int inIndex = (y * inStep) + (x * inBytesPerPixel);
-                    int outIndex = (y * outStep) + (x * outBytesPerPixel);
-
-                    byte hibyte = inBuffer[inIndex + 1];
-                    byte lobyte = inBuffer[inIndex];
-
-                    //R
-                    outBuffer[outIndex] = lobyte;
-                    outBuffer[outIndex + 1] = hibyte;
-
-                    //G
-                    outBuffer[outIndex + 2] = lobyte;
-                    outBuffer[outIndex + 3] = hibyte;
-
-                    //B
-                    outBuffer[outIndex + 4] = lobyte;
-                    outBuffer[outIndex + 5] = hibyte;
-                }
-            }
-            return outBuffer;
+            return (int)camera.ImagingColumns ;
         }
 
-        private static byte[] convertShortToByte(ushort[] pixels, long width, long height)
-        {
-            byte[] result = new byte[width * height * 2];
-            return result;
-        }
+
+
+
+
+    
 
     }
         

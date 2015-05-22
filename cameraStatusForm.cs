@@ -12,6 +12,7 @@ namespace SarcusImaging
 {
     public partial class CameraStatusForm : Form
     {
+
         public CameraStatusForm()
         {
             InitializeComponent();
@@ -42,11 +43,10 @@ namespace SarcusImaging
             double exposeTime = Double.Parse(textBox1.Text);
             bool withLights = checkBox1.Checked;
             System.Diagnostics.Debug.WriteLine("Exposing with time: " + exposeTime + ", with lights: " + withLights);
-            //CameraManager.Instance.manualExpose(exposeTime, withLights);
-            // while (!CameraManager.Instance.hasNewImage()) { }
+            CameraManager.Instance.manualExpose(exposeTime, withLights);
+            while (!CameraManager.Instance.hasNewImage()) { }
             System.Diagnostics.Debug.WriteLine("Got new image");
-            //Bitmap img = CameraManager.Instance.getImage();
-            Bitmap img = CameraManager.Instance.getDebugImage(512, 512);
+            ushort[] img = CameraManager.Instance.getSingleImage();
             SingleImageForm singleImageForm = new SingleImageForm(img);
             singleImageForm.Show();
 
