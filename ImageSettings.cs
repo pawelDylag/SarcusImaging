@@ -33,7 +33,7 @@ namespace SarcusImaging
             image = CameraManager.Instance.getSingleImage();
             int width = CameraManager.Instance.getImagingRows();
             int height = CameraManager.Instance.getImagingColumns();
-            Bitmap bitmap = ImageConverter.convertArrayToBitmap(image, width, height, offsetValue);
+            Bitmap bitmap = ImageProcessor.convertArrayToBitmap(image, width, height, offsetValue);
             imageForm.showBitmap(bitmap);
         }
     }

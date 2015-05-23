@@ -32,9 +32,7 @@
             this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemCamera = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCameraLoad = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCameraOptions = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCameraStatus = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,41 +59,24 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.aboutToolStripMenuItem.Text = "New";
             // 
             // menuItemCamera
             // 
             this.menuItemCamera.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCameraLoad,
-            this.menuCameraOptions,
-            this.menuCameraStatus});
+            this.menuCameraOptions});
             this.menuItemCamera.Name = "menuItemCamera";
             this.menuItemCamera.Size = new System.Drawing.Size(60, 20);
             this.menuItemCamera.Text = "Camera";
             this.menuItemCamera.Click += new System.EventHandler(this.aboutToolStripMenuItem1_Click);
             // 
-            // menuCameraLoad
-            // 
-            this.menuCameraLoad.Name = "menuCameraLoad";
-            this.menuCameraLoad.Size = new System.Drawing.Size(152, 22);
-            this.menuCameraLoad.Text = "Load";
-            this.menuCameraLoad.Click += new System.EventHandler(this.loadCameraToolStripMenuItem_Click);
-            // 
             // menuCameraOptions
             // 
-            this.menuCameraOptions.Enabled = false;
             this.menuCameraOptions.Name = "menuCameraOptions";
             this.menuCameraOptions.Size = new System.Drawing.Size(152, 22);
-            this.menuCameraOptions.Text = "Options";
-            // 
-            // menuCameraStatus
-            // 
-            this.menuCameraStatus.Enabled = false;
-            this.menuCameraStatus.Name = "menuCameraStatus";
-            this.menuCameraStatus.Size = new System.Drawing.Size(152, 22);
-            this.menuCameraStatus.Text = "Status";
-            this.menuCameraStatus.Click += new System.EventHandler(this.showStatusToolStripMenuItem_Click);
+            this.menuCameraOptions.Text = "Control Panel";
+            this.menuCameraOptions.Click += new System.EventHandler(this.menuCameraOptions_Click);
             // 
             // SarcusImaging
             // 
@@ -120,9 +101,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuFile;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuItemCamera;
-        private System.Windows.Forms.ToolStripMenuItem menuCameraLoad;
         private System.Windows.Forms.ToolStripMenuItem menuCameraOptions;
-        private System.Windows.Forms.ToolStripMenuItem menuCameraStatus;
     }
 }
 

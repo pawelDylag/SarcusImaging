@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SarcusImaging
 {
-    static class ImageConverter
+    static class ImageProcessor
     {
 
         public static Bitmap generateBitmap(byte[] pixels, long width, long height)

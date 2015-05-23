@@ -21,8 +21,8 @@ namespace SarcusImaging
             this.image = img;
             int width = CameraManager.Instance.getImagingRows();
             int height = CameraManager.Instance.getImagingColumns();
-            ushort offset = ImageConverter.getUshortMinValue(image);
-            Bitmap bitmap = ImageConverter.convertArrayToBitmap(image, width, height, offset);
+            ushort offset = ImageProcessor.getUshortMinValue(image);
+            Bitmap bitmap = ImageProcessor.convertArrayToBitmap(image, width, height, offset);
             boxPicture.Image = bitmap;
             Form settingsForm = new ImageSettings(this);
             settingsForm.Show();

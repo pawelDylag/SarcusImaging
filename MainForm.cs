@@ -41,25 +41,24 @@ namespace SarcusImaging
 
         private void loadCameraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CameraManager cameraManager = CameraManager.Instance;
-            if (cameraManager.showCameraSelectionDialog())
-            {
-                menuCameraOptions.Enabled = true;
-                menuCameraStatus.Enabled = true;
-            }
-            else menuCameraStatus.Enabled = true; ;
+          
         }
 
         private void showStatusToolStripMenuItem_Click(object sender, EventArgs e)
         {
-             CameraStatusForm cameraStatusForm = new CameraStatusForm();
-             cameraStatusForm.MdiParent = this;
-             cameraStatusForm.Show();
+
         }
 
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void menuCameraOptions_Click(object sender, EventArgs e)
+        {
+            CameraControlPanel cameraStatusForm = new CameraControlPanel();
+            cameraStatusForm.MdiParent = this;
+            cameraStatusForm.Show();
         }
     }
 }

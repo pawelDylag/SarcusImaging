@@ -19,6 +19,19 @@ namespace SarcusImaging
         private ICamDiscover cameraFinder;
         private ICamera2 camera;
 
+        public static readonly String STATUS_NOT_CONNECTED = "Not connected";
+        public static readonly String STATUS_CONNECTED = "Connected";
+        
+        public static readonly int LED_A = 0;
+        public static readonly int LED_B = 1;
+
+        public static readonly int DIGITIZATION_NORMAL = 0;
+        public static readonly int DIGITIZATION_FAST = 1;
+
+
+        /// <summary>
+        /// Private constructor to avoid creating copies of this class
+        /// </summary>
         private CameraManager()
         {
             cameraFinder = new CamDiscover();
@@ -51,7 +64,6 @@ namespace SarcusImaging
             if (cameraFinder != null)
             {
                 cameraFinder.DlgCheckUsb = true;
-                cameraFinder.DlgTitleBarText = "Select camera device";
                 System.Diagnostics.Debug.WriteLine("Showing camera selection dialog");
                 cameraFinder.ShowDialog(true);
                 if (cameraFinder.ValidSelection)
@@ -59,8 +71,6 @@ namespace SarcusImaging
                     // if user selected valid camera
                     System.Diagnostics.Debug.WriteLine("Succesfully selected camera");
                     System.Diagnostics.Debug.WriteLine("SelectedInterface: " + cameraFinder.SelectedInterface.ToString());
-                    System.Diagnostics.Debug.WriteLine("SelectedCamIdOne: " + cameraFinder.SelectedCamIdOne.ToString());
-                    System.Diagnostics.Debug.WriteLine("SelectedCamIdTwo: " + cameraFinder.SelectedCamIdTwo.ToString());
                     camera.Init(cameraFinder.SelectedInterface, cameraFinder.SelectedCamIdOne, cameraFinder.SelectedCamIdTwo, 0);
                     System.Diagnostics.Debug.WriteLine(camera.ToString());
                     result = true;
@@ -73,21 +83,78 @@ namespace SarcusImaging
             return result;
         }
 
-        public void createDummyCamera()
-        {
-            // TO DO
-        }
-
+        /// <summary>
+        /// Manually exposes camera for time and in LIGHT or DARK mode
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="light"></param>
         public void manualExpose(Double time, bool light)
         {
             System.Diagnostics.Debug.WriteLine("Exposing manually camera (time: " + time + ", light: " + light);
-            camera.Expose(time, true);
+            camera.Expose(time, light);
         }
 
+        /// <summary>
+        /// Checks if camera has new Image to upload
+        /// </summary>
+        /// <returns></returns>
         public bool hasNewImage()
         {
             return camera.ImagingStatus == APOGEELib.Apn_Status.Apn_Status_ImageReady;
         }
+
+        /// <summary>
+        /// Returns camera imaging status
+        /// </summary>
+        /// <returns></returns>
+        public Apn_Status getCameraImagingStatus()
+        {
+            return camera.ImagingStatus;
+        }
+
+        /// <summary>
+        /// Returns camera imaging status string for UI.
+        /// </summary>
+        /// <returns></returns>
+        public String getCameraImagingStatusString()
+        {
+            String result = "";
+            Apn_Status status = getCameraImagingStatus();
+            switch (status)
+            {
+                case Apn_Status.Apn_Status_ConnectionError:
+                    result = "Connection error";
+                    break;
+                case Apn_Status.Apn_Status_DataError:
+                    result = "Data error";
+                    break;
+                case Apn_Status.Apn_Status_Exposing:
+                    result = "Exposing";
+                    break;
+                case Apn_Status.Apn_Status_Flushing:
+                    result = "Flushing";
+                    break;
+                case Apn_Status.Apn_Status_Idle:
+                    result = "Idle";
+                    break;
+                case Apn_Status.Apn_Status_ImageReady:
+                    result = "Image ready";
+                    break;
+                case Apn_Status.Apn_Status_ImagingActive:
+                    result = "Imaging active";
+                    break;
+                case Apn_Status.Apn_Status_PatternError:
+                    result = "Pattern error";
+                    break;
+                case Apn_Status.Apn_Status_WaitingOnTrigger:
+                    result = "Waiting for trigger";
+                    break;
+            }
+            return result;
+        }
+
+
+
 
         /// <summary>
         /// Gets image from camera, and returns bitmap
@@ -111,7 +178,7 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public unsafe ushort[] getImageToMemory(long width, long height)
+        private unsafe ushort[] getImageToMemory(long width, long height)
         {
             // Allocating array of image size (width * height)
             // where pixel is size of unsigned int (4 BYTES)
@@ -151,9 +218,104 @@ namespace SarcusImaging
             return (int)camera.ImagingColumns ;
         }
 
+        /// <summary>
+        /// Returns camera model String fromc camera Discover.
+        /// If no camera is selected, method returns "no model"
+        /// </summary>
+        /// <returns></returns>
+        public String getCameraModelInfo()
+        {
+            String result = "";
+            if (cameraFinder != null)
+            {
+                result = cameraFinder.SelectedModel;
+                if (result == null || result == "")
+                {
+                    result = "No Model";
+                }
+            }
+            return result;
+        }
 
+        /// <summary>
+        /// Returns camera connection status string.
+        /// </summary>
+        /// <returns></returns>
+        public String getCameraConnectionStatus()
+        {
+            String result = STATUS_NOT_CONNECTED;
+            if (isCameraConnected())
+            {
+                result = STATUS_CONNECTED;
+            }
+            return result;
+        }
 
+        /// <summary>
+        /// Returns camera connection status string.
+        /// </summary>
+        /// <returns></returns>
+        public bool isCameraConnected()
+        {
+            bool result = false;
+            if (cameraFinder != null && cameraFinder.ValidSelection)
+            {
+                System.Diagnostics.Debug.WriteLine("isCameraConnected(): " + cameraFinder.SelectedInterface);
+                result = true;
+            }
+            return result;
+        }
 
+        /// <summary>
+        /// Sets LED mode of camera
+        /// </summary>
+        /// <param name="ledMode"></param>
+        public void setLedMode(Apn_LedMode ledMode)
+        {
+            if (camera != null && isCameraConnected())
+            {
+                camera.LedMode = ledMode;
+            }
+        }
+
+        /// <summary>
+        /// Sets given led to state. Id is selected from CameraManager.LED_A  or LED_B
+        /// </summary>
+        /// <param name="ledId"></param>
+        /// <param name="state"></param>
+        public void setLedState(int ledId, Apn_LedState state)
+        {
+            if (ledId == LED_A)
+            {
+                camera.LedA = state;
+            }
+            else camera.LedB = state;
+        }
+
+        /// <summary>
+        /// Sets camera mode for one from Apn_CameraMode
+        /// </summary>
+        /// <param name="mode"></param>
+        public void setCameraMode(Apn_CameraMode mode)
+        {
+            if (camera != null && isCameraConnected())
+            {
+                camera.CameraMode = mode;
+            }
+        }
+
+        /// <summary>
+        /// Sets digitization speed CameraManager.DIGITIZATION_NORMAL or FAST
+        /// </summary>
+        /// <param name="value"></param>
+        public void setDigitizationSpeed(int value)
+        {
+            if (camera != null && isCameraConnected())
+            {
+                if (value == DIGITIZATION_FAST || value == DIGITIZATION_NORMAL)
+                camera.DigitizationSpeed = value;
+            }
+        }
 
     
 
