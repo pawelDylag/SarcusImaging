@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace SarcusImaging
 {
     public partial class CameraControlPanel : Form
     {
+
+        public static CameraControlPanel openedWindow = null;
 
         public CameraControlPanel()
         {
@@ -25,27 +28,45 @@ namespace SarcusImaging
         }
 
         /// <summary>
+        /// This method ensures that only one dialog is opened at given time
+        /// </summary>
+        public void ShowForm()
+        {
+             if (openedWindow != null)
+            {
+                openedWindow.BringToFront();
+            }
+            else
+            {
+            openedWindow = new CameraControlPanel();
+            openedWindow.Show();
+            }
+        }
+
+        /// <summary>
         /// Locks tabs when camera is not selected
         /// </summary>
         /// <param name="locked"></param>
         private void lockTabs(bool locked){
-            TabPage temperaturePage = tabControlPanel.TabPages[1];
-            TabPage sequencePage = tabControlPanel.TabPages[2];
+            TabPage shutterPage = tabControlPanel.TabPages[1];
+            TabPage imagePage = tabControlPanel.TabPages[2];
+            TabPage exposePage = tabControlPanel.TabPages[3];
             if (locked)
             {
-                temperaturePage.Enabled = false;
-                sequencePage.Enabled = false;
+                shutterPage.Enabled = false;
+                imagePage.Enabled = false;
                 groupBoxLeds.Enabled = false;
-                groupBoxShutter.Enabled = false;
-                groupBoxDigitization.Enabled = false;
+                exposePage.Enabled = false;
+                groupBoxTemperature.Enabled = false;
             }
             else
             {
-                temperaturePage.Enabled = true;
-                sequencePage.Enabled = true;
+                shutterPage.Enabled = true;
+                imagePage.Enabled = true;
                 groupBoxLeds.Enabled = true;
-                groupBoxShutter.Enabled = true;
-                groupBoxDigitization.Enabled = true;
+                exposePage.Enabled = true;
+                groupBoxTemperature.Enabled = true;
+              
             }
         }
 
@@ -97,11 +118,6 @@ namespace SarcusImaging
         }
 
 
-        private void cameraStatusForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -119,17 +135,44 @@ namespace SarcusImaging
 
         private void buttonExpose_Click(object sender, EventArgs e)
         {
-            //double exposeTime = Double.Parse(textBox1.Text);
-            //bool withLights = checkBox1.Checked;
-            //System.Diagnostics.Debug.WriteLine("Exposing with time: " + exposeTime + ", with lights: " + withLights);
-            //CameraManager.Instance.manualExpose(exposeTime, withLights);
-            //while (!CameraManager.Instance.hasNewImage()) { }
-            //System.Diagnostics.Debug.WriteLine("Got new image");
-            //ushort[] img = CameraManager.Instance.getSingleImage();
-            //SingleImageForm singleImageForm = new SingleImageForm(img);
-            //singleImageForm.Show();
+            bool light = false;
+            if (radioButtonLight.Checked)
+            {
+                light = true;
+            }
+            double exposeTime = (double)numericUpDownTime.Value;
+            System.Diagnostics.Debug.WriteLine("Exposing with time: " + exposeTime + ", with lights: " + light);
+            Thread backgroundThread = new Thread(
+            new ThreadStart(() =>
+            {
+                CameraManager.Instance.manualExpose(exposeTime, light);
+                while (!CameraManager.Instance.hasNewImage())
+                {
+                    progressBarExposure.BeginInvoke(
+                        new Action(() =>
+                        {
+                            progressBarExposure.Style = ProgressBarStyle.Marquee;
+                            progressBarExposure.MarqueeAnimationSpeed = 30;
+                        }
+                    ));
+                }
+                 progressBarExposure.BeginInvoke(
+                        new Action(() =>
+                        {
+                            progressBarExposure.Style = ProgressBarStyle.Continuous;
+                        }
+                    ));
+                System.Diagnostics.Debug.WriteLine("Got new image");
+                ushort[] img = CameraManager.Instance.getSingleImage();
+                SingleImageForm singleImageForm = new SingleImageForm(img);
+                singleImageForm.Show();
+            }
+            ));
+            backgroundThread.Start();
+
         }
 
+       
         private void buttonGetImage_Click(object sender, EventArgs e)
         {
 
@@ -249,25 +292,26 @@ namespace SarcusImaging
 
         }
 
-        private void toolTip1_Popup(object sender, PopupEventArgs e)
-        {
-
-        }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            CameraManager.Instance.setCameraMode(APOGEELib.Apn_CameraMode.Apn_CameraMode_Normal);
+            CameraManager cm = CameraManager.Instance;
+            cm.setCameraMode(APOGEELib.Apn_CameraMode.Apn_CameraMode_Normal);
+            cm.setCameraTrigger(false, false);
+            groupBoxTrigger.Enabled = false;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            CameraManager.Instance.setCameraMode(APOGEELib.Apn_CameraMode.Apn_CameraMode_ExternalTrigger);
+            CameraManager.Instance.setCameraTrigger(true, false);
+            groupBoxTrigger.Enabled = true;
         }
 
         private void radioButton4_CheckedChanged_1(object sender, EventArgs e)
         {
 
         }
+
 
         private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -288,5 +332,44 @@ namespace SarcusImaging
 
         }
 
+        private void radioButtonTrgger1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonTemperature_Click(object sender, EventArgs e)
+        {
+            CameraManager.Instance.getCamera().ShowTempDialog();
+        }
+
+        private void CameraControlPanel_FormClosed(object sender, EventArgs e)
+        {
+            openedWindow = null;
+        }
+
+        private void radioButton8_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton7_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

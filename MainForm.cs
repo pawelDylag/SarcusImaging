@@ -13,6 +13,7 @@ namespace SarcusImaging
 {
     public partial class SarcusImaging : Form
     {
+
         public SarcusImaging()
         {
             InitializeComponent();
@@ -58,7 +59,31 @@ namespace SarcusImaging
         {
             CameraControlPanel cameraStatusForm = new CameraControlPanel();
             cameraStatusForm.MdiParent = this;
-            cameraStatusForm.Show();
+            cameraStatusForm.ShowForm();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void runCameraStatusUpdates()
+        {
+            CameraManager cm = CameraManager.Instance;
+            while (cm.isCameraConnected())
+            {
+                toolStripTextBoxStatus.Text = cm.getCameraImagingStatusString();
+            }
+        }
+
+        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

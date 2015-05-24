@@ -55,6 +55,15 @@ namespace SarcusImaging
         }
 
         /// <summary>
+        /// Getter of camera object
+        /// </summary>
+        /// <returns></returns>
+        public ICamera2 getCamera()
+        {
+            return this.camera;
+        }
+
+        /// <summary>
         /// Shows connect camera dialog and returns if camera was selected or not
         /// </summary>
         /// <returns></returns>
@@ -301,6 +310,39 @@ namespace SarcusImaging
             if (camera != null && isCameraConnected())
             {
                 camera.CameraMode = mode;
+            }
+        }
+        
+        /// <summary>
+        /// Sets camera trigger options.
+        /// </summary>
+        /// <param name="state">if trigger is enabled</param>
+        /// <param name="group">if enabled, then select group/singel image</param>
+        public void setCameraTrigger(bool state, bool group)
+        {
+            if (camera != null && isCameraConnected())
+            {
+                // if turned on
+                if (state)
+                {
+                    if (group)
+                    {
+                        // sets trigger to start whole sequence
+                        camera.TriggerNormalEach = false;
+                        camera.TriggerNormalGroup = true;
+                    }
+                    else
+                    {
+                        // sets trigger to start each image
+                        camera.TriggerNormalEach = true;
+                        camera.TriggerNormalGroup = false;
+                    }
+                } 
+                else
+                {
+                    camera.TriggerNormalEach = false;
+                    camera.TriggerNormalGroup = false;
+                }
             }
         }
 
