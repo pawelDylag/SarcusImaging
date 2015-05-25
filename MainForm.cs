@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using APOGEELib;
+using System.Threading;
 
 namespace SarcusImaging
 {
@@ -17,6 +18,7 @@ namespace SarcusImaging
         public SarcusImaging()
         {
             InitializeComponent();
+            runCameraStatusUpdates();
         }
 
 
@@ -75,7 +77,7 @@ namespace SarcusImaging
         private void runCameraStatusUpdates()
         {
             CameraManager cm = CameraManager.Instance;
-            while (cm.isCameraConnected())
+            while (true)
             {
                 toolStripTextBoxStatus.Text = cm.getCameraImagingStatusString();
             }

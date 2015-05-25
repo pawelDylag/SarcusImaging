@@ -69,6 +69,9 @@
             this.comboBoxDigitization = new System.Windows.Forms.ComboBox();
             this.checkBoxDigitizeOverscan = new System.Windows.Forms.CheckBox();
             this.tabPageExpose = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.progressBarExposure = new System.Windows.Forms.ProgressBar();
+            this.buttonStop = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownTime = new System.Windows.Forms.NumericUpDown();
@@ -76,9 +79,6 @@
             this.radioButtonBias = new System.Windows.Forms.RadioButton();
             this.radioButtonLight = new System.Windows.Forms.RadioButton();
             this.buttonExpose = new System.Windows.Forms.Button();
-            this.buttonStop = new System.Windows.Forms.Button();
-            this.progressBarExposure = new System.Windows.Forms.ProgressBar();
-            this.label6 = new System.Windows.Forms.Label();
             this.gtoupBoxCameraSetup.SuspendLayout();
             this.tabControlPanel.SuspendLayout();
             this.tabPageSetup.SuspendLayout();
@@ -433,6 +433,24 @@
             resources.ApplyResources(this.tabPageExpose, "tabPageExpose");
             this.tabPageExpose.Name = "tabPageExpose";
             // 
+            // label6
+            // 
+            resources.ApplyResources(this.label6, "label6");
+            this.label6.Name = "label6";
+            // 
+            // progressBarExposure
+            // 
+            resources.ApplyResources(this.progressBarExposure, "progressBarExposure");
+            this.progressBarExposure.Name = "progressBarExposure";
+            this.progressBarExposure.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBarExposure.Click += new System.EventHandler(this.progressBarExposure_Click);
+            // 
+            // buttonStop
+            // 
+            resources.ApplyResources(this.buttonStop, "buttonStop");
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label5);
@@ -493,23 +511,6 @@
             this.buttonExpose.Name = "buttonExpose";
             this.buttonExpose.UseVisualStyleBackColor = true;
             this.buttonExpose.Click += new System.EventHandler(this.buttonExpose_Click);
-            // 
-            // buttonStop
-            // 
-            resources.ApplyResources(this.buttonStop, "buttonStop");
-            this.buttonStop.Name = "buttonStop";
-            this.buttonStop.UseVisualStyleBackColor = true;
-            // 
-            // progressBarExposure
-            // 
-            resources.ApplyResources(this.progressBarExposure, "progressBarExposure");
-            this.progressBarExposure.Name = "progressBarExposure";
-            this.progressBarExposure.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            // 
-            // label6
-            // 
-            resources.ApplyResources(this.label6, "label6");
-            this.label6.Name = "label6";
             // 
             // CameraControlPanel
             // 

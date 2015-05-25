@@ -127,37 +127,39 @@ namespace SarcusImaging
         /// <returns></returns>
         public String getCameraImagingStatusString()
         {
-            String result = "";
-            Apn_Status status = getCameraImagingStatus();
-            switch (status)
-            {
-                case Apn_Status.Apn_Status_ConnectionError:
-                    result = "Connection error";
-                    break;
-                case Apn_Status.Apn_Status_DataError:
-                    result = "Data error";
-                    break;
-                case Apn_Status.Apn_Status_Exposing:
-                    result = "Exposing";
-                    break;
-                case Apn_Status.Apn_Status_Flushing:
-                    result = "Flushing";
-                    break;
-                case Apn_Status.Apn_Status_Idle:
-                    result = "Idle";
-                    break;
-                case Apn_Status.Apn_Status_ImageReady:
-                    result = "Image ready";
-                    break;
-                case Apn_Status.Apn_Status_ImagingActive:
-                    result = "Imaging active";
-                    break;
-                case Apn_Status.Apn_Status_PatternError:
-                    result = "Pattern error";
-                    break;
-                case Apn_Status.Apn_Status_WaitingOnTrigger:
-                    result = "Waiting for trigger";
-                    break;
+            String result = "No camera connected";
+            if (isCameraConnected()) {
+                Apn_Status status = getCameraImagingStatus();
+                switch (status)
+                {
+                    case Apn_Status.Apn_Status_ConnectionError:
+                        result = "Connection error";
+                        break;
+                    case Apn_Status.Apn_Status_DataError:
+                        result = "Data error";
+                        break;
+                    case Apn_Status.Apn_Status_Exposing:
+                        result = "Exposing";
+                        break;
+                    case Apn_Status.Apn_Status_Flushing:
+                        result = "Flushing";
+                        break;
+                    case Apn_Status.Apn_Status_Idle:
+                        result = "Idle";
+                        break;
+                    case Apn_Status.Apn_Status_ImageReady:
+                        result = "Image ready";
+                        break;
+                    case Apn_Status.Apn_Status_ImagingActive:
+                        result = "Imaging active";
+                        break;
+                    case Apn_Status.Apn_Status_PatternError:
+                        result = "Pattern error";
+                        break;
+                    case Apn_Status.Apn_Status_WaitingOnTrigger:
+                        result = "Waiting for trigger";
+                        break;
+                }
             }
             return result;
         }

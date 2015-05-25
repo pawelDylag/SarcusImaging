@@ -371,5 +371,10 @@ namespace SarcusImaging
         {
 
         }
+
+        private void progressBarExposure_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
