@@ -30,7 +30,7 @@ namespace SarcusImaging
         /// <summary>
         /// This method ensures that only one dialog is opened at given time
         /// </summary>
-        public void ShowForm()
+        public static void ShowForm( SarcusImaging parentForm)
         {
              if (openedWindow != null)
             {
@@ -39,6 +39,7 @@ namespace SarcusImaging
             else
             {
             openedWindow = new CameraControlPanel();
+            openedWindow.MdiParent = parentForm;
             openedWindow.Show();
             }
         }
@@ -65,6 +66,10 @@ namespace SarcusImaging
                 exposePage.Enabled = true;
                 groupBoxTemperature.Enabled = true;
                 groupBoxMode.Enabled = true;
+                comboBoxDigitization.SelectedIndex = 1;
+                comboBoxLedOptions.SelectedIndex = 0;
+                comboBoxStatusLedA.SelectedIndex = 0;
+                comboBoxStatusLedB.SelectedIndex = 0;
             }
         }
 
@@ -149,7 +154,7 @@ namespace SarcusImaging
             Thread backgroundThread = new Thread(
             new ThreadStart(() =>                       
             {
-                CameraManager.Instance.manualExpose(exposeTime, light);
+                CameraManager.Instance.startExposure(exposeTime, light);
                 progressBarExposure.BeginInvoke( new Action(() =>
                 {
                     progressBarExposure.Style = ProgressBarStyle.Marquee;
@@ -185,6 +190,7 @@ namespace SarcusImaging
             SingleImageForm singleImageForm = new SingleImageForm(image);
             openedWindow.Invoke((MethodInvoker)delegate()
             {
+                singleImageForm.MdiParent = this.MdiParent;
                 singleImageForm.Show();
             });
         }
@@ -466,7 +472,7 @@ namespace SarcusImaging
             Thread backgroundThread = new Thread(
             new ThreadStart(() =>
             {
-                CameraManager.Instance.manualExpose(exposeTime, true);
+                CameraManager.Instance.startExposure(exposeTime, true);
                 progressBarSequence.BeginInvoke(
                 new Action(() =>
                 {
@@ -474,11 +480,13 @@ namespace SarcusImaging
                     progressBarSequence.MarqueeAnimationSpeed = 60;
                 }
                  ));
-                for (int i = 0; i <= imageCount; i++)
+                while (!CameraManager.Instance.hasNewImage())
                 {
-                    while (!CameraManager.Instance.hasNewImage())
-                    { }
-                    System.Diagnostics.Debug.WriteLine("Got new image with number " + i);
+                    // WAIT FOR IMAGE 
+                }
+                while (CameraManager.Instance.hasNewImage())
+                { 
+                    System.Diagnostics.Debug.WriteLine("New image is ready!");
                     ushort[] img = CameraManager.Instance.getSingleImage();
                     showImageForm(img);
                 }

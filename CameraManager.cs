@@ -13,7 +13,6 @@ namespace SarcusImaging
     //
     // Camera manager class
     //
-    // github test
     class CameraManager
     {
         private static CameraManager instance;
@@ -22,7 +21,7 @@ namespace SarcusImaging
 
         public static readonly String STATUS_NOT_CONNECTED = "Not connected";
         public static readonly String STATUS_CONNECTED = "Connected";
-        
+
         public static readonly int LED_A = 0;
         public static readonly int LED_B = 1;
 
@@ -98,10 +97,21 @@ namespace SarcusImaging
         /// </summary>
         /// <param name="time"></param>
         /// <param name="light"></param>
-        public void manualExpose(Double time, bool light)
+        public void startExposure(Double time, bool light)
         {
             System.Diagnostics.Debug.WriteLine("Exposing manually camera (time: " + time + ", light: " + light);
             camera.Expose(time, light);
+        }
+
+        /// <summary>
+        /// Stops exposure if possible
+        /// </summary>
+        public void stopExposure()
+        {
+            if (camera != null && isCameraConnected())
+            {
+                camera.StopExposure(false);
+            }
         }
 
         /// <summary>
@@ -110,7 +120,7 @@ namespace SarcusImaging
         /// <returns></returns>
         public bool hasNewImage()
         {
-            return camera.ImagingStatus == APOGEELib.Apn_Status.Apn_Status_ImageReady;
+            return camera.ImagingStatus == Apn_Status.Apn_Status_ImageReady;
         }
 
         /// <summary>
@@ -129,7 +139,8 @@ namespace SarcusImaging
         public String getCameraImagingStatusString()
         {
             String result = "No camera connected";
-            if (isCameraConnected()) {
+            if (isCameraConnected())
+            {
                 Apn_Status status = getCameraImagingStatus();
                 switch (status)
                 {
@@ -195,7 +206,7 @@ namespace SarcusImaging
             // Allocating array of image size (width * height)
             // where pixel is size of unsigned int (4 BYTES)
             // possible values: 0 to 4,294,967,295 
-            ushort[] pixels = new ushort[ width * height ];
+            ushort[] pixels = new ushort[width * height];
 
             // Gets pointer to allocated array and fixes it, 
             // so that it won't be moved by Garbage Collector
@@ -227,7 +238,7 @@ namespace SarcusImaging
         /// <returns></returns>
         public int getImagingColumns()
         {
-            return (int)camera.ImagingColumns ;
+            return (int)camera.ImagingColumns;
         }
 
         /// <summary>
@@ -314,7 +325,7 @@ namespace SarcusImaging
                 camera.CameraMode = mode;
             }
         }
-        
+
         /// <summary>
         /// Sets camera trigger options.
         /// </summary>
@@ -339,7 +350,7 @@ namespace SarcusImaging
                         camera.TriggerNormalEach = true;
                         camera.TriggerNormalGroup = true;
                     }
-                } 
+                }
                 else
                 {
                     camera.TriggerNormalEach = false;
@@ -358,7 +369,7 @@ namespace SarcusImaging
             if (camera != null && isCameraConnected())
             {
                 if (value == DIGITIZATION_FAST || value == DIGITIZATION_NORMAL)
-                camera.DigitizationSpeed = value;
+                    camera.DigitizationSpeed = value;
             }
         }
 
@@ -382,6 +393,10 @@ namespace SarcusImaging
             return result;
         }
 
+        /// <summary>
+        /// Returns current image count value
+        /// </summary>
+        /// <returns></returns>
         public int getImageCount()
         {
             int result = 1;
@@ -390,16 +405,9 @@ namespace SarcusImaging
                 result = camera.ImageCount;
             }
             return result;
+
+
         }
 
-        public void stopExposure()
-        {
-            if (camera != null && isCameraConnected())
-            {
-                camera.StopExposure(true);
-            }
-        }
-
-    }
-        
+    }       
 }

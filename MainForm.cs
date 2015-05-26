@@ -60,9 +60,7 @@ namespace SarcusImaging
 
         private void menuCameraOptions_Click(object sender, EventArgs e)
         {
-            CameraControlPanel cameraStatusForm = new CameraControlPanel();
-            cameraStatusForm.MdiParent = this;
-            cameraStatusForm.ShowForm();
+            CameraControlPanel.ShowForm(this);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
