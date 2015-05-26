@@ -24,8 +24,8 @@ namespace SarcusImaging
             ushort offset = ImageProcessor.getUshortMinValue(image);
             Bitmap bitmap = ImageProcessor.convertArrayToBitmap(image, width, height, offset);
             boxPicture.Image = bitmap;
-            Form settingsForm = new ImageSettings(this);
-            settingsForm.Show();
+            //Form settingsForm = new ImageSettings(this);
+            //settingsForm.Show();
         }
 
         public void showBitmap(Bitmap bitmap)

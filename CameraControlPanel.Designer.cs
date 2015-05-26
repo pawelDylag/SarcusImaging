@@ -44,51 +44,57 @@
             this.tabPageSetup = new System.Windows.Forms.TabPage();
             this.groupBoxTemperature = new System.Windows.Forms.GroupBox();
             this.buttonTemperature = new System.Windows.Forms.Button();
+            this.groupBoxMode = new System.Windows.Forms.GroupBox();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBoxLeds = new System.Windows.Forms.GroupBox();
             this.comboBoxLedOptions = new System.Windows.Forms.ComboBox();
             this.labelLedB = new System.Windows.Forms.Label();
             this.comboBoxStatusLedA = new System.Windows.Forms.ComboBox();
             this.comboBoxStatusLedB = new System.Windows.Forms.ComboBox();
             this.labelLedA = new System.Windows.Forms.Label();
-            this.tabPageShutter = new System.Windows.Forms.TabPage();
+            this.tabPageSequence = new System.Windows.Forms.TabPage();
             this.groupBoxTrigger = new System.Windows.Forms.GroupBox();
             this.radioButtonTrigger2 = new System.Windows.Forms.RadioButton();
             this.radioButtonTrgger1 = new System.Windows.Forms.RadioButton();
-            this.groupBoxShutter = new System.Windows.Forms.GroupBox();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.tabPageSequence = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBoxImage = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownTimeSequence = new System.Windows.Forms.NumericUpDown();
+            this.progressBarSequence = new System.Windows.Forms.ProgressBar();
+            this.buttonStartSequence = new System.Windows.Forms.Button();
+            this.buttonStopSequence = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownImageCount = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBoxDigitization = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.comboBoxDigitization = new System.Windows.Forms.ComboBox();
             this.checkBoxDigitizeOverscan = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabPageExpose = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
             this.progressBarExposure = new System.Windows.Forms.ProgressBar();
             this.buttonStop = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownTime = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButtonBias = new System.Windows.Forms.RadioButton();
             this.radioButtonLight = new System.Windows.Forms.RadioButton();
             this.buttonExpose = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.gtoupBoxCameraSetup.SuspendLayout();
             this.tabControlPanel.SuspendLayout();
             this.tabPageSetup.SuspendLayout();
             this.groupBoxTemperature.SuspendLayout();
+            this.groupBoxMode.SuspendLayout();
             this.groupBoxLeds.SuspendLayout();
-            this.tabPageShutter.SuspendLayout();
-            this.groupBoxTrigger.SuspendLayout();
-            this.groupBoxShutter.SuspendLayout();
             this.tabPageSequence.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.groupBoxTrigger.SuspendLayout();
+            this.groupBoxImage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeSequence)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownImageCount)).BeginInit();
             this.groupBoxDigitization.SuspendLayout();
             this.tabPageExpose.SuspendLayout();
@@ -118,6 +124,7 @@
             // 
             // textBoxStatus
             // 
+            this.textBoxStatus.ForeColor = System.Drawing.SystemColors.WindowText;
             resources.ApplyResources(this.textBoxStatus, "textBoxStatus");
             this.textBoxStatus.Name = "textBoxStatus";
             this.textBoxStatus.ReadOnly = true;
@@ -175,7 +182,6 @@
             // tabControlPanel
             // 
             this.tabControlPanel.Controls.Add(this.tabPageSetup);
-            this.tabControlPanel.Controls.Add(this.tabPageShutter);
             this.tabControlPanel.Controls.Add(this.tabPageSequence);
             this.tabControlPanel.Controls.Add(this.tabPageExpose);
             resources.ApplyResources(this.tabControlPanel, "tabControlPanel");
@@ -186,6 +192,7 @@
             // 
             this.tabPageSetup.BackColor = System.Drawing.Color.Transparent;
             this.tabPageSetup.Controls.Add(this.groupBoxTemperature);
+            this.tabPageSetup.Controls.Add(this.groupBoxMode);
             this.tabPageSetup.Controls.Add(this.groupBoxLeds);
             this.tabPageSetup.Controls.Add(this.gtoupBoxCameraSetup);
             resources.ApplyResources(this.tabPageSetup, "tabPageSetup");
@@ -205,6 +212,55 @@
             this.buttonTemperature.Name = "buttonTemperature";
             this.buttonTemperature.UseVisualStyleBackColor = true;
             this.buttonTemperature.Click += new System.EventHandler(this.buttonTemperature_Click);
+            // 
+            // groupBoxMode
+            // 
+            this.groupBoxMode.Controls.Add(this.radioButton3);
+            this.groupBoxMode.Controls.Add(this.radioButton4);
+            this.groupBoxMode.Controls.Add(this.radioButton2);
+            this.groupBoxMode.Controls.Add(this.radioButton1);
+            this.groupBoxMode.Controls.Add(this.checkBox1);
+            resources.ApplyResources(this.groupBoxMode, "groupBoxMode");
+            this.groupBoxMode.Name = "groupBoxMode";
+            this.groupBoxMode.TabStop = false;
+            this.groupBoxMode.Enter += new System.EventHandler(this.groupBox1_Enter_2);
+            // 
+            // radioButton3
+            // 
+            resources.ApplyResources(this.radioButton3, "radioButton3");
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.TabStop = true;
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            resources.ApplyResources(this.radioButton4, "radioButton4");
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.TabStop = true;
+            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged_1);
+            // 
+            // radioButton2
+            // 
+            resources.ApplyResources(this.radioButton2, "radioButton2");
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.TabStop = true;
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // radioButton1
+            // 
+            resources.ApplyResources(this.radioButton1, "radioButton1");
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.TabStop = true;
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // checkBox1
+            // 
+            resources.ApplyResources(this.checkBox1, "checkBox1");
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // groupBoxLeds
             // 
@@ -247,8 +303,7 @@
             resources.GetString("comboBoxStatusLedA.Items3"),
             resources.GetString("comboBoxStatusLedA.Items4"),
             resources.GetString("comboBoxStatusLedA.Items5"),
-            resources.GetString("comboBoxStatusLedA.Items6"),
-            resources.GetString("comboBoxStatusLedA.Items7")});
+            resources.GetString("comboBoxStatusLedA.Items6")});
             resources.ApplyResources(this.comboBoxStatusLedA, "comboBoxStatusLedA");
             this.comboBoxStatusLedA.Name = "comboBoxStatusLedA";
             this.comboBoxStatusLedA.SelectedIndexChanged += new System.EventHandler(this.comboBoxStatusLedA_SelectedIndexChanged);
@@ -264,8 +319,7 @@
             resources.GetString("comboBoxStatusLedB.Items3"),
             resources.GetString("comboBoxStatusLedB.Items4"),
             resources.GetString("comboBoxStatusLedB.Items5"),
-            resources.GetString("comboBoxStatusLedB.Items6"),
-            resources.GetString("comboBoxStatusLedB.Items7")});
+            resources.GetString("comboBoxStatusLedB.Items6")});
             resources.ApplyResources(this.comboBoxStatusLedB, "comboBoxStatusLedB");
             this.comboBoxStatusLedB.Name = "comboBoxStatusLedB";
             this.comboBoxStatusLedB.SelectedIndexChanged += new System.EventHandler(this.comboBoxStatusLedB_SelectedIndexChanged);
@@ -276,12 +330,13 @@
             this.labelLedA.Name = "labelLedA";
             this.labelLedA.Click += new System.EventHandler(this.label1_Click_3);
             // 
-            // tabPageShutter
+            // tabPageSequence
             // 
-            this.tabPageShutter.Controls.Add(this.groupBoxTrigger);
-            this.tabPageShutter.Controls.Add(this.groupBoxShutter);
-            resources.ApplyResources(this.tabPageShutter, "tabPageShutter");
-            this.tabPageShutter.Name = "tabPageShutter";
+            this.tabPageSequence.Controls.Add(this.groupBoxTrigger);
+            this.tabPageSequence.Controls.Add(this.groupBoxImage);
+            this.tabPageSequence.Controls.Add(this.groupBoxDigitization);
+            resources.ApplyResources(this.tabPageSequence, "tabPageSequence");
+            this.tabPageSequence.Name = "tabPageSequence";
             // 
             // groupBoxTrigger
             // 
@@ -290,6 +345,7 @@
             resources.ApplyResources(this.groupBoxTrigger, "groupBoxTrigger");
             this.groupBoxTrigger.Name = "groupBoxTrigger";
             this.groupBoxTrigger.TabStop = false;
+            this.groupBoxTrigger.Enter += new System.EventHandler(this.groupBoxTrigger_Enter);
             // 
             // radioButtonTrigger2
             // 
@@ -306,69 +362,76 @@
             this.radioButtonTrgger1.UseVisualStyleBackColor = true;
             this.radioButtonTrgger1.CheckedChanged += new System.EventHandler(this.radioButtonTrgger1_CheckedChanged);
             // 
-            // groupBoxShutter
+            // groupBoxImage
             // 
-            this.groupBoxShutter.Controls.Add(this.radioButton3);
-            this.groupBoxShutter.Controls.Add(this.radioButton4);
-            this.groupBoxShutter.Controls.Add(this.radioButton2);
-            this.groupBoxShutter.Controls.Add(this.radioButton1);
-            this.groupBoxShutter.Controls.Add(this.checkBox1);
-            resources.ApplyResources(this.groupBoxShutter, "groupBoxShutter");
-            this.groupBoxShutter.Name = "groupBoxShutter";
-            this.groupBoxShutter.TabStop = false;
-            this.groupBoxShutter.Enter += new System.EventHandler(this.groupBox1_Enter_2);
+            this.groupBoxImage.Controls.Add(this.label8);
+            this.groupBoxImage.Controls.Add(this.numericUpDownTimeSequence);
+            this.groupBoxImage.Controls.Add(this.progressBarSequence);
+            this.groupBoxImage.Controls.Add(this.buttonStartSequence);
+            this.groupBoxImage.Controls.Add(this.buttonStopSequence);
+            this.groupBoxImage.Controls.Add(this.textBox1);
+            this.groupBoxImage.Controls.Add(this.label7);
+            this.groupBoxImage.Controls.Add(this.label5);
+            this.groupBoxImage.Controls.Add(this.numericUpDownImageCount);
+            resources.ApplyResources(this.groupBoxImage, "groupBoxImage");
+            this.groupBoxImage.Name = "groupBoxImage";
+            this.groupBoxImage.TabStop = false;
+            this.groupBoxImage.Enter += new System.EventHandler(this.groupBox3_Enter);
             // 
-            // radioButton3
+            // label8
             // 
-            resources.ApplyResources(this.radioButton3, "radioButton3");
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.TabStop = true;
-            this.radioButton3.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.label8, "label8");
+            this.label8.Name = "label8";
             // 
-            // radioButton4
+            // numericUpDownTimeSequence
             // 
-            resources.ApplyResources(this.radioButton4, "radioButton4");
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.TabStop = true;
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged_1);
+            this.numericUpDownTimeSequence.DecimalPlaces = 3;
+            this.numericUpDownTimeSequence.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            resources.ApplyResources(this.numericUpDownTimeSequence, "numericUpDownTimeSequence");
+            this.numericUpDownTimeSequence.Name = "numericUpDownTimeSequence";
+            this.numericUpDownTimeSequence.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // radioButton2
+            // progressBarSequence
             // 
-            resources.ApplyResources(this.radioButton2, "radioButton2");
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.TabStop = true;
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            resources.ApplyResources(this.progressBarSequence, "progressBarSequence");
+            this.progressBarSequence.Name = "progressBarSequence";
             // 
-            // radioButton1
+            // buttonStartSequence
             // 
-            resources.ApplyResources(this.radioButton1, "radioButton1");
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.TabStop = true;
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            resources.ApplyResources(this.buttonStartSequence, "buttonStartSequence");
+            this.buttonStartSequence.Name = "buttonStartSequence";
+            this.buttonStartSequence.UseVisualStyleBackColor = true;
+            this.buttonStartSequence.Click += new System.EventHandler(this.buttonStartSequence_Click);
             // 
-            // checkBox1
+            // buttonStopSequence
             // 
-            resources.ApplyResources(this.checkBox1, "checkBox1");
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.buttonStopSequence, "buttonStopSequence");
+            this.buttonStopSequence.Name = "buttonStopSequence";
+            this.buttonStopSequence.UseVisualStyleBackColor = true;
+            this.buttonStopSequence.Click += new System.EventHandler(this.button1_Click_2);
             // 
-            // tabPageSequence
+            // textBox1
             // 
-            this.tabPageSequence.Controls.Add(this.groupBox3);
-            this.tabPageSequence.Controls.Add(this.groupBoxDigitization);
-            resources.ApplyResources(this.tabPageSequence, "tabPageSequence");
-            this.tabPageSequence.Name = "tabPageSequence";
+            resources.ApplyResources(this.textBox1, "textBox1");
+            this.textBox1.Name = "textBox1";
             // 
-            // groupBox3
+            // label7
             // 
-            this.groupBox3.Controls.Add(this.numericUpDownImageCount);
-            this.groupBox3.Controls.Add(this.label4);
-            resources.ApplyResources(this.groupBox3, "groupBox3");
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.TabStop = false;
+            resources.ApplyResources(this.label7, "label7");
+            this.label7.Name = "label7";
+            // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.Name = "label5";
             // 
             // numericUpDownImageCount
             // 
@@ -384,25 +447,16 @@
             0,
             0,
             0});
-            // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
+            this.numericUpDownImageCount.ValueChanged += new System.EventHandler(this.numericUpDownImageCount_ValueChanged);
             // 
             // groupBoxDigitization
             // 
-            this.groupBoxDigitization.Controls.Add(this.label1);
             this.groupBoxDigitization.Controls.Add(this.comboBoxDigitization);
             this.groupBoxDigitization.Controls.Add(this.checkBoxDigitizeOverscan);
+            this.groupBoxDigitization.Controls.Add(this.label4);
             resources.ApplyResources(this.groupBoxDigitization, "groupBoxDigitization");
             this.groupBoxDigitization.Name = "groupBoxDigitization";
             this.groupBoxDigitization.TabStop = false;
-            // 
-            // label1
-            // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
             // 
             // comboBoxDigitization
             // 
@@ -421,6 +475,11 @@
             this.checkBoxDigitizeOverscan.Name = "checkBoxDigitizeOverscan";
             this.checkBoxDigitizeOverscan.UseVisualStyleBackColor = true;
             this.checkBoxDigitizeOverscan.CheckedChanged += new System.EventHandler(this.checkBoxDigitizeOverscan_CheckedChanged);
+            // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
             // 
             // tabPageExpose
             // 
@@ -450,20 +509,14 @@
             resources.ApplyResources(this.buttonStop, "buttonStop");
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.label5);
             this.groupBox4.Controls.Add(this.numericUpDownTime);
             resources.ApplyResources(this.groupBox4, "groupBox4");
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
-            // 
-            // label5
-            // 
-            resources.ApplyResources(this.label5, "label5");
-            this.label5.Name = "label5";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // numericUpDownTime
             // 
@@ -512,6 +565,11 @@
             this.buttonExpose.UseVisualStyleBackColor = true;
             this.buttonExpose.Click += new System.EventHandler(this.buttonExpose_Click);
             // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
             // CameraControlPanel
             // 
             resources.ApplyResources(this, "$this");
@@ -524,23 +582,22 @@
             this.tabControlPanel.ResumeLayout(false);
             this.tabPageSetup.ResumeLayout(false);
             this.groupBoxTemperature.ResumeLayout(false);
+            this.groupBoxMode.ResumeLayout(false);
+            this.groupBoxMode.PerformLayout();
             this.groupBoxLeds.ResumeLayout(false);
             this.groupBoxLeds.PerformLayout();
-            this.tabPageShutter.ResumeLayout(false);
+            this.tabPageSequence.ResumeLayout(false);
             this.groupBoxTrigger.ResumeLayout(false);
             this.groupBoxTrigger.PerformLayout();
-            this.groupBoxShutter.ResumeLayout(false);
-            this.groupBoxShutter.PerformLayout();
-            this.tabPageSequence.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.groupBoxImage.ResumeLayout(false);
+            this.groupBoxImage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeSequence)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownImageCount)).EndInit();
             this.groupBoxDigitization.ResumeLayout(false);
             this.groupBoxDigitization.PerformLayout();
             this.tabPageExpose.ResumeLayout(false);
             this.tabPageExpose.PerformLayout();
             this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTime)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -553,8 +610,6 @@
         private System.Windows.Forms.GroupBox gtoupBoxCameraSetup;
         private System.Windows.Forms.TabControl tabControlPanel;
         private System.Windows.Forms.TabPage tabPageSetup;
-        private System.Windows.Forms.TabPage tabPageShutter;
-        private System.Windows.Forms.TabPage tabPageSequence;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxStatus;
         private System.Windows.Forms.Label label3;
@@ -571,24 +626,14 @@
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ComboBox comboBoxLedOptions;
-        private System.Windows.Forms.GroupBox groupBoxShutter;
+        private System.Windows.Forms.GroupBox groupBoxMode;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.GroupBox groupBoxDigitization;
-        private System.Windows.Forms.CheckBox checkBoxDigitizeOverscan;
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.ComboBox comboBoxDigitization;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBoxTemperature;
-        private System.Windows.Forms.GroupBox groupBoxTrigger;
-        private System.Windows.Forms.RadioButton radioButtonTrigger2;
-        private System.Windows.Forms.RadioButton radioButtonTrgger1;
         private System.Windows.Forms.Button buttonTemperature;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.NumericUpDown numericUpDownImageCount;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabPage tabPageExpose;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioButtonBias;
@@ -596,10 +641,28 @@
         private System.Windows.Forms.Button buttonExpose;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.NumericUpDown numericUpDownTime;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ProgressBar progressBarExposure;
         private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.TabPage tabPageSequence;
+        private System.Windows.Forms.GroupBox groupBoxTrigger;
+        private System.Windows.Forms.GroupBox groupBoxImage;
+        private System.Windows.Forms.GroupBox groupBoxDigitization;
+        private System.Windows.Forms.CheckBox checkBoxDigitizeOverscan;
+        private System.Windows.Forms.ComboBox comboBoxDigitization;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numericUpDownImageCount;
+        private System.Windows.Forms.RadioButton radioButtonTrgger1;
+        private System.Windows.Forms.RadioButton radioButtonTrigger2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonStartSequence;
+        private System.Windows.Forms.Button buttonStopSequence;
+        private System.Windows.Forms.ProgressBar progressBarSequence;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDownTimeSequence;
 
     }
 }

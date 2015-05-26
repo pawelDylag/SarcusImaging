@@ -14,11 +14,12 @@ namespace SarcusImaging
 {
     public partial class SarcusImaging : Form
     {
+        Thread updateCameraStatus = null;
 
         public SarcusImaging()
         {
             InitializeComponent();
-            runCameraStatusUpdates();
+            startCameraStatusUpdates();
         }
 
 
@@ -74,18 +75,51 @@ namespace SarcusImaging
 
         }
 
-        private void runCameraStatusUpdates()
-        {
-            CameraManager cm = CameraManager.Instance;
-            while (true)
+        private void startCameraStatusUpdates() {
+            this.updateCameraStatus = new Thread(
+            new ThreadStart(() =>
             {
-                toolStripTextBoxStatus.Text = cm.getCameraImagingStatusString();
+                while (true)
+                {
+                    String status = CameraManager.Instance.getCameraImagingStatusString();
+                    updateCameraStatusTextBox(status);
+                    Thread.Sleep(1000);
+                }
             }
+            ));
+            updateCameraStatus.Start();
+        }
+
+        private void stopCameraStatusUpdates()
+        {
+            if (this.updateCameraStatus != null)
+            {
+                updateCameraStatus.Abort();
+            }
+        }
+
+        protected void updateCameraStatusTextBox(string value)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(updateCameraStatusTextBox), new object[] { value });
+                return;
+            }
+            toolStripTextBoxStatus.Text = value;
         }
 
         private void toolStripTextBox1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void SarcusImaging_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void SarcusImaging_Closed(object sender, EventArgs e)
+        {
+            stopCameraStatusUpdates();
         }
     }
 }

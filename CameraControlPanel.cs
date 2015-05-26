@@ -48,25 +48,23 @@ namespace SarcusImaging
         /// </summary>
         /// <param name="locked"></param>
         private void lockTabs(bool locked){
-            TabPage shutterPage = tabControlPanel.TabPages[1];
-            TabPage imagePage = tabControlPanel.TabPages[2];
-            TabPage exposePage = tabControlPanel.TabPages[3];
+            TabPage imagePage = tabControlPanel.TabPages[1];
+            TabPage exposePage = tabControlPanel.TabPages[2];
             if (locked)
             {
-                shutterPage.Enabled = false;
                 imagePage.Enabled = false;
                 groupBoxLeds.Enabled = false;
                 exposePage.Enabled = false;
                 groupBoxTemperature.Enabled = false;
+                groupBoxMode.Enabled = false;
             }
             else
             {
-                shutterPage.Enabled = true;
                 imagePage.Enabled = true;
                 groupBoxLeds.Enabled = true;
                 exposePage.Enabled = true;
                 groupBoxTemperature.Enabled = true;
-              
+                groupBoxMode.Enabled = true;
             }
         }
 
@@ -142,19 +140,23 @@ namespace SarcusImaging
             }
             double exposeTime = (double)numericUpDownTime.Value;
             System.Diagnostics.Debug.WriteLine("Exposing with time: " + exposeTime + ", with lights: " + light);
+            // remember last image count
+            int lastImageCount = CameraManager.Instance.getImageCount();
+            // set camera image count to 
+            CameraManager.Instance.setImageCount(1);
+            // turn on stop button
+            buttonStop.Enabled = true;
             Thread backgroundThread = new Thread(
-            new ThreadStart(() =>
+            new ThreadStart(() =>                       
             {
                 CameraManager.Instance.manualExpose(exposeTime, light);
+                progressBarExposure.BeginInvoke( new Action(() =>
+                {
+                    progressBarExposure.Style = ProgressBarStyle.Marquee;
+                    progressBarExposure.MarqueeAnimationSpeed = 30;
+                }));
                 while (!CameraManager.Instance.hasNewImage())
                 {
-                    progressBarExposure.BeginInvoke(
-                        new Action(() =>
-                        {
-                            progressBarExposure.Style = ProgressBarStyle.Marquee;
-                            progressBarExposure.MarqueeAnimationSpeed = 30;
-                        }
-                    ));
                 }
                  progressBarExposure.BeginInvoke(
                         new Action(() =>
@@ -164,12 +166,27 @@ namespace SarcusImaging
                     ));
                 System.Diagnostics.Debug.WriteLine("Got new image");
                 ushort[] img = CameraManager.Instance.getSingleImage();
-                SingleImageForm singleImageForm = new SingleImageForm(img);
-                singleImageForm.Show();
+                CameraManager.Instance.setImageCount(lastImageCount);
+                showImageForm(img);
+                // unlock stop button
+                buttonStop.BeginInvoke(
+                new Action(() =>
+                {
+                    buttonStop.Enabled = false;
+                }));
             }
             ));
             backgroundThread.Start();
 
+        }
+
+        private void showImageForm(ushort[] image)
+        {
+            SingleImageForm singleImageForm = new SingleImageForm(image);
+            openedWindow.Invoke((MethodInvoker)delegate()
+            {
+                singleImageForm.Show();
+            });
         }
 
        
@@ -229,7 +246,7 @@ namespace SarcusImaging
             bool isSelected = cameraManager.showCameraSelectionDialog();
             if (isSelected)
             {
-                // WHEN CAMERA SELECTED
+                lockTabs(false);
             }
             updateTextBoxModel();
             updateTextBoxCameraConnectionStatus();
@@ -257,19 +274,53 @@ namespace SarcusImaging
             {
                 case 0:
                     setLedMode(APOGEELib.Apn_LedMode.Apn_LedMode_DisableAll);
+                    comboBoxStatusLedA.Enabled = false;
+                    comboBoxStatusLedB.Enabled = false;
                     break;
                 case 1:
                     setLedMode(APOGEELib.Apn_LedMode.Apn_LedMode_DisableWhileExpose);
+                    comboBoxStatusLedA.Enabled = true;
+                    comboBoxStatusLedB.Enabled = true;
                     break;
                 case 2:
                     setLedMode(APOGEELib.Apn_LedMode.Apn_LedMode_EnableAll);
+                    comboBoxStatusLedA.Enabled = true;
+                    comboBoxStatusLedB.Enabled = true;
                     break;
+            }
+        }
+
+        private void setLedStatus(int ledId, int status) {
+            switch (status)
+            {
+                case 0:
+                    CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_AtTemp);
+                break;
+                case 1:
+                    CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_Expose);
+                break;
+                case 2:
+                    CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_Flushing);
+                break;
+                case 3:
+                    CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_ExtStartReadout);
+                break;
+                case 4:
+                CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_ExtShutterInput);
+                break;
+                case 5:
+                CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_ExtTriggerReceived);
+                break;
+                case 6:
+                CameraManager.Instance.setLedState(ledId, APOGEELib.Apn_LedState.Apn_LedState_ExtTriggerWaiting);
+                break;
+
             }
         }
 
         private void comboBoxStatusLedA_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            setLedStatus(CameraManager.LED_A, comboBoxStatusLedA.SelectedIndex);
         }
 
         private void label1_Click_3(object sender, EventArgs e)
@@ -284,7 +335,7 @@ namespace SarcusImaging
 
         private void comboBoxStatusLedB_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            setLedStatus(CameraManager.LED_B, comboBoxStatusLedB.SelectedIndex);
         }
 
         private void groupBox1_Enter_2(object sender, EventArgs e)
@@ -303,7 +354,7 @@ namespace SarcusImaging
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-            CameraManager.Instance.setCameraTrigger(true, false);
+            CameraManager.Instance.setCameraTrigger(true, true);
             groupBoxTrigger.Enabled = true;
         }
 
@@ -375,6 +426,83 @@ namespace SarcusImaging
         private void progressBarExposure_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBoxTrigger_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDownImageCount_ValueChanged(object sender, EventArgs e)
+        {
+            int value = (int) numericUpDownImageCount.Value;
+            // if value is out of range / camera is not initiallized
+            if (!CameraManager.Instance.setImageCount(value))
+            {
+                MessageBox.Show("Value must be between 1 - 65535");
+            }
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonStartSequence_Click(object sender, EventArgs e)
+        {
+            int imageCount = (int) numericUpDownImageCount.Value;
+            double exposeTime = (double) numericUpDownTimeSequence.Value;
+            System.Diagnostics.Debug.WriteLine("Exposing sequence of " + imageCount + " images, with time: " + exposeTime );
+            // set camera image count to last one
+            CameraManager.Instance.setImageCount(imageCount);
+            // unlock "stop" button
+            buttonStopSequence.Enabled = true;
+            // start imaging bg thread
+            Thread backgroundThread = new Thread(
+            new ThreadStart(() =>
+            {
+                CameraManager.Instance.manualExpose(exposeTime, true);
+                progressBarSequence.BeginInvoke(
+                new Action(() =>
+                {
+                    progressBarSequence.Style = ProgressBarStyle.Marquee;
+                    progressBarSequence.MarqueeAnimationSpeed = 60;
+                }
+                 ));
+                for (int i = 0; i <= imageCount; i++)
+                {
+                    while (!CameraManager.Instance.hasNewImage())
+                    { }
+                    System.Diagnostics.Debug.WriteLine("Got new image with number " + i);
+                    ushort[] img = CameraManager.Instance.getSingleImage();
+                    showImageForm(img);
+                }
+                progressBarExposure.BeginInvoke(
+                new Action(() =>
+                {
+                    progressBarSequence.Style = ProgressBarStyle.Continuous;
+                }
+                ));
+                // lock again stop button
+                buttonStopSequence.BeginInvoke(
+                new Action(() =>
+                {
+                    buttonStopSequence.Enabled = false;
+                }));
+            }
+            ));
+            backgroundThread.Start();
+
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            CameraManager.Instance.stopExposure();
         }
     }
 }

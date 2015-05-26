@@ -271,7 +271,6 @@ namespace SarcusImaging
             bool result = false;
             if (cameraFinder != null && cameraFinder.ValidSelection)
             {
-                System.Diagnostics.Debug.WriteLine("isCameraConnected(): " + cameraFinder.SelectedInterface);
                 result = true;
             }
             return result;
@@ -330,14 +329,14 @@ namespace SarcusImaging
                     if (group)
                     {
                         // sets trigger to start whole sequence
-                        camera.TriggerNormalEach = false;
+                        camera.TriggerNormalEach = true;
                         camera.TriggerNormalGroup = true;
                     }
                     else
                     {
                         // sets trigger to start each image
                         camera.TriggerNormalEach = true;
-                        camera.TriggerNormalGroup = false;
+                        camera.TriggerNormalGroup = true;
                     }
                 } 
                 else
@@ -346,6 +345,7 @@ namespace SarcusImaging
                     camera.TriggerNormalGroup = false;
                 }
             }
+            System.Diagnostics.Debug.WriteLine("Camera trigger set to: " + camera.TriggerNormalEach + " , " + camera.TriggerNormalGroup);
         }
 
         /// <summary>
@@ -361,7 +361,43 @@ namespace SarcusImaging
             }
         }
 
-    
+
+        public Boolean setImageCount(int value)
+        {
+            Boolean result = false;
+            if (camera != null && isCameraConnected())
+            {
+                // check if value is between 0 - 65535 
+                if (value >= 0 && value < 65535)
+                {
+                    camera.ImageCount = value;
+                    result = true;
+                }
+                else
+                {
+                    camera.ImageCount = 1;
+                }
+            }
+            return result;
+        }
+
+        public int getImageCount()
+        {
+            int result = 1;
+            if (camera != null && isCameraConnected())
+            {
+                result = camera.ImageCount;
+            }
+            return result;
+        }
+
+        public void stopExposure()
+        {
+            if (camera != null && isCameraConnected())
+            {
+                camera.StopExposure(true);
+            }
+        }
 
     }
         

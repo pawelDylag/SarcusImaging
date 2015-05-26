@@ -18,7 +18,6 @@ C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\bin\Debug\Sa
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\bin\Debug\SarcusImaging.pdb
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csprojResolveAssemblyReference.cache
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.SarcusImaging.resources
-C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.cameraStatusForm.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
@@ -27,3 +26,5 @@ C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\obj\Debug\Sa
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.ImageSettings.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
+C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
