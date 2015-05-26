@@ -28,3 +28,18 @@ C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImagin
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\SarcusImaging.exe.config
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\Interop.APOGEELib.dll
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csproj.ResolveComReference.cache
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.exe
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.pdb
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\SarcusImaging.exe
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\SarcusImaging.pdb
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csprojResolveAssemblyReference.cache
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.ImageSettings.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SarcusImaging.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache

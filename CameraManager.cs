@@ -13,6 +13,7 @@ namespace SarcusImaging
     //
     // Camera manager class
     //
+    // github test
     class CameraManager
     {
         private static CameraManager instance;
