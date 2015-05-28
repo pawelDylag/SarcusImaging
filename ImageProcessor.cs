@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SarcusImaging
 {
+    /// <summary>
+    /// Simple static class for image processing operations, conversions e.t.c
+    /// </summary>
     static class ImageProcessor
     {
 

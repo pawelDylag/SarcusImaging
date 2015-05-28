@@ -13,12 +13,16 @@ namespace SarcusImaging
     public partial class SingleImageForm : Form
     {
 
-        public ushort[] image;
 
-        public SingleImageForm(ushort[] img)
+        public SingleImageForm()
+        {
+            CameraManager.Instance.ImageReady += this.OnImageReady;
+        }
+
+        public SingleImageForm(ushort[] image)
         {
             InitializeComponent();
-            this.image = img;
+            CameraManager.Instance.ImageReady += this.OnImageReady;
             int width = CameraManager.Instance.getImagingRows();
             int height = CameraManager.Instance.getImagingColumns();
             ushort offset = ImageProcessor.getUshortMinValue(image);
@@ -30,7 +34,15 @@ namespace SarcusImaging
 
         public void showBitmap(Bitmap bitmap)
         {
+            boxPicture.Image = bitmap;
+        }
 
+        public void OnImageReady(object source, ImageReadyArgs a)
+        {
+            int width = CameraManager.Instance.getImagingRows();
+            int height = CameraManager.Instance.getImagingColumns();
+            ushort offset = ImageProcessor.getUshortMinValue(a.pixels);
+            Bitmap bitmap = ImageProcessor.convertArrayToBitmap(a.pixels, width, height, offset);
             boxPicture.Image = bitmap;
         }
 

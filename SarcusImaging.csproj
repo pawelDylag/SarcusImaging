@@ -51,6 +51,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,13 +69,8 @@
     <Compile Include="dropdownWithLabel.Designer.cs">
       <DependentUpon>dropdownWithLabel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageConverter.cs" />
-    <Compile Include="ImageSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ImageSettings.Designer.cs">
-      <DependentUpon>ImageSettings.cs</DependentUpon>
-    </Compile>
+    <Compile Include="ImageProcessor.cs" />
+    <Compile Include="ImageReadyArgs.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,9 +93,6 @@
     </Compile>
     <EmbeddedResource Include="dropdownWithLabel.resx">
       <DependentUpon>dropdownWithLabel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ImageSettings.resx">
-      <DependentUpon>ImageSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

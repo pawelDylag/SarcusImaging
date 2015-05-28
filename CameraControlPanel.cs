@@ -80,6 +80,7 @@ namespace SarcusImaging
         {
             updateTextBoxModel();
             updateTextBoxCameraConnectionStatus();
+            CameraManager.Instance.ImageReady += this.OnImageReady;
         }
 
         private void setLedMode(APOGEELib.Apn_LedMode mode)
@@ -172,7 +173,7 @@ namespace SarcusImaging
                 System.Diagnostics.Debug.WriteLine("Got new image");
                 ushort[] img = CameraManager.Instance.getSingleImage();
                 CameraManager.Instance.setImageCount(lastImageCount);
-                showImageForm(img);
+                showImageFormWithImage(img);
                 // unlock stop button
                 buttonStop.BeginInvoke(
                 new Action(() =>
@@ -185,7 +186,7 @@ namespace SarcusImaging
 
         }
 
-        private void showImageForm(ushort[] image)
+        private void showImageFormWithImage(ushort[] image)
         {
             SingleImageForm singleImageForm = new SingleImageForm(image);
             openedWindow.Invoke((MethodInvoker)delegate()
@@ -195,6 +196,15 @@ namespace SarcusImaging
             });
         }
 
+        private void showImageForm()
+        {
+            SingleImageForm singleImageForm = new SingleImageForm();
+            openedWindow.Invoke((MethodInvoker)delegate()
+            {
+                singleImageForm.MdiParent = this.MdiParent;
+                singleImageForm.Show();
+            });
+        }
        
         private void buttonGetImage_Click(object sender, EventArgs e)
         {
@@ -461,41 +471,24 @@ namespace SarcusImaging
 
         private void buttonStartSequence_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("buttonStartSequence_Click()");
             int imageCount = (int) numericUpDownImageCount.Value;
-            double exposeTime = (double) numericUpDownTimeSequence.Value;
-            System.Diagnostics.Debug.WriteLine("Exposing sequence of " + imageCount + " images, with time: " + exposeTime );
-            // set camera image count to last one
-            CameraManager.Instance.setImageCount(imageCount);
+            double exposeTime = (double)numericUpDownTimeSequence.Value;
+            // set progress bar 
+            progressBarSequence.Style = ProgressBarStyle.Blocks;
+            progressBarSequence.Maximum = imageCount;
+            progressBarSequence.Value = 0;
             // unlock "stop" button
             buttonStopSequence.Enabled = true;
+            // show image form if not visible
+            showImageForm();
             // start imaging bg thread
             Thread backgroundThread = new Thread(
             new ThreadStart(() =>
             {
-                CameraManager.Instance.startExposure(exposeTime, true);
-                progressBarSequence.BeginInvoke(
-                new Action(() =>
-                {
-                    progressBarSequence.Style = ProgressBarStyle.Marquee;
-                    progressBarSequence.MarqueeAnimationSpeed = 60;
-                }
-                 ));
-                while (!CameraManager.Instance.hasNewImage())
-                {
-                    // WAIT FOR IMAGE 
-                }
-                while (CameraManager.Instance.hasNewImage())
-                { 
-                    System.Diagnostics.Debug.WriteLine("New image is ready!");
-                    ushort[] img = CameraManager.Instance.getSingleImage();
-                    showImageForm(img);
-                }
-                progressBarExposure.BeginInvoke(
-                new Action(() =>
-                {
-                    progressBarSequence.Style = ProgressBarStyle.Continuous;
-                }
-                ));
+                // start imaging sequence
+                CameraManager.Instance.startSequence(exposeTime, true, imageCount);
+
                 // lock again stop button
                 buttonStopSequence.BeginInvoke(
                 new Action(() =>
@@ -505,7 +498,11 @@ namespace SarcusImaging
             }
             ));
             backgroundThread.Start();
+        }
 
+        public void OnImageReady(object source, ImageReadyArgs a)
+        {
+            progressBarSequence.Value++;
         }
 
         private void buttonStop_Click(object sender, EventArgs e)

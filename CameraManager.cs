@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace SarcusImaging
 {
@@ -28,6 +28,8 @@ namespace SarcusImaging
         public static readonly int DIGITIZATION_NORMAL = 0;
         public static readonly int DIGITIZATION_FAST = 1;
 
+        public delegate void ImageReadyEventHandler(object source, ImageReadyArgs args);
+        public event ImageReadyEventHandler ImageReady;
 
         /// <summary>
         /// Private constructor to avoid creating copies of this class
@@ -191,9 +193,51 @@ namespace SarcusImaging
             System.Diagnostics.Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")");
             // get raw data array from camera
             ushort[] image = getImageToMemory(imgXSize, imgYSize);
-            System.Diagnostics.Debug.WriteLine("Image array lenght: " + image.Length);
+            //System.Diagnostics.Debug.WriteLine("Image array lenght: " + image.Length);
             return image;
         }
+
+        /// <summary>
+        /// Starts sequence of images.
+        /// </summary>
+        /// <param name="exposeTime"></param>
+        /// <param name="light"></param>
+        /// <param name="imageCount"></param>
+        public void startSequence(double exposeTime, bool light, int imageCount)
+        {
+            System.Diagnostics.Debug.WriteLine("startSequence()");
+            if (camera != null && isCameraConnected())
+            {
+                camera.ImageCount = imageCount;
+                long imgXSize = camera.ImagingColumns;
+                long imgYSize = camera.ImagingRows;
+                // get raw data array from camera
+                camera.Expose(exposeTime, light);
+                for (int i = 1; i < imageCount; i++)
+                {
+                    // while new image isn't ready
+                    while (camera.SequenceCounter != i)
+                    {
+                        // waiting for new image
+                    }
+                    // if new image is ready
+                    OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                }
+            }
+            else 
+            {
+                   System.Diagnostics.Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
+            }
+        }
+
+        protected virtual void OnImageReady(ushort[] pixels)
+        {
+            if (ImageReady != null)
+            {
+                ImageReady(this, new ImageReadyArgs(pixels));
+            }
+        }
+
 
         /// <summary>
         /// Gets image from camera by passing ptr to allocated memory.
@@ -222,6 +266,7 @@ namespace SarcusImaging
 
             return pixels;
         }
+
 
         /// <summary>
         /// Returns number of pixels in a row

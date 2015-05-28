@@ -34,22 +34,21 @@
             // 
             // boxPicture
             // 
-            this.boxPicture.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.boxPicture.Location = new System.Drawing.Point(0, 0);
-            this.boxPicture.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.boxPicture.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.boxPicture.Location = new System.Drawing.Point(12, 12);
             this.boxPicture.Name = "boxPicture";
-            this.boxPicture.Size = new System.Drawing.Size(692, 698);
+            this.boxPicture.Size = new System.Drawing.Size(512, 512);
+            this.boxPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.boxPicture.TabIndex = 0;
             this.boxPicture.TabStop = false;
             this.boxPicture.Click += new System.EventHandler(this.boxPicture_Click);
             // 
             // SingleImageForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 698);
+            this.ClientSize = new System.Drawing.Size(941, 790);
             this.Controls.Add(this.boxPicture);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "SingleImageForm";
             this.Text = "Single image";
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).EndInit();
