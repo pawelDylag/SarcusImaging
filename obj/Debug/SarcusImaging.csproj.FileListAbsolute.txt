@@ -36,7 +36,6 @@ C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\SarcusImaging.exe
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\SarcusImaging.pdb
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csprojResolveAssemblyReference.cache
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.ImageSettings.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SarcusImaging.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources

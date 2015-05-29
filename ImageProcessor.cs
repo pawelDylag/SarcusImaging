@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -14,6 +15,13 @@ namespace SarcusImaging
     static class ImageProcessor
     {
 
+        /// <summary>
+        /// Generates bitmap from 8bpp array
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static Bitmap generateBitmap(byte[] pixels, long width, long height)
         {
             Bitmap bitmap = new Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
@@ -44,9 +52,9 @@ namespace SarcusImaging
             return pixels; 
         }
 
-        public static Bitmap convertArrayToBitmap(ushort[] array, int width, int height, ushort offset)
+        public static Bitmap convertArrayToBitmap(ushort[] array, int width, int height)
         {
-            byte[] pixels = convertShortToByteArray(array, width, height,offset);
+            byte[] pixels = convertShortToByteArray(array, width, height);
             return generateBitmap(pixels, width, height);
 
         }
@@ -127,7 +135,7 @@ namespace SarcusImaging
                     int inIndex = (y * inStep) + (x * inBytesPerPixel);
                     int outIndex = (y * outStep) + (x * outBytesPerPixel);
 
-                    ushort pixel = pixels[inStep];
+                    ushort pixel = pixels[inIndex];
 
                     byte lobyte = (byte)pixel;
                     byte hibyte = (byte)(pixel >> 8);
@@ -158,60 +166,96 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static byte[] convertShortToByteArray(ushort[] original, long width, long height, ushort offset)
+        public static byte[] convertShortToByteArray(ushort[] original, long width, long height)
         {
-            // get max offset value
-            Byte byteMaxValue = Byte.MaxValue;
+            Debug.WriteLine("convertShortToByteArray()");
             // calculate result array size
             int size = (int)height * (int)width;
+            // create scale and offset func
+            ushort[] minMax = getUshortMinMaxValues(original);
+            float maxByteSize = (float)Byte.MaxValue;
+            float scale = maxByteSize / (minMax[1] - minMax[0]);
+            Debug.WriteLine("convertShortToByteArray() : min = " + minMax[0] + ", max = " + minMax[1] + ", scale = " + scale);
             // create result array
             byte[] result = new byte[size];
             // Step through original array
-            for (int y = 0; y < size; y++)
+            for (int i = 0; i < size; i++)
             {
-                ushort value = (ushort)(original[y] - offset);
-                if (value > byteMaxValue) {
-                    result[y] = byteMaxValue;
-                }
-                else {
-                    result[y] = (byte)value;
-                }
-               
+                float value = (original[i] - minMax[0]) * scale;
+                result[i] = (byte)value;       
             }
             return result;
         }
 
-        public static void printUshortArrayMinMax(ushort[] array)
+        public static ushort[] getImageXAveragePixelValue (ushort[] pixels, int width, int height)
         {
-            ushort resultMin = array[0];
-            ushort resultMax = array[0];
-            for (int x = 1; x < array.Length; x++)
+            System.Diagnostics.Debug.WriteLine("getImageXAveragePixelValue()");
+            ushort[] result = new ushort[width];
+          
+            // Step through the image by colum  
+            for (int y = 0; y < width; y++)
             {
-                if (array[x] > resultMax)
+                // Step through the image by width
+                ulong average = 0;  
+                for (int x = 0; x < height; x++)
                 {
-                    resultMax = array[x];
+                    // Get inbuffer index and outbuffer index 
+                    int index = y + (width * x);
+                    average += pixels[index];
                 }
-                if (array[x] < resultMin)
-                {
-                    resultMin = array[x];
-                }
+                // calculate average value of colum
+                result[y] = (ushort) (average / (uint) width);
             }
-            System.Diagnostics.Debug.WriteLine("Image pixel min value = " + resultMin);
-            System.Diagnostics.Debug.WriteLine("Image pixel max value = " + resultMax);
+            return result;
         }
 
-        public static ushort getUshortMinValue(ushort[] array)
+        public static ushort[] getImageYAveragePixelValue(ushort[] pixels, int width, int height)
         {
-            ushort resultMin = array[0];
+            System.Diagnostics.Debug.WriteLine("getImageXAveragePixelValue()");
+            ushort[] result = new ushort[width];
+
+            // Step through the image by colum  
+            for (int y = 0; y < height; y++)
+            {
+                // Step through the image by width
+                ulong average = 0;
+                for (int x = 0; x < width; x++)
+                {
+                    // Get inbuffer index and outbuffer index 
+                    int index = x + (width * y);
+                    average += pixels[index];
+                }
+                // calculate average value of colum
+                result[height - y - 1] = (ushort)(average / (uint)width);
+            }
+            return result;
+        }
+
+
+        /// <summary>
+        /// Returns array with two values MIN and MAX
+        /// minMax[0] = minimum, minMax[1] = maximum
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static ushort[] getUshortMinMaxValues(ushort[] array)
+        {
+            ushort[] minMax = new ushort[2];
+
+            minMax[0] = array[0];
+            minMax[0] = array[0];
             for (int x = 1; x < array.Length; x++)
             {
-                if (array[x] < resultMin)
+                if (array[x] > minMax[1])
                 {
-                    resultMin = array[x];
+                    minMax[1] = array[x];
+                }
+                if (array[x] < minMax[0])
+                {
+                    minMax[0] = array[x];
                 }
             }
-            System.Diagnostics.Debug.WriteLine("getUshortMinValue() =  " + resultMin);
-            return resultMin;
+            return minMax;
         }
 
         public static void printByteArrayMinMax(byte[] array)

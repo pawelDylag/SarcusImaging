@@ -69,6 +69,7 @@
     <Compile Include="dropdownWithLabel.Designer.cs">
       <DependentUpon>dropdownWithLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageBuffer.cs" />
     <Compile Include="ImageProcessor.cs" />
     <Compile Include="ImageReadyArgs.cs" />
     <Compile Include="MainForm.cs">

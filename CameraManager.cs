@@ -1,6 +1,7 @@
 ﻿using APOGEELib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -205,15 +206,19 @@ namespace SarcusImaging
         /// <param name="imageCount"></param>
         public void startSequence(double exposeTime, bool light, int imageCount)
         {
-            System.Diagnostics.Debug.WriteLine("startSequence()");
+            System.Diagnostics.Debug.WriteLine("startSequence() : start");
             if (camera != null && isCameraConnected())
             {
                 camera.ImageCount = imageCount;
                 long imgXSize = camera.ImagingColumns;
                 long imgYSize = camera.ImagingRows;
+                // camera turn off bulk sequence
+                camera.SequenceBulkDownload = false;
+                // setup time counter for method
                 // get raw data array from camera
                 camera.Expose(exposeTime, light);
-                for (int i = 1; i < imageCount; i++)
+                var absWatch = Stopwatch.StartNew();
+                for (int i = 1; i <= imageCount; i++)
                 {
                     // while new image isn't ready
                     while (camera.SequenceCounter != i)
@@ -221,15 +226,23 @@ namespace SarcusImaging
                         // waiting for new image
                     }
                     // if new image is ready
+                    System.Diagnostics.Debug.WriteLine("startSequence() : got new image. Timestamp: " + absWatch.ElapsedMilliseconds + "ms");
                     OnImageReady(getImageToMemory(imgXSize, imgYSize));
                 }
+                System.Diagnostics.Debug.WriteLine("startSequence() : stop");
+                camera.ImageCount = 1;
+                camera.SequenceBulkDownload = true;
             }
             else 
             {
-                   System.Diagnostics.Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
+                System.Diagnostics.Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
             }
         }
 
+        /// <summary>
+        /// Event handling method witch gets pixels array, and postprocess it.
+        /// </summary>
+        /// <param name="pixels"></param>
         protected virtual void OnImageReady(ushort[] pixels)
         {
             if (ImageReady != null)
@@ -237,7 +250,6 @@ namespace SarcusImaging
                 ImageReady(this, new ImageReadyArgs(pixels));
             }
         }
-
 
         /// <summary>
         /// Gets image from camera by passing ptr to allocated memory.
@@ -374,20 +386,20 @@ namespace SarcusImaging
         /// <summary>
         /// Sets camera trigger options.
         /// </summary>
-        /// <param name="state">if trigger is enabled</param>
+        /// <param name="each">if trigger is enabled</param>
         /// <param name="group">if enabled, then select group/singel image</param>
-        public void setCameraTrigger(bool state, bool group)
+        public void setCameraTrigger(bool each, bool group)
         {
             if (camera != null && isCameraConnected())
             {
                 // if turned on
-                if (state)
+                if (each)
                 {
                     if (group)
                     {
                         // sets trigger to start whole sequence
                         camera.TriggerNormalEach = true;
-                        camera.TriggerNormalGroup = true;
+                        camera.TriggerNormalGroup = false;
                     }
                     else
                     {
@@ -398,8 +410,18 @@ namespace SarcusImaging
                 }
                 else
                 {
-                    camera.TriggerNormalEach = false;
-                    camera.TriggerNormalGroup = false;
+                    if (group)
+                    {
+                        // sets trigger to start whole sequence
+                        camera.TriggerNormalEach = false;
+                        camera.TriggerNormalGroup = true;
+                    }
+                    else
+                    {
+                        // sets trigger off
+                        camera.TriggerNormalEach = false;
+                        camera.TriggerNormalGroup = false;
+                    }
                 }
             }
             System.Diagnostics.Debug.WriteLine("Camera trigger set to: " + camera.TriggerNormalEach + " , " + camera.TriggerNormalGroup);

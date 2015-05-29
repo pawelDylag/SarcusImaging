@@ -188,21 +188,17 @@ namespace SarcusImaging
 
         private void showImageFormWithImage(ushort[] image)
         {
-            SingleImageForm singleImageForm = new SingleImageForm(image);
             openedWindow.Invoke((MethodInvoker)delegate()
             {
-                singleImageForm.MdiParent = this.MdiParent;
-                singleImageForm.Show();
+                SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
         }
 
         private void showImageForm()
-        {
-            SingleImageForm singleImageForm = new SingleImageForm();
+        { 
             openedWindow.Invoke((MethodInvoker)delegate()
             {
-                singleImageForm.MdiParent = this.MdiParent;
-                singleImageForm.Show();
+                SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
         }
        
@@ -401,7 +397,12 @@ namespace SarcusImaging
 
         private void radioButtonTrgger1_CheckedChanged(object sender, EventArgs e)
         {
+            CameraManager.Instance.setCameraTrigger(true, true);
+        }
 
+        private void radioButtonTrigger2_CheckedChanged(object sender, EventArgs e)
+        {
+            CameraManager.Instance.setCameraTrigger(false, true);
         }
 
         private void buttonTemperature_Click(object sender, EventArgs e)
@@ -478,6 +479,7 @@ namespace SarcusImaging
             progressBarSequence.Style = ProgressBarStyle.Blocks;
             progressBarSequence.Maximum = imageCount;
             progressBarSequence.Value = 0;
+            progressBarSequence.Step = 1;
             // unlock "stop" button
             buttonStopSequence.Enabled = true;
             // show image form if not visible
@@ -495,6 +497,13 @@ namespace SarcusImaging
                 {
                     buttonStopSequence.Enabled = false;
                 }));
+
+                // Set progress bar value to 0
+                progressBarSequence.BeginInvoke(
+                new Action(() =>
+                { 
+                    progressBarSequence.Value = 0;
+                }));
             }
             ));
             backgroundThread.Start();
@@ -502,7 +511,11 @@ namespace SarcusImaging
 
         public void OnImageReady(object source, ImageReadyArgs a)
         {
-            progressBarSequence.Value++;
+            progressBarSequence.BeginInvoke(
+                new Action(() =>
+                {
+                    progressBarSequence.PerformStep();
+                }));
         }
 
         private void buttonStop_Click(object sender, EventArgs e)

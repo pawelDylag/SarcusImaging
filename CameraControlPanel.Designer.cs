@@ -355,6 +355,7 @@
             this.radioButtonTrigger2.Name = "radioButtonTrigger2";
             this.radioButtonTrigger2.TabStop = true;
             this.radioButtonTrigger2.UseVisualStyleBackColor = true;
+            this.radioButtonTrigger2.CheckedChanged += new System.EventHandler(this.radioButtonTrigger2_CheckedChanged);
             // 
             // radioButtonTrgger1
             // 
