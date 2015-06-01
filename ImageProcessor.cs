@@ -174,6 +174,7 @@ namespace SarcusImaging
             // create scale and offset func
             ushort[] minMax = getUshortMinMaxValues(original);
             float maxByteSize = (float)Byte.MaxValue;
+            // CO JESLI MIN = MAX ??
             float scale = maxByteSize / (minMax[1] - minMax[0]);
             Debug.WriteLine("convertShortToByteArray() : min = " + minMax[0] + ", max = " + minMax[1] + ", scale = " + scale);
             // create result array
@@ -187,6 +188,13 @@ namespace SarcusImaging
             return result;
         }
 
+        /// <summary>
+        /// Returns array with average pixel datas from X Axis
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static ushort[] getImageXAveragePixelValue (ushort[] pixels, int width, int height)
         {
             System.Diagnostics.Debug.WriteLine("getImageXAveragePixelValue()");
@@ -209,6 +217,13 @@ namespace SarcusImaging
             return result;
         }
 
+        /// <summary>
+        /// Returns array with average pixel data from Y Axis
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public static ushort[] getImageYAveragePixelValue(ushort[] pixels, int width, int height)
         {
             System.Diagnostics.Debug.WriteLine("getImageXAveragePixelValue()");
