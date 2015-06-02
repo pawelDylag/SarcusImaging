@@ -188,10 +188,10 @@ namespace SarcusImaging
         /// <returns></returns>
         public ushort[] getSingleImage()
         {
-            System.Diagnostics.Debug.WriteLine("GetSingleImage()");
+            Debug.WriteLine("GetSingleImage()");
             long imgXSize = camera.ImagingColumns;
             long imgYSize = camera.ImagingRows;
-            System.Diagnostics.Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")");
+            Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")");
             // get raw data array from camera
             ushort[] image = getImageToMemory(imgXSize, imgYSize);
             //System.Diagnostics.Debug.WriteLine("Image array lenght: " + image.Length);
@@ -206,7 +206,7 @@ namespace SarcusImaging
         /// <param name="imageCount"></param>
         public void startSequence(double exposeTime, bool light, int imageCount)
         {
-            System.Diagnostics.Debug.WriteLine("startSequence() : start");
+            Debug.WriteLine("startSequence() : start");
             if (camera != null && isCameraConnected())
             {
                 camera.ImageCount = imageCount;
@@ -215,27 +215,93 @@ namespace SarcusImaging
                 // camera turn off bulk sequence
                 camera.SequenceBulkDownload = false;
                 // setup time counter for method
+                ImagingTimer timer = new ImagingTimer();
+                timer.start();
                 // get raw data array from camera
                 camera.Expose(exposeTime, light);
-                var absWatch = Stopwatch.StartNew();
+                timer.timestamp("Exposure");
                 for (int i = 1; i <= imageCount; i++)
                 {
                     // while new image isn't ready
+                    timer.timestamp("Begin wait for image " + i + "/" + imageCount) ;
                     while (camera.SequenceCounter != i)
                     {
                         // waiting for new image
                     }
                     // if new image is ready
-                    System.Diagnostics.Debug.WriteLine("startSequence() : got new image. Timestamp: " + absWatch.ElapsedMilliseconds + "ms");
+                    timer.timestamp("Got image " + i + "/" + imageCount);
                     OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                    timer.timestamp("OnImageReady() for image " + i + "/" + imageCount);
                 }
-                System.Diagnostics.Debug.WriteLine("startSequence() : stop");
+                timer.timestamp("Sequence end");
+                timer.stop();
+                Debug.WriteLine(timer.listTimes());
                 camera.ImageCount = 1;
                 camera.SequenceBulkDownload = true;
             }
             else 
             {
-                System.Diagnostics.Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
+                Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
+            }
+        }
+
+
+        /// <summary>
+        /// Executes step by step given SequencePlan
+        /// </summary>
+        /// <param name="plan"></param>
+        public void executeSequencePlan(SequencePlan plan)
+        {
+            Debug.WriteLine("executeSequencePlan() : start");
+            long imgXSize = camera.ImagingColumns;
+            long imgYSize = camera.ImagingRows;
+            if (camera != null && isCameraConnected())
+            {
+                // loop all sequence items
+                for (int j = 0; j < plan.size(); j++)
+                {
+                    Debug.WriteLine("executeSequencePlan() : STEP " + j + "/" + (plan.size() + 1));
+                    // get next step from SequencePlan
+                    SequenceItem sequenceItem = plan.getItem(j);
+                    // set camera image count
+                    camera.ImageCount = sequenceItem.imageCount;
+                    // set camera trigger
+                    setCameraTrigger(sequenceItem.triggerType);
+                    // camera turn off bulk sequence
+                    camera.SequenceBulkDownload = false;
+                    // check if image is bias
+                    Boolean bias = (sequenceItem.type != (int)SequenceItem.types.TYPE_BIAS) ? true : false;
+                    // setup time counter for item
+                    ImagingTimer timer = new ImagingTimer();
+                    timer.start();
+                    // get raw data array from camera
+                    camera.Expose(sequenceItem.exposureTime, bias);
+                    timer.timestamp("Exposure");
+                    // loop all images in item
+                    for (int i = 1; i <= sequenceItem.imageCount; i++)
+                    {
+                        // while new image isn't ready
+                        timer.timestamp("Begin wait for image " + i + "/" + sequenceItem.imageCount);
+                        while (camera.SequenceCounter != i)
+                        {
+                            // waiting for new image
+                        }
+                        // if new image is ready
+                        timer.timestamp("Got image " + i + "/" + sequenceItem.imageCount);
+                        OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                        timer.timestamp("OnImageReady() for image " + i + "/" + sequenceItem.imageCount);
+                    }
+                    timer.timestamp("Sequence end");
+                    timer.stop();
+                    Debug.WriteLine(timer.listTimes());
+                }
+                // reset camera to default 
+                camera.ImageCount = 1;
+                camera.SequenceBulkDownload = true;
+            }
+            else
+            {
+                Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
             }
         }
 
@@ -424,7 +490,30 @@ namespace SarcusImaging
                     }
                 }
             }
-            System.Diagnostics.Debug.WriteLine("Camera trigger set to: " + camera.TriggerNormalEach + " , " + camera.TriggerNormalGroup);
+            Debug.WriteLine("Camera trigger set to: " + camera.TriggerNormalEach + " , " + camera.TriggerNormalGroup);
+        }
+
+        /// <summary>
+        /// Sets camera trigger dependent on trigger type from SequenceItem
+        /// </summary>
+        /// <param name="triggerType"></param>
+        public void setCameraTrigger(int triggerType)
+        {
+            switch (triggerType)
+            {
+                case (int)SequenceItem.triggerTypes.TRIGGER_NONE:
+                    setCameraTrigger(false, false);
+                    break;
+                case (int)SequenceItem.triggerTypes.TRIGGER_EACH:
+                    setCameraTrigger(true, true);
+                    break;
+                case (int)SequenceItem.triggerTypes.TRIGGER_WHOLE:
+                    setCameraTrigger(false, true);
+                    break;
+                case (int)SequenceItem.triggerTypes.TRIGGER_ALL_WITHOUT_FIRST:
+                    setCameraTrigger(true, false);
+                    break;
+            }
         }
 
         /// <summary>

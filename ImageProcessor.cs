@@ -226,7 +226,7 @@ namespace SarcusImaging
         /// <returns></returns>
         public static ushort[] getImageYAveragePixelValue(ushort[] pixels, int width, int height)
         {
-            System.Diagnostics.Debug.WriteLine("getImageXAveragePixelValue()");
+            System.Diagnostics.Debug.WriteLine("getImageYAveragePixelValue()");
             ushort[] result = new ushort[width];
 
             // Step through the image by colum  

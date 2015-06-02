@@ -472,25 +472,27 @@ namespace SarcusImaging
 
         private void buttonStartSequence_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("buttonStartSequence_Click()");
-            int imageCount = (int) numericUpDownImageCount.Value;
-            double exposeTime = (double)numericUpDownTimeSequence.Value;
-            // set progress bar 
-            progressBarSequence.Style = ProgressBarStyle.Blocks;
-            progressBarSequence.Maximum = imageCount;
-            progressBarSequence.Value = 0;
-            progressBarSequence.Step = 1;
-            // unlock "stop" button
-            buttonStopSequence.Enabled = true;
-            // show image form if not visible
+            //System.Diagnostics.Debug.WriteLine("buttonStartSequence_Click()");
+            //int imageCount = (int) numericUpDownImageCount.Value;
+            //double exposeTime = (double)numericUpDownTimeSequence.Value;
+            //// set progress bar 
+            //progressBarSequence.Style = ProgressBarStyle.Blocks;
+            //progressBarSequence.Maximum = imageCount;
+            //progressBarSequence.Value = 0;
+            //progressBarSequence.Step = 1;
+            //// unlock "stop" button
+            //buttonStopSequence.Enabled = true;
+            //// show image form if not visible
             showImageForm();
             // start imaging bg thread
             Thread backgroundThread = new Thread(
             new ThreadStart(() =>
             {
                 // start imaging sequence
-                CameraManager.Instance.startSequence(exposeTime, true, imageCount);
-
+                // CameraManager.Instance.startSequence(exposeTime, true, imageCount);
+                SequencePlan plan = new SequencePlan();
+                plan.setDebugPlan();
+                CameraManager.Instance.executeSequencePlan(plan);
                 // lock again stop button
                 buttonStopSequence.BeginInvoke(
                 new Action(() =>

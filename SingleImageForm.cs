@@ -29,8 +29,8 @@ namespace SarcusImaging
             chartX.ChartAreas[0].AxisX.Maximum = 512;
             chartX.ChartAreas[0].AxisX.Minimum = 0;
 
-            chartY.ChartAreas[0].AxisX.Maximum = 512;
-            chartY.ChartAreas[0].AxisX.Minimum = 0;
+            chartY.ChartAreas[0].AxisY2.Maximum = 512;
+            chartY.ChartAreas[0].AxisY2.Minimum = 0;
         }
 
         /// <summary>
@@ -53,6 +53,7 @@ namespace SarcusImaging
         public SingleImageForm(ushort[] image)
         {
             InitializeComponent();
+            // subscribe to image event list
             CameraManager.Instance.ImageReady += this.OnImageReady;
             int width = CameraManager.Instance.getImagingRows();
             int height = CameraManager.Instance.getImagingColumns();
@@ -112,10 +113,10 @@ namespace SarcusImaging
                {
                    ushort[] averageY = ImageProcessor.getImageYAveragePixelValue(data, width, height);
                    chartY.Series["AverageY"].Points.Clear();
-                   for (int i = 0; i < width; i++)
+                   for (int i = 0; i < height; i++)
                    {
                        DataPoint dp = new DataPoint();
-                       dp.SetValueXY(i, averageY[i]);
+                       dp.SetValueXY(averageY[i], i);
                        chartY.Series["AverageY"].Points.Add(dp);
                    }
                }));
@@ -128,6 +129,8 @@ namespace SarcusImaging
 
         private void SingleImageForm_FormClosed(object sender, EventArgs e)
         {
+            // unsubscribe from image events
+            CameraManager.Instance.ImageReady -= this.OnImageReady;
             openedWindow = null;
         }
     }

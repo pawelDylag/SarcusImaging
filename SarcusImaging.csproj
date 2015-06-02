@@ -72,6 +72,7 @@
     <Compile Include="ImageBuffer.cs" />
     <Compile Include="ImageProcessor.cs" />
     <Compile Include="ImageReadyArgs.cs" />
+    <Compile Include="ImagingTimer.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +87,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SequenceItem.cs" />
+    <Compile Include="SequencePlan.cs" />
     <Compile Include="SingleImageForm.cs">
       <SubType>Form</SubType>
     </Compile>
