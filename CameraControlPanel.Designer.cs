@@ -74,16 +74,6 @@
             this.comboBoxDigitization = new System.Windows.Forms.ComboBox();
             this.checkBoxDigitizeOverscan = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.tabPageExpose = new System.Windows.Forms.TabPage();
-            this.label6 = new System.Windows.Forms.Label();
-            this.progressBarExposure = new System.Windows.Forms.ProgressBar();
-            this.buttonStop = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.numericUpDownTime = new System.Windows.Forms.NumericUpDown();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonBias = new System.Windows.Forms.RadioButton();
-            this.radioButtonLight = new System.Windows.Forms.RadioButton();
-            this.buttonExpose = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.gtoupBoxCameraSetup.SuspendLayout();
             this.tabControlPanel.SuspendLayout();
@@ -97,10 +87,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTimeSequence)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownImageCount)).BeginInit();
             this.groupBoxDigitization.SuspendLayout();
-            this.tabPageExpose.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTime)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gtoupBoxCameraSetup
@@ -183,7 +169,6 @@
             // 
             this.tabControlPanel.Controls.Add(this.tabPageSetup);
             this.tabControlPanel.Controls.Add(this.tabPageSequence);
-            this.tabControlPanel.Controls.Add(this.tabPageExpose);
             resources.ApplyResources(this.tabControlPanel, "tabControlPanel");
             this.tabControlPanel.Name = "tabControlPanel";
             this.tabControlPanel.SelectedIndex = 0;
@@ -484,90 +469,6 @@
             resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
             // 
-            // tabPageExpose
-            // 
-            this.tabPageExpose.Controls.Add(this.label6);
-            this.tabPageExpose.Controls.Add(this.progressBarExposure);
-            this.tabPageExpose.Controls.Add(this.buttonStop);
-            this.tabPageExpose.Controls.Add(this.groupBox4);
-            this.tabPageExpose.Controls.Add(this.groupBox1);
-            this.tabPageExpose.Controls.Add(this.buttonExpose);
-            resources.ApplyResources(this.tabPageExpose, "tabPageExpose");
-            this.tabPageExpose.Name = "tabPageExpose";
-            // 
-            // label6
-            // 
-            resources.ApplyResources(this.label6, "label6");
-            this.label6.Name = "label6";
-            // 
-            // progressBarExposure
-            // 
-            resources.ApplyResources(this.progressBarExposure, "progressBarExposure");
-            this.progressBarExposure.Name = "progressBarExposure";
-            this.progressBarExposure.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBarExposure.Click += new System.EventHandler(this.progressBarExposure_Click);
-            // 
-            // buttonStop
-            // 
-            resources.ApplyResources(this.buttonStop, "buttonStop");
-            this.buttonStop.Name = "buttonStop";
-            this.buttonStop.UseVisualStyleBackColor = true;
-            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.numericUpDownTime);
-            resources.ApplyResources(this.groupBox4, "groupBox4");
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.TabStop = false;
-            // 
-            // numericUpDownTime
-            // 
-            this.numericUpDownTime.DecimalPlaces = 3;
-            this.numericUpDownTime.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-            resources.ApplyResources(this.numericUpDownTime, "numericUpDownTime");
-            this.numericUpDownTime.Name = "numericUpDownTime";
-            this.numericUpDownTime.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDownTime.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.radioButtonBias);
-            this.groupBox1.Controls.Add(this.radioButtonLight);
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
-            // 
-            // radioButtonBias
-            // 
-            resources.ApplyResources(this.radioButtonBias, "radioButtonBias");
-            this.radioButtonBias.Name = "radioButtonBias";
-            this.radioButtonBias.UseVisualStyleBackColor = true;
-            this.radioButtonBias.CheckedChanged += new System.EventHandler(this.radioButton7_CheckedChanged);
-            // 
-            // radioButtonLight
-            // 
-            resources.ApplyResources(this.radioButtonLight, "radioButtonLight");
-            this.radioButtonLight.Checked = true;
-            this.radioButtonLight.Name = "radioButtonLight";
-            this.radioButtonLight.TabStop = true;
-            this.radioButtonLight.UseVisualStyleBackColor = true;
-            // 
-            // buttonExpose
-            // 
-            resources.ApplyResources(this.buttonExpose, "buttonExpose");
-            this.buttonExpose.Name = "buttonExpose";
-            this.buttonExpose.UseVisualStyleBackColor = true;
-            this.buttonExpose.Click += new System.EventHandler(this.buttonExpose_Click);
-            // 
             // label1
             // 
             resources.ApplyResources(this.label1, "label1");
@@ -598,12 +499,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownImageCount)).EndInit();
             this.groupBoxDigitization.ResumeLayout(false);
             this.groupBoxDigitization.PerformLayout();
-            this.tabPageExpose.ResumeLayout(false);
-            this.tabPageExpose.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTime)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -637,16 +532,6 @@
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.GroupBox groupBoxTemperature;
         private System.Windows.Forms.Button buttonTemperature;
-        private System.Windows.Forms.TabPage tabPageExpose;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radioButtonBias;
-        private System.Windows.Forms.RadioButton radioButtonLight;
-        private System.Windows.Forms.Button buttonExpose;
-        private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.NumericUpDown numericUpDownTime;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ProgressBar progressBarExposure;
-        private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.TabPage tabPageSequence;
         private System.Windows.Forms.GroupBox groupBoxTrigger;
         private System.Windows.Forms.GroupBox groupBoxImage;

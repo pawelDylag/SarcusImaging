@@ -119,5 +119,10 @@ namespace SarcusImaging
         {
             stopCameraStatusUpdates();
         }
+
+        private void sequenceSetupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SequenceForm.ShowForm(this);
+        }
     }
 }

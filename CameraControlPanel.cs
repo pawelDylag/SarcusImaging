@@ -50,12 +50,10 @@ namespace SarcusImaging
         /// <param name="locked"></param>
         private void lockTabs(bool locked){
             TabPage imagePage = tabControlPanel.TabPages[1];
-            TabPage exposePage = tabControlPanel.TabPages[2];
             if (locked)
             {
                 imagePage.Enabled = false;
                 groupBoxLeds.Enabled = false;
-                exposePage.Enabled = false;
                 groupBoxTemperature.Enabled = false;
                 groupBoxMode.Enabled = false;
             }
@@ -63,7 +61,6 @@ namespace SarcusImaging
             {
                 imagePage.Enabled = true;
                 groupBoxLeds.Enabled = true;
-                exposePage.Enabled = true;
                 groupBoxTemperature.Enabled = true;
                 groupBoxMode.Enabled = true;
                 comboBoxDigitization.SelectedIndex = 1;
@@ -134,55 +131,6 @@ namespace SarcusImaging
 
         private void label1_Click_1(object sender, EventArgs e)
         {
-
-        }
-
-        private void buttonExpose_Click(object sender, EventArgs e)
-        {
-            bool light = false;
-            if (radioButtonLight.Checked)
-            {
-                light = true;
-            }
-            double exposeTime = (double)numericUpDownTime.Value;
-            System.Diagnostics.Debug.WriteLine("Exposing with time: " + exposeTime + ", with lights: " + light);
-            // remember last image count
-            int lastImageCount = CameraManager.Instance.getImageCount();
-            // set camera image count to 
-            CameraManager.Instance.setImageCount(1);
-            // turn on stop button
-            buttonStop.Enabled = true;
-            Thread backgroundThread = new Thread(
-            new ThreadStart(() =>                       
-            {
-                CameraManager.Instance.startExposure(exposeTime, light);
-                progressBarExposure.BeginInvoke( new Action(() =>
-                {
-                    progressBarExposure.Style = ProgressBarStyle.Marquee;
-                    progressBarExposure.MarqueeAnimationSpeed = 30;
-                }));
-                while (!CameraManager.Instance.hasNewImage())
-                {
-                }
-                 progressBarExposure.BeginInvoke(
-                        new Action(() =>
-                        {
-                            progressBarExposure.Style = ProgressBarStyle.Continuous;
-                        }
-                    ));
-                System.Diagnostics.Debug.WriteLine("Got new image");
-                ushort[] img = CameraManager.Instance.getSingleImage();
-                CameraManager.Instance.setImageCount(lastImageCount);
-                showImageFormWithImage(img);
-                // unlock stop button
-                buttonStop.BeginInvoke(
-                new Action(() =>
-                {
-                    buttonStop.Enabled = false;
-                }));
-            }
-            ));
-            backgroundThread.Start();
 
         }
 

@@ -25,7 +25,6 @@ namespace SarcusImaging
         private struct Timestamp
         {
             public long timestamp;
-            public long absoluteTimestamp;
             public String comment;
         }
 

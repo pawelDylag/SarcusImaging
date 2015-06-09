@@ -83,6 +83,8 @@ namespace SarcusImaging
             int width = CameraManager.Instance.getImagingRows();
             int height = CameraManager.Instance.getImagingColumns();
             Bitmap bitmap = ImageProcessor.convertArrayToBitmap(a.pixels, width, height);
+            boxPicture3.Image = boxPicture2.Image;
+            boxPicture2.Image = boxPicture.Image;
             boxPicture.Image = bitmap;
             updateXChart(a.pixels, width, height);
             updateYChart(a.pixels, width, height);
@@ -132,6 +134,21 @@ namespace SarcusImaging
             // unsubscribe from image events
             CameraManager.Instance.ImageReady -= this.OnImageReady;
             openedWindow = null;
+        }
+
+        private void SingleImageForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

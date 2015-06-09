@@ -41,3 +41,4 @@ C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.CameraContro
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources

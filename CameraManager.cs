@@ -252,7 +252,8 @@ namespace SarcusImaging
         /// <param name="plan"></param>
         public void executeSequencePlan(SequencePlan plan)
         {
-            Debug.WriteLine("executeSequencePlan() : start");
+            Debug.WriteLine("=============================");
+            Debug.WriteLine("executeSequencePlan() : start" + Environment.NewLine);
             long imgXSize = camera.ImagingColumns;
             long imgYSize = camera.ImagingRows;
             if (camera != null && isCameraConnected())
@@ -260,7 +261,7 @@ namespace SarcusImaging
                 // loop all sequence items
                 for (int j = 0; j < plan.size(); j++)
                 {
-                    Debug.WriteLine("executeSequencePlan() : STEP " + j + "/" + (plan.size() + 1));
+                    Debug.WriteLine("executeSequencePlan() : STEP " + (j + 1) + "/" + plan.size());
                     // get next step from SequencePlan
                     SequenceItem sequenceItem = plan.getItem(j);
                     // set camera image count
@@ -295,13 +296,16 @@ namespace SarcusImaging
                     timer.stop();
                     Debug.WriteLine(timer.listTimes());
                 }
+                Debug.WriteLine("executeSequencePlan() : stop");
+                Debug.WriteLine("=============================");
                 // reset camera to default 
                 camera.ImageCount = 1;
                 camera.SequenceBulkDownload = true;
             }
             else
             {
-                Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
+                Debug.WriteLine("executeSequencePlan() : Error starting sequence. No camera object or camera is not connected.");
+                Debug.WriteLine("=============================");
             }
         }
 

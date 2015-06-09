@@ -32,6 +32,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemCamera = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCameraOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,7 +43,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxStatus = new System.Windows.Forms.ToolStripTextBox();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sequenceSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -77,10 +78,17 @@
             this.aboutToolStripMenuItem.Text = "New session";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
             // menuItemCamera
             // 
             this.menuItemCamera.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCameraOptions});
+            this.menuCameraOptions,
+            this.sequenceSetupToolStripMenuItem});
             this.menuItemCamera.Name = "menuItemCamera";
             this.menuItemCamera.Size = new System.Drawing.Size(60, 20);
             this.menuItemCamera.Text = "Camera";
@@ -89,7 +97,7 @@
             // menuCameraOptions
             // 
             this.menuCameraOptions.Name = "menuCameraOptions";
-            this.menuCameraOptions.Size = new System.Drawing.Size(146, 22);
+            this.menuCameraOptions.Size = new System.Drawing.Size(157, 22);
             this.menuCameraOptions.Text = "Control Panel";
             this.menuCameraOptions.Click += new System.EventHandler(this.menuCameraOptions_Click);
             // 
@@ -159,11 +167,12 @@
             this.toolStripTextBoxStatus.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolStripTextBoxStatus.Click += new System.EventHandler(this.toolStripTextBox1_Click);
             // 
-            // editToolStripMenuItem
+            // sequenceSetupToolStripMenuItem
             // 
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
+            this.sequenceSetupToolStripMenuItem.Name = "sequenceSetupToolStripMenuItem";
+            this.sequenceSetupToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.sequenceSetupToolStripMenuItem.Text = "Sequence setup";
+            this.sequenceSetupToolStripMenuItem.Click += new System.EventHandler(this.sequenceSetupToolStripMenuItem_Click);
             // 
             // SarcusImaging
             // 
@@ -203,6 +212,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxStatus;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sequenceSetupToolStripMenuItem;
     }
 }
 
