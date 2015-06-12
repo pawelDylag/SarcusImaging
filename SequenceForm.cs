@@ -20,6 +20,7 @@ namespace SarcusImaging
         {
             InitializeComponent();
             initList();
+            CameraManager.Instance.SequenceEnded += this.OnSequenceEnded;
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace SarcusImaging
             col1.HeaderText = "Type";
             col1.Name = "2";
             row.Add("Bias");
-            row.Add("Sequence");
+            row.Add("Image");
             row.Add("Probe");
             row.Add("Background");
             col1.Items.AddRange(row.ToArray());
@@ -64,8 +65,8 @@ namespace SarcusImaging
             col4.HeaderText = "Trigger";
             col4.Name = "4";
             row.Add("No trigger");
-            row.Add("Each image");
-            row.Add("Whole group");
+            row.Add("Trigger each");
+            row.Add("Trigger whole group");
             col4.Items.AddRange(row.ToArray());
             col4.SortMode = DataGridViewColumnSortMode.NotSortable;
             DataGridViewTextBoxColumn col5 = new DataGridViewTextBoxColumn();
@@ -97,6 +98,7 @@ namespace SarcusImaging
         {
             Debug.WriteLine("generateSequencePlan() : start");
             SequencePlan result = new SequencePlan();
+            result.iterations = (int) numericUpDownIterations.Value;
             // get list items
             DataGridViewRowCollection rows = dataGridViewSequence.Rows;
             // loop for each item
@@ -116,7 +118,7 @@ namespace SarcusImaging
                     case "Background":
                         type = (int)SequenceItem.types.TYPE_BACKGROUND;
                         break;
-                    case "Sequence":
+                    case "Image":
                         type = (int)SequenceItem.types.TYPE_SEQUENCE;
                         break;
                     case "Probe":
@@ -149,10 +151,10 @@ namespace SarcusImaging
                     case "No trigger":
                         trigger = (int)SequenceItem.triggerTypes.TRIGGER_NONE;
                         break;
-                    case "Each image":
+                    case "Trigger each":
                         trigger = (int)SequenceItem.triggerTypes.TRIGGER_EACH;
                         break;
-                    case "Whole group":
+                    case "Trigger whole group":
                         trigger = (int)SequenceItem.triggerTypes.TRIGGER_WHOLE;
                         break;
                     default:
@@ -199,7 +201,57 @@ namespace SarcusImaging
             {
                 SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
+            buttonStop.BeginInvoke(
+               new Action(() =>
+               {
+                   buttonStop.Enabled = false;
+               }));
+            progressBarIterations.BeginInvoke(
+              new Action(() =>
+              {
+                  progressBarIterations.Maximum = sequencePlan.iterations * sequencePlan.size();
+              }));
             CameraManager.Instance.executeSequencePlan(sequencePlan);
+        }
+
+        public void OnImageReady(object source, ImageReadyArgs a)
+        {
+            progressBarIterations.BeginInvoke(
+              new Action(() =>
+              {
+                  progressBarIterations.PerformStep();
+              }));
+        }
+
+        public void OnSequenceEnded(object source, EventArgs a)
+        {
+            progressBarIterations.BeginInvoke(
+              new Action(() =>
+              {
+                  progressBarIterations.Value = 0;
+              }));
+            buttonStop.BeginInvoke(
+             new Action(() =>
+             {
+                 buttonStop.Enabled = true;
+                 CameraManager.Instance.stopExposure();
+             }));
+        }
+
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
         }
 
 

@@ -42,3 +42,4 @@ C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.Properties.R
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
+C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources

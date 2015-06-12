@@ -472,5 +472,10 @@ namespace SarcusImaging
         {
             CameraManager.Instance.stopExposure();
         }
+
+        private void progressBarSequence_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

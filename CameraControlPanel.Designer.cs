@@ -391,6 +391,7 @@
             // 
             resources.ApplyResources(this.progressBarSequence, "progressBarSequence");
             this.progressBarSequence.Name = "progressBarSequence";
+            this.progressBarSequence.Click += new System.EventHandler(this.progressBarSequence_Click);
             // 
             // buttonStartSequence
             // 

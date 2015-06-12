@@ -8,7 +8,8 @@ namespace SarcusImaging
 {
     class SequencePlan
     {
-        List<SequenceItem> items; 
+        List<SequenceItem> items;
+        public int iterations { get; set; }
 
         public SequencePlan()
         {

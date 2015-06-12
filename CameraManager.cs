@@ -32,6 +32,9 @@ namespace SarcusImaging
         public delegate void ImageReadyEventHandler(object source, ImageReadyArgs args);
         public event ImageReadyEventHandler ImageReady;
 
+        public delegate void SequenceEndedEventHandler(object source, EventArgs args);
+        public event SequenceEndedEventHandler SequenceEnded;
+
         /// <summary>
         /// Private constructor to avoid creating copies of this class
         /// </summary>
@@ -199,105 +202,65 @@ namespace SarcusImaging
         }
 
         /// <summary>
-        /// Starts sequence of images.
-        /// </summary>
-        /// <param name="exposeTime"></param>
-        /// <param name="light"></param>
-        /// <param name="imageCount"></param>
-        public void startSequence(double exposeTime, bool light, int imageCount)
-        {
-            Debug.WriteLine("startSequence() : start");
-            if (camera != null && isCameraConnected())
-            {
-                camera.ImageCount = imageCount;
-                long imgXSize = camera.ImagingColumns;
-                long imgYSize = camera.ImagingRows;
-                // camera turn off bulk sequence
-                camera.SequenceBulkDownload = false;
-                // setup time counter for method
-                ImagingTimer timer = new ImagingTimer();
-                timer.start();
-                // get raw data array from camera
-                camera.Expose(exposeTime, light);
-                timer.timestamp("Exposure");
-                for (int i = 1; i <= imageCount; i++)
-                {
-                    // while new image isn't ready
-                    timer.timestamp("Begin wait for image " + i + "/" + imageCount) ;
-                    while (camera.SequenceCounter != i)
-                    {
-                        // waiting for new image
-                    }
-                    // if new image is ready
-                    timer.timestamp("Got image " + i + "/" + imageCount);
-                    OnImageReady(getImageToMemory(imgXSize, imgYSize));
-                    timer.timestamp("OnImageReady() for image " + i + "/" + imageCount);
-                }
-                timer.timestamp("Sequence end");
-                timer.stop();
-                Debug.WriteLine(timer.listTimes());
-                camera.ImageCount = 1;
-                camera.SequenceBulkDownload = true;
-            }
-            else 
-            {
-                Debug.WriteLine("startSequence() : Error starting sequence. No camera object or camera is not connected.");
-            }
-        }
-
-
-        /// <summary>
         /// Executes step by step given SequencePlan
         /// </summary>
         /// <param name="plan"></param>
         public void executeSequencePlan(SequencePlan plan)
         {
+
             Debug.WriteLine("=============================");
             Debug.WriteLine("executeSequencePlan() : start" + Environment.NewLine);
             long imgXSize = camera.ImagingColumns;
             long imgYSize = camera.ImagingRows;
             if (camera != null && isCameraConnected())
             {
-                // loop all sequence items
-                for (int j = 0; j < plan.size(); j++)
+                // loop all iterations
+                for (int k = 0; k < plan.iterations; k++)
                 {
-                    Debug.WriteLine("executeSequencePlan() : STEP " + (j + 1) + "/" + plan.size());
-                    // get next step from SequencePlan
-                    SequenceItem sequenceItem = plan.getItem(j);
-                    // set camera image count
-                    camera.ImageCount = sequenceItem.imageCount;
-                    // set camera trigger
-                    setCameraTrigger(sequenceItem.triggerType);
-                    // camera turn off bulk sequence
-                    camera.SequenceBulkDownload = false;
-                    // check if image is bias
-                    Boolean bias = (sequenceItem.type != (int)SequenceItem.types.TYPE_BIAS) ? true : false;
-                    // setup time counter for item
-                    ImagingTimer timer = new ImagingTimer();
-                    timer.start();
-                    // get raw data array from camera
-                    camera.Expose(sequenceItem.exposureTime, bias);
-                    timer.timestamp("Exposure");
-                    // loop all images in item
-                    for (int i = 1; i <= sequenceItem.imageCount; i++)
+                    // loop all sequence items
+                    for (int j = 0; j < plan.size(); j++)
                     {
-                        // while new image isn't ready
-                        timer.timestamp("Begin wait for image " + i + "/" + sequenceItem.imageCount);
-                        while (camera.SequenceCounter != i)
+                        Debug.WriteLine("executeSequencePlan() : ITERATION " + k + " STEP " + (j + 1) + "/" + plan.size());
+                        // get next step from SequencePlan
+                        SequenceItem sequenceItem = plan.getItem(j);
+                        // set camera image count
+                        camera.ImageCount = sequenceItem.imageCount;
+                        // set camera trigger
+                        setCameraTrigger(sequenceItem.triggerType);
+                        // camera turn off bulk sequence
+                        camera.SequenceBulkDownload = false;
+                        // check if image is bias
+                        Boolean bias = (sequenceItem.type != (int)SequenceItem.types.TYPE_BIAS) ? true : false;
+                        // setup time counter for item
+                        ImagingTimer timer = new ImagingTimer();
+                        timer.start();
+                        // get raw data array from camera
+                        camera.Expose(sequenceItem.exposureTime, bias);
+                        timer.timestamp("Exposure");
+                        // loop all images in item
+                        for (int i = 1; i <= sequenceItem.imageCount; i++)
                         {
-                            // waiting for new image
+                            // while new image isn't ready
+                            timer.timestamp("Begin wait for image " + i + "/" + sequenceItem.imageCount);
+                            while (camera.SequenceCounter != i)
+                            {
+                                // waiting for new image
+                            }
+                            // if new image is ready
+                            timer.timestamp("Got image " + i + "/" + sequenceItem.imageCount);
+                            OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                            timer.timestamp("OnImageReady() for image " + i + "/" + sequenceItem.imageCount);
                         }
-                        // if new image is ready
-                        timer.timestamp("Got image " + i + "/" + sequenceItem.imageCount);
-                        OnImageReady(getImageToMemory(imgXSize, imgYSize));
-                        timer.timestamp("OnImageReady() for image " + i + "/" + sequenceItem.imageCount);
+                        timer.timestamp("Sequence end");
+                        timer.stop();
+                        Debug.WriteLine(timer.listTimes());
                     }
-                    timer.timestamp("Sequence end");
-                    timer.stop();
-                    Debug.WriteLine(timer.listTimes());
+
                 }
                 Debug.WriteLine("executeSequencePlan() : stop");
                 Debug.WriteLine("=============================");
+                // notify about sequence end
+                OnSequenceEnd();
                 // reset camera to default 
                 camera.ImageCount = 1;
                 camera.SequenceBulkDownload = true;
@@ -318,6 +281,18 @@ namespace SarcusImaging
             if (ImageReady != null)
             {
                 ImageReady(this, new ImageReadyArgs(pixels));
+            }
+        }
+
+        /// <summary>
+        /// Event handling method witch gets pixels array, and postprocess it.
+        /// </summary>
+        /// <param name="pixels"></param>
+        protected virtual void OnSequenceEnd()
+        {
+            if (SequenceEnded != null)
+            {
+                SequenceEnded(this, new EventArgs());
             }
         }
 
