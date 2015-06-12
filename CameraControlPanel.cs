@@ -149,7 +149,16 @@ namespace SarcusImaging
                 SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
         }
-       
+
+        private void showSequenceForm()
+        {
+            openedWindow.Invoke((MethodInvoker)delegate ()
+            {
+                SequenceForm.ShowForm((SarcusImaging)this.MdiParent);
+            });
+        }
+
+
         private void buttonGetImage_Click(object sender, EventArgs e)
         {
 
@@ -200,6 +209,11 @@ namespace SarcusImaging
 
         }
 
+        /// <summary>
+        /// This method is called when user selects new camera
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonFindNewCamera_Click(object sender, EventArgs e)
         {
             CameraManager cameraManager = CameraManager.Instance;
@@ -207,6 +221,8 @@ namespace SarcusImaging
             if (isSelected)
             {
                 lockTabs(false);
+                showImageForm();
+                showSequenceForm();
             }
             updateTextBoxModel();
             updateTextBoxCameraConnectionStatus();

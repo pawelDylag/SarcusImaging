@@ -177,7 +177,7 @@ namespace SarcusImaging
         /// <param name="e"></param>
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            dataGridViewSequence.Rows.Add("Sequence","1,0", "1", "No trigger", "img");
+            dataGridViewSequence.Rows.Add("Image","1,0", "1", "No trigger", "img");
         }
 
         /// <summary>
@@ -211,7 +211,8 @@ namespace SarcusImaging
               {
                   progressBarIterations.Maximum = sequencePlan.iterations * sequencePlan.size();
               }));
-            CameraManager.Instance.executeSequencePlan(sequencePlan);
+            // CameraManager.Instance.executeSequencePlan(sequencePlan);
+            CameraManager.Instance.measureImagingTimes();
         }
 
         public void OnImageReady(object source, ImageReadyArgs a)

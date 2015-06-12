@@ -72,5 +72,11 @@ namespace SarcusImaging
             return result;
         }
 
+        public void reset()
+        {
+            stopwatch.Reset();
+            timestamps.Clear();
+        }
+
     }
 }
