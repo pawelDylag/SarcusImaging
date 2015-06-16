@@ -34,9 +34,9 @@
             this.buttonStart = new System.Windows.Forms.Button();
             this.numericUpDownIterations = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.buttonStop = new System.Windows.Forms.Button();
             this.progressBarIterations = new System.Windows.Forms.ProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSequence)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownIterations)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -116,6 +116,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(19, 21);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Iterations";
+            this.label1.Click += new System.EventHandler(this.label1_Click_1);
+            // 
             // buttonStop
             // 
             this.buttonStop.Enabled = false;
@@ -132,16 +142,6 @@
             this.progressBarIterations.Name = "progressBarIterations";
             this.progressBarIterations.Size = new System.Drawing.Size(156, 23);
             this.progressBarIterations.TabIndex = 7;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Iterations";
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // SequenceForm
             // 

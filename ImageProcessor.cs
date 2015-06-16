@@ -24,8 +24,9 @@ namespace SarcusImaging
         /// <returns></returns>
         public static Bitmap generateBitmap(byte[] pixels, long width, long height)
         {
-            Bitmap bitmap = new Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
-            changeBitmapToGreyscale(bitmap);
+            
+            Bitmap bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format32bppRgb);
+            Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
             Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
             IntPtr pixelStartAddress = picData.Scan0;
@@ -66,15 +67,15 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static byte[] Convert16BitGrayScaleToRgb48(byte[] inBuffer, int width, int height)
+        public static byte[] Convert16BitGrayScaleToRgb32(byte[] inBuffer, int width, int height)
         {
-            System.Diagnostics.Debug.WriteLine("Convert16BitGrayScaleToRgb48()" );
-            System.Diagnostics.Debug.WriteLine("Convert16BitGrayScaleToRgb48() -> input array lenght: " + inBuffer.Length);
+            Debug.WriteLine("Convert16BitGrayScaleToRgb32()");
+            Debug.WriteLine("Convert16BitGrayScaleToRgb32() -> input array lenght: " + inBuffer.Length);
             int inBytesPerPixel = 2;
-            int outBytesPerPixel = 6;
+            int outBytesPerPixel = 4;
 
             byte[] outBuffer = new byte[width * height * outBytesPerPixel];
-            System.Diagnostics.Debug.WriteLine("Convert16BitGrayScaleToRgb48() -> output array lenght: " + outBuffer.Length);
+            Debug.WriteLine("Convert16BitGrayScaleToRgb32() -> output array lenght: " + outBuffer.Length);
             int inStep = width * inBytesPerPixel;
             int outStep = width * outBytesPerPixel;
 
@@ -152,6 +153,19 @@ namespace SarcusImaging
             ColorPalette palette = bitmap.Palette;
             Color[] colors = palette.Entries;
             for(int i = 0; i<256; i++){
+                Color grayShade = new Color();
+                grayShade = Color.FromArgb((byte)i, (byte)i, (byte)i);
+                colors[i] = grayShade;
+            }
+            bitmap.Palette = palette;
+        }
+
+        public static void changeBitmapToHeatmap(Bitmap bitmap)
+        {
+            ColorPalette palette = bitmap.Palette;
+            Color[] colors = palette.Entries;
+            for (int i = 0; i < 256; i++)
+            {
                 Color grayShade = new Color();
                 grayShade = Color.FromArgb((byte)i, (byte)i, (byte)i);
                 colors[i] = grayShade;

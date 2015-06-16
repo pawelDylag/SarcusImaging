@@ -19,7 +19,7 @@ namespace SarcusImaging
         public SarcusImaging()
         {
             InitializeComponent();
-           // startCameraStatusUpdates();
+            startCameraStatusUpdates();
         }
 
 
