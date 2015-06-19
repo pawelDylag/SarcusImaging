@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,13 +25,12 @@ namespace SarcusImaging
         /// <returns></returns>
         public static Bitmap generateBitmap(byte[] pixels, long width, long height)
         {
-            
             Bitmap bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format32bppRgb);
-            Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
+            byte[] image = Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
             Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
             IntPtr pixelStartAddress = picData.Scan0;
-            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, pixelStartAddress, pixels.Length);
+            System.Runtime.InteropServices.Marshal.Copy(image, 0, pixelStartAddress, pixels.Length);
             bitmap.UnlockBits(picData);
             return bitmap;
         }
@@ -73,7 +73,6 @@ namespace SarcusImaging
             Debug.WriteLine("Convert16BitGrayScaleToRgb32() -> input array lenght: " + inBuffer.Length);
             int inBytesPerPixel = 2;
             int outBytesPerPixel = 4;
-
             byte[] outBuffer = new byte[width * height * outBytesPerPixel];
             Debug.WriteLine("Convert16BitGrayScaleToRgb32() -> output array lenght: " + outBuffer.Length);
             int inStep = width * inBytesPerPixel;
@@ -94,19 +93,21 @@ namespace SarcusImaging
 
                     //R
                     outBuffer[outIndex] = lobyte;
-                    outBuffer[outIndex + 1] = hibyte;
 
                     //G
-                    outBuffer[outIndex + 2] = lobyte;
-                    outBuffer[outIndex + 3] = hibyte;
+                    outBuffer[outIndex + 1] = lobyte;
 
                     //B
-                    outBuffer[outIndex + 4] = lobyte;
-                    outBuffer[outIndex + 5] = hibyte;
+                    outBuffer[outIndex + 2] = lobyte;
+
+                    //ALFA
+                    outBuffer[outIndex + 3] = lobyte;
+
                 }
             }
             return outBuffer;
         }
+
 
         /// <summary>
         ///  Converts LOSELESS short[x] array to byte[2x] array.
