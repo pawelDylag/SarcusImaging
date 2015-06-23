@@ -82,6 +82,7 @@ namespace SarcusImaging
             var watch = Stopwatch.StartNew();
             int width = CameraManager.Instance.getImagingRows();
             int height = CameraManager.Instance.getImagingColumns();
+            // Here we decide to use greyscale or heatmap
             Bitmap bitmap = ImageProcessor.convertArrayToBitmap(a.pixels, width, height);
             boxPicture3.Image = boxPicture2.Image;
             boxPicture2.Image = boxPicture.Image;

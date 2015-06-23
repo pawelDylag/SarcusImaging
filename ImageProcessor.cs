@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SarcusImaging
 {
@@ -26,11 +22,12 @@ namespace SarcusImaging
         public static Bitmap generateBitmap(byte[] pixels, long width, long height)
         {
             Bitmap bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format32bppRgb);
-            byte[] image = Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
+            //byte[] image = Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
+            changeBitmapToGreyscale(bitmap);
             Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
             IntPtr pixelStartAddress = picData.Scan0;
-            System.Runtime.InteropServices.Marshal.Copy(image, 0, pixelStartAddress, pixels.Length);
+            System.Runtime.InteropServices.Marshal.Copy(pixels, 0, pixelStartAddress, pixels.Length);
             bitmap.UnlockBits(picData);
             return bitmap;
         }
@@ -67,17 +64,17 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static byte[] Convert16BitGrayScaleToRgb32(byte[] inBuffer, int width, int height)
+        public static byte[] ConvertArrayToRgb24Heatmap(ushort[] pixels, int width, int height)
         {
-            Debug.WriteLine("Convert16BitGrayScaleToRgb32()");
-            Debug.WriteLine("Convert16BitGrayScaleToRgb32() -> input array lenght: " + inBuffer.Length);
-            int inBytesPerPixel = 2;
-            int outBytesPerPixel = 4;
-            byte[] outBuffer = new byte[width * height * outBytesPerPixel];
-            Debug.WriteLine("Convert16BitGrayScaleToRgb32() -> output array lenght: " + outBuffer.Length);
-            int inStep = width * inBytesPerPixel;
-            int outStep = width * outBytesPerPixel;
-
+            Debug.WriteLine("ConvertArrayToRgb24Heatmap()");
+            Debug.WriteLine("ConvertArrayToRgb24Heatmap() : input array length: " + pixels.Length);
+            byte[] outBuffer = new byte[width * height * 3];
+            ushort[] minMax = getUshortMinMaxValues(pixels);
+            // Setup conversion constants
+            double range = minMax[1] - minMax[0];
+            double mid = (minMax[1] + minMax[1]) / 2.0;
+            Debug.WriteLine("ConvertArrayToRgb24Heatmap() : input array MIN =  " + minMax[0] + ", MAX = " + minMax[1] + ", RANGE = " + range + ", MID = " + mid);
+            Debug.WriteLine("ConvertArrayToRgb24Heatmap() : output array length: " + outBuffer.Length);
             // Step through the image by row  
             for (int y = 0; y < height; y++)
             {
@@ -85,23 +82,20 @@ namespace SarcusImaging
                 for (int x = 0; x < width; x++)
                 {
                     // Get inbuffer index and outbuffer index 
-                    int inIndex = (y * inStep) + (x * inBytesPerPixel);
-                    int outIndex = (y * outStep) + (x * outBytesPerPixel);
-
-                    byte hibyte = inBuffer[inIndex + 1];
-                    byte lobyte = inBuffer[inIndex];
+                    int inIndex = (y * width) + x;
+                    int outIndex = (y * width * 3) + (x * 3);
+                    
+                    
+                    // color value conversion here
 
                     //R
-                    outBuffer[outIndex] = lobyte;
+                    outBuffer[outIndex] = 0;
 
                     //G
-                    outBuffer[outIndex + 1] = lobyte;
+                    outBuffer[outIndex + 1] = 0;
 
                     //B
-                    outBuffer[outIndex + 2] = lobyte;
-
-                    //ALFA
-                    outBuffer[outIndex + 3] = lobyte;
+                    outBuffer[outIndex + 2] = 0;
 
                 }
             }
@@ -118,9 +112,9 @@ namespace SarcusImaging
         /// <returns></returns>
         public static byte[] convertShortToByte(ushort[] pixels, long width, long height)
         {
-            System.Diagnostics.Debug.WriteLine("convertShortToByte()");
+            Debug.WriteLine("convertShortToByte()");
             byte[] result = new byte[width * height * 2];
-            System.Diagnostics.Debug.WriteLine("convertShortToByte() -> Array lenght: " + result.Length);
+            Debug.WriteLine("convertShortToByte() -> Array lenght: " + result.Length);
             int inBytesPerPixel = 2;
             int outBytesPerPixel = 1;
 
@@ -212,7 +206,7 @@ namespace SarcusImaging
         /// <returns></returns>
         public static ushort[] getImageXAveragePixelValue (ushort[] pixels, int width, int height)
         {
-            System.Diagnostics.Debug.WriteLine("getImageXAveragePixelValue()");
+            Debug.WriteLine("getImageXAveragePixelValue()");
             ushort[] result = new ushort[width];
           
             // Step through the image by colum  
@@ -241,7 +235,7 @@ namespace SarcusImaging
         /// <returns></returns>
         public static ushort[] getImageYAveragePixelValue(ushort[] pixels, int width, int height)
         {
-            System.Diagnostics.Debug.WriteLine("getImageYAveragePixelValue()");
+            Debug.WriteLine("getImageYAveragePixelValue()");
             ushort[] result = new ushort[width];
 
             // Step through the image by colum  
@@ -303,16 +297,16 @@ namespace SarcusImaging
                     resultMin = array[x];
                 }
             }
-            System.Diagnostics.Debug.WriteLine("Image pixel min value = " + resultMin);
-            System.Diagnostics.Debug.WriteLine("Image pixel max value = " + resultMax);
+            Debug.WriteLine("Image pixel min value = " + resultMin);
+            Debug.WriteLine("Image pixel max value = " + resultMax);
         }
 
         public static byte[] generateRandomImage(int x, int y)
         {
             int width = x;
             int height = y;
-            System.Diagnostics.Debug.WriteLine("Getting debug camera image...");
-            System.Diagnostics.Debug.WriteLine("Image size = (" + width + "*" + height + ")");
+            Debug.WriteLine("Getting debug camera image...");
+            Debug.WriteLine("Image size = (" + width + "*" + height + ")");
             byte[] pixels = generateRandom16BitArray(width, height);
             return pixels;
         }
