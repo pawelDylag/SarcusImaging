@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Collections.Generic;
 
 
 namespace SarcusImaging
@@ -166,6 +167,12 @@ namespace SarcusImaging
                 colors[i] = grayShade;
             }
             bitmap.Palette = palette;
+        }
+
+        private static void generateHeatmapColors(List<Color> stepColors)
+        {
+            SortedDictionary<ushort, Color> colors = new SortedDictionary<ushort, Color>();
+
         }
 
         /// <summary>
