@@ -35,6 +35,9 @@ namespace SarcusImaging
         public delegate void SequenceEndedEventHandler(object source, EventArgs args);
         public event SequenceEndedEventHandler SequenceEnded;
 
+        public delegate void IterationEndedEventHandler(object source, EventArgs args);
+        public event IterationEndedEventHandler IterationEnded;
+
         /// <summary>
         /// Private constructor to avoid creating copies of this class
         /// </summary>
@@ -247,7 +250,7 @@ namespace SarcusImaging
                             }
                             // if new image is ready
                             timer.timestamp("Got image " + i + "/" + sequenceItem.imageCount);
-                            OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                            OnImageReady(getImageToMemory(imgXSize, imgYSize), sequenceItem.type);
                             timer.timestamp("OnImageReady() for image " + i + "/" + sequenceItem.imageCount);
                         }
                         timer.timestamp("Sequence end");
@@ -319,7 +322,7 @@ namespace SarcusImaging
                   
                     // if new image is ready
                     timer.timestamp("New image ready " + i + "/" + imageCount);
-                    OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                    OnImageReady(getImageToMemory(imgXSize, imgYSize), 0);
 
                     timer.timestamp("Got image in memory " + i + "/" + imageCount);
                     //timer.timestamp("Got image " + i + "/" + imageCount + " to memory");
@@ -388,11 +391,11 @@ namespace SarcusImaging
         /// Event handling method witch gets pixels array, and postprocess it.
         /// </summary>
         /// <param name="pixels"></param>
-        protected virtual void OnImageReady(ushort[] pixels)
+        protected virtual void OnImageReady(ushort[] pixels, int imageType)
         {
             if (ImageReady != null)
             {
-                ImageReady(this, new ImageReadyArgs(pixels));
+                ImageReady(this, new ImageReadyArgs(pixels, imageType));
             }
         }
 
@@ -405,6 +408,18 @@ namespace SarcusImaging
             if (SequenceEnded != null)
             {
                 SequenceEnded(this, new EventArgs());
+            }
+        }
+
+        /// <summary>
+        /// Event handling method witch gets pixels array, and postprocess it.
+        /// </summary>
+        /// <param name="pixels"></param>
+        protected virtual void OnIterationEnded()
+        {
+            if (IterationEnded != null)
+            {
+                IterationEnded(this, new EventArgs());
             }
         }
 

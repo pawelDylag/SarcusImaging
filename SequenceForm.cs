@@ -211,8 +211,9 @@ namespace SarcusImaging
               {
                   progressBarIterations.Maximum = sequencePlan.iterations * sequencePlan.size();
               }));
-            // CameraManager.Instance.executeSequencePlan(sequencePlan);
-            CameraManager.Instance.measureImagingTimes();
+            //CameraManager.Instance.executeSequencePlan(sequencePlan);
+            new SingleImageForm(1).Show();
+            //CameraManager.Instance.measureImagingTimes();
         }
 
         public void OnImageReady(object source, ImageReadyArgs a)

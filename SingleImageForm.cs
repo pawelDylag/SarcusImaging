@@ -17,11 +17,33 @@ namespace SarcusImaging
 
         private static SingleImageForm openedWindow = null;
 
+        private static Bitmap heatmapGradient;
+
+        private static readonly int heatmapGradientHeight = 512;
+        private static readonly int heatmapGradientWidth = 32;
+
+        // TODO: Get rows and columns from camera object
+        private static int cameraImagingRows = 512;
+        private static int cameraImagingColumns = 512;
+
+        /// <summary>
+        /// Raw image data for postprocessing 
+        /// </summary>
+        private static ushort[] atomsRawImage;
+        private static ushort[] probeBeamRawImage;
+        private static ushort[] backgroundRawImage;
+        private static ushort[] biasRawImage;
+        private static ushort[] mainRawImage;
+
         public SingleImageForm()
         {
             InitializeComponent();
             initCharts();
             CameraManager.Instance.ImageReady += this.OnImageReady;
+            CameraManager.Instance.ImageReady += this.OnIterationEnded;
+            // init main gradient stripe
+            heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
+            gradientPicture.Image = heatmapGradient;
         }
 
         public void initCharts()
@@ -50,14 +72,13 @@ namespace SarcusImaging
             }
         }
 
-        public SingleImageForm(ushort[] image)
+        public SingleImageForm(int value)
         {
             InitializeComponent();
             // subscribe to image event list
             CameraManager.Instance.ImageReady += this.OnImageReady;
-            int width = CameraManager.Instance.getImagingRows();
-            int height = CameraManager.Instance.getImagingColumns();
-            Bitmap bitmap = ImageProcessor.convertArrayToBitmap(image, width, height);
+            ushort[] pixels = ImageProcessor.generateRandomUshortArray(512, 512);
+            Bitmap bitmap = ImageProcessor.convertArrayToHeatmapBitmap(pixels, 512, 512);
             boxPicture.Image = bitmap;
             //Form settingsForm = new ImageSettings(this);
             //settingsForm.Show();
@@ -79,17 +100,92 @@ namespace SarcusImaging
         /// <param name="a"></param>
         public void OnImageReady(object source, ImageReadyArgs a)
         {
-            var watch = Stopwatch.StartNew();
-            int width = CameraManager.Instance.getImagingRows();
-            int height = CameraManager.Instance.getImagingColumns();
-            // Here we decide to use greyscale or heatmap
-            Bitmap bitmap = ImageProcessor.convertArrayToBitmap(a.pixels, width, height);
-            boxPicture3.Image = boxPicture2.Image;
-            boxPicture2.Image = boxPicture.Image;
-            boxPicture.Image = bitmap;
-            updateXChart(a.pixels, width, height);
-            updateYChart(a.pixels, width, height);
-            Debug.WriteLine("OnImageReady() : image conversion time = " + watch.ElapsedMilliseconds + "ms");
+            switch (a.imageType)
+            {
+                case (int)SequenceItem.types.TYPE_BIAS:
+                    biasRawImage = a.pixels;
+                    break;
+                case (int)SequenceItem.types.TYPE_BACKGROUND:
+                    backgroundRawImage = a.pixels;
+                    break;
+                case (int)SequenceItem.types.TYPE_PROBE:
+                    probeBeamRawImage = a.pixels;
+                    break;
+                case (int)SequenceItem.types.TYPE_SEQUENCE:
+                    atomsRawImage = a.pixels;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Event handling method - starts postprocessing and images display
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="a"></param>
+        public void OnIterationEnded(object source, EventArgs a)
+        {
+            postProcessImages();
+            updateAll();
+        }
+
+        /// <summary>
+        /// Generates result image from iteration sequence
+        /// </summary>
+        private void postProcessImages() 
+        {
+
+        }
+
+        /// <summary>
+        /// Updates all images
+        /// </summary>
+        public void updateAll()
+        {
+            updateAtomsImage();
+            updateBackgroundImage();
+            updateBiasImage();
+            updateMainImage();
+            updateProbeBeamImage();
+        }
+
+        /// <summary>
+        /// Updates main image
+        /// </summary>
+        public void updateMainImage()
+        {
+            boxPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
+        }
+
+        /// <summary>
+        /// Updates bias image
+        /// </summary>
+        public void updateBiasImage()
+        {
+            biasPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(biasRawImage, cameraImagingColumns, cameraImagingRows);
+        }
+
+        /// <summary>
+        /// Updates background image
+        /// </summary>
+        public void updateBackgroundImage()
+        {
+            backgroundPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(backgroundRawImage, cameraImagingColumns, cameraImagingRows);
+        }
+
+        /// <summary>
+        /// Updates probe image
+        /// </summary>
+        public void updateProbeBeamImage()
+        {
+            probeBeamPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(probeBeamRawImage, cameraImagingColumns, cameraImagingRows);
+        }
+
+        /// <summary>
+        /// Updates atoms image
+        /// </summary>
+        public void updateAtomsImage()
+        {
+            atomsPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(atomsRawImage, cameraImagingColumns, cameraImagingRows);
         }
 
         public void updateXChart (ushort[] data, int width, int height)
@@ -125,6 +221,29 @@ namespace SarcusImaging
                }));
         }
 
+        /// <summary>
+        /// Generates heatmap gradient for display
+        /// </summary>
+        /// <returns></returns>
+        private ushort[] generateHeatmapGradient()
+        {
+            ushort[] pixels = new ushort[heatmapGradientHeight * heatmapGradientWidth];
+            // Step through the image by row
+            for (int y = 0; y < heatmapGradientHeight; y++)
+            {
+                // Step through the image by column  
+                for (int x = 0; x < heatmapGradientWidth; x++)
+                {
+                    // compute index of input array
+                    int inIndex = (y * heatmapGradientWidth) + x;
+                    ushort step = (ushort)(ushort.MaxValue / heatmapGradientHeight); // = 127
+                    ushort colorValue = (ushort) (step * y);
+                    pixels[inIndex] = colorValue;
+                }
+            }
+            return pixels;
+        }
+
         private void boxPicture_Click(object sender, EventArgs e)
         {
 
@@ -134,8 +253,11 @@ namespace SarcusImaging
         {
             // unsubscribe from image events
             CameraManager.Instance.ImageReady -= this.OnImageReady;
+            CameraManager.Instance.IterationEnded -= this.OnIterationEnded;
+
             openedWindow = null;
         }
+
 
         private void SingleImageForm_Load(object sender, EventArgs e)
         {
@@ -148,6 +270,11 @@ namespace SarcusImaging
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }

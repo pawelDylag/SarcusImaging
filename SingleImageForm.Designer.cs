@@ -35,26 +35,30 @@
             this.boxPicture = new System.Windows.Forms.PictureBox();
             this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartX = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.boxPicture2 = new System.Windows.Forms.PictureBox();
+            this.biasPicture = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.boxPicture3 = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.boxPicture4 = new System.Windows.Forms.PictureBox();
-            this.buttonLoadBackground = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.backgroundPicture = new System.Windows.Forms.PictureBox();
+            this.gradientPicture = new System.Windows.Forms.PictureBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.probeBeamPicture = new System.Windows.Forms.PictureBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.atomsPicture = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.boxPicture2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.boxPicture3)).BeginInit();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.boxPicture4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gradientPicture)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.probeBeamPicture)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.atomsPicture)).BeginInit();
             this.SuspendLayout();
             // 
             // boxPicture
@@ -149,17 +153,17 @@
             this.chartX.TabIndex = 3;
             this.chartX.Text = "chartXAxis";
             // 
-            // boxPicture2
+            // biasPicture
             // 
-            this.boxPicture2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.biasPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.boxPicture2.Location = new System.Drawing.Point(6, 49);
-            this.boxPicture2.Name = "boxPicture2";
-            this.boxPicture2.Size = new System.Drawing.Size(170, 170);
-            this.boxPicture2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.boxPicture2.TabIndex = 5;
-            this.boxPicture2.TabStop = false;
+            this.biasPicture.Location = new System.Drawing.Point(6, 19);
+            this.biasPicture.Name = "biasPicture";
+            this.biasPicture.Size = new System.Drawing.Size(170, 170);
+            this.biasPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.biasPicture.TabIndex = 5;
+            this.biasPicture.TabStop = false;
             // 
             // panel1
             // 
@@ -181,87 +185,100 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.buttonLoadBackground);
-            this.groupBox1.Controls.Add(this.boxPicture2);
-            this.groupBox1.Location = new System.Drawing.Point(737, 12);
+            this.groupBox1.Controls.Add(this.biasPicture);
+            this.groupBox1.Location = new System.Drawing.Point(936, 218);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(185, 225);
+            this.groupBox1.Size = new System.Drawing.Size(185, 200);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Background";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.boxPicture3);
-            this.groupBox2.Location = new System.Drawing.Point(737, 243);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(185, 225);
-            this.groupBox2.TabIndex = 10;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Bias";
-            // 
-            // boxPicture3
-            // 
-            this.boxPicture3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.boxPicture3.Location = new System.Drawing.Point(6, 49);
-            this.boxPicture3.Name = "boxPicture3";
-            this.boxPicture3.Size = new System.Drawing.Size(170, 170);
-            this.boxPicture3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.boxPicture3.TabIndex = 5;
-            this.boxPicture3.TabStop = false;
+            this.groupBox1.Text = "Bias";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.boxPicture4);
-            this.groupBox3.Location = new System.Drawing.Point(737, 474);
+            this.groupBox3.Controls.Add(this.backgroundPicture);
+            this.groupBox3.Location = new System.Drawing.Point(742, 218);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(185, 225);
+            this.groupBox3.Size = new System.Drawing.Size(185, 200);
             this.groupBox3.TabIndex = 10;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Probe beam";
+            this.groupBox3.Text = "Background";
             this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
             // 
-            // boxPicture4
+            // backgroundPicture
             // 
-            this.boxPicture4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.backgroundPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.boxPicture4.Location = new System.Drawing.Point(6, 49);
-            this.boxPicture4.Name = "boxPicture4";
-            this.boxPicture4.Size = new System.Drawing.Size(170, 170);
-            this.boxPicture4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.boxPicture4.TabIndex = 5;
-            this.boxPicture4.TabStop = false;
-            this.boxPicture4.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.backgroundPicture.Location = new System.Drawing.Point(6, 19);
+            this.backgroundPicture.Name = "backgroundPicture";
+            this.backgroundPicture.Size = new System.Drawing.Size(170, 170);
+            this.backgroundPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.backgroundPicture.TabIndex = 5;
+            this.backgroundPicture.TabStop = false;
+            this.backgroundPicture.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
-            // buttonLoadBackground
+            // gradientPicture
             // 
-            this.buttonLoadBackground.Location = new System.Drawing.Point(7, 20);
-            this.buttonLoadBackground.Name = "buttonLoadBackground";
-            this.buttonLoadBackground.Size = new System.Drawing.Size(50, 23);
-            this.buttonLoadBackground.TabIndex = 6;
-            this.buttonLoadBackground.Text = "Load";
-            this.buttonLoadBackground.UseVisualStyleBackColor = true;
+            this.gradientPicture.Location = new System.Drawing.Point(25, 12);
+            this.gradientPicture.Name = "gradientPicture";
+            this.gradientPicture.Size = new System.Drawing.Size(32, 512);
+            this.gradientPicture.TabIndex = 11;
+            this.gradientPicture.TabStop = false;
             // 
-            // button2
+            // groupBox2
             // 
-            this.button2.Location = new System.Drawing.Point(63, 20);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(50, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Load";
-            this.button2.UseVisualStyleBackColor = true;
+            this.groupBox2.Controls.Add(this.probeBeamPicture);
+            this.groupBox2.Location = new System.Drawing.Point(936, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(185, 200);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Probe beam";
+            // 
+            // probeBeamPicture
+            // 
+            this.probeBeamPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.probeBeamPicture.Location = new System.Drawing.Point(6, 19);
+            this.probeBeamPicture.Name = "probeBeamPicture";
+            this.probeBeamPicture.Size = new System.Drawing.Size(170, 170);
+            this.probeBeamPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.probeBeamPicture.TabIndex = 5;
+            this.probeBeamPicture.TabStop = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.atomsPicture);
+            this.groupBox4.Location = new System.Drawing.Point(742, 12);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(185, 200);
+            this.groupBox4.TabIndex = 10;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Atoms";
+            // 
+            // atomsPicture
+            // 
+            this.atomsPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.atomsPicture.Location = new System.Drawing.Point(6, 19);
+            this.atomsPicture.Name = "atomsPicture";
+            this.atomsPicture.Size = new System.Drawing.Size(170, 170);
+            this.atomsPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.atomsPicture.TabIndex = 5;
+            this.atomsPicture.TabStop = false;
             // 
             // SingleImageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1128, 721);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(1133, 721);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.gradientPicture);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.chartX);
@@ -274,13 +291,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.boxPicture2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).EndInit();
             this.panel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.boxPicture3)).EndInit();
             this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.boxPicture4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gradientPicture)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.probeBeamPicture)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.atomsPicture)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -290,15 +310,16 @@
         private System.Windows.Forms.PictureBox boxPicture;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartX;
-        private System.Windows.Forms.PictureBox boxPicture2;
+        private System.Windows.Forms.PictureBox biasPicture;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.PictureBox boxPicture3;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.PictureBox boxPicture4;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button buttonLoadBackground;
+        private System.Windows.Forms.PictureBox backgroundPicture;
+        private System.Windows.Forms.PictureBox gradientPicture;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.PictureBox probeBeamPicture;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.PictureBox atomsPicture;
     }
 }

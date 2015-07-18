@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 
 
 namespace SarcusImaging
@@ -13,6 +14,8 @@ namespace SarcusImaging
     static class ImageProcessor
     {
 
+        private static List<Color> interpolationStepColors = new List<Color> { Color.White, Color.Blue, Color.Cyan, Color.Green, Color.Yellow, Color.Red, Color.Black };
+
         /// <summary>
         /// Generates bitmap from 8bpp array
         /// </summary>
@@ -20,11 +23,11 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static Bitmap generateBitmap(byte[] pixels, long width, long height)
+        public static Bitmap generateBitmap(byte[] pixels, long width, long height, PixelFormat pixelFormat)
         {
-            Bitmap bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format32bppRgb);
+            Bitmap bitmap = new Bitmap((int)width, (int)height, pixelFormat);
             //byte[] image = Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
-            changeBitmapToGreyscale(bitmap);
+           // changeBitmapToGreyscale(bitmap);
             Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
             IntPtr pixelStartAddress = picData.Scan0;
@@ -51,10 +54,72 @@ namespace SarcusImaging
             return pixels; 
         }
 
+
+        /// <summary>
+        /// Generates random ushort[] array.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static ushort[] generateRandomUshortArray(int width, int height)
+        {
+            Random r = new Random();
+            ushort[] pixels = new ushort[width * height];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                ushort value = (ushort) r.Next(0, ushort.MaxValue);
+                pixels[i] = value;
+            }
+            return pixels;
+        }
+
         public static Bitmap convertArrayToBitmap(ushort[] array, int width, int height)
         {
             byte[] pixels = convertShortToByteArray(array, width, height);
-            return generateBitmap(pixels, width, height);
+            return generateBitmap(pixels, width, height, PixelFormat.Format32bppArgb);
+
+        }
+
+        public static Bitmap convertArrayToHeatmapBitmap(ushort[] array, int width, int height)
+        {
+            // get boundary values for pixels
+            ushort[] minMax = getUshortMinMaxValues(array);
+            // ushort range = (ushort) (minMax[1] - minMax[0]);
+            ushort range = ushort.MaxValue;
+            // generate color palette
+            List<Color> heatmapColors = interpolateColors(interpolationStepColors, range + 1);
+            // create new RGB array
+            byte[] pixels = new byte[width * height * 3];
+            // assign each pixel value a color
+            for (int y = 0; y < height; y++)
+            {
+                // Step through the image by column  
+                for (int x = 0; x < width; x++)
+                {
+                    // compute index of input array
+                    int inIndex = (y * width) + x;
+                    // compute index of output array
+                    int outIndex = (y * width * 3) + (x * 3);
+
+                    // copy colors for each value 
+                    ushort index = array[inIndex];
+                    Color color = heatmapColors[index];
+                    //R
+                    pixels[outIndex] = color.R;
+                    //G
+                    pixels[outIndex + 1] = color.G;
+                    //B
+                    pixels[outIndex + 2] = color.B;
+                }
+            }
+            return generateBitmap(pixels, width, height, PixelFormat.Format24bppRgb);
+
+        }
+
+
+        public static Bitmap convertArrayToBitmap(byte[] array, int width, int height)
+        {
+            return generateBitmap(array, width, height, PixelFormat.Format32bppArgb);
 
         }
 
@@ -156,23 +221,41 @@ namespace SarcusImaging
             bitmap.Palette = palette;
         }
 
-        public static void changeBitmapToHeatmap(Bitmap bitmap)
+
+        private static List<Color> interpolateColors(List<Color> stepColors, int size)
         {
-            ColorPalette palette = bitmap.Palette;
-            Color[] colors = palette.Entries;
-            for (int i = 0; i < 256; i++)
+            SortedDictionary<float, Color> gradient = new SortedDictionary<float, Color>();
+            for (int i = 0; i < stepColors.Count; i++)
+                gradient.Add(1f * i / (stepColors.Count - 1), stepColors[i]);
+            List<Color> colorList = new List<Color>();
+            ImagingTimer timer = new ImagingTimer();
+            timer.start();
+            using (Bitmap bmp = new Bitmap(size, 1))
+            using (Graphics G = Graphics.FromImage(bmp))
             {
-                Color grayShade = new Color();
-                grayShade = Color.FromArgb((byte)i, (byte)i, (byte)i);
-                colors[i] = grayShade;
+                timer.timestamp("interpolateColors() : start ");
+                Rectangle rect = new Rectangle(Point.Empty, bmp.Size);
+                LinearGradientBrush brush = new LinearGradientBrush
+                                        (rect, Color.Empty, Color.Empty, 0, false);
+                ColorBlend colorBlend = new ColorBlend();
+                colorBlend.Positions = new float[gradient.Count];
+                SortedDictionary<float, Color>.Enumerator enumerator = gradient.GetEnumerator();
+                for (int i = 0; i < gradient.Count; i++) 
+                {
+                    enumerator.MoveNext();
+                    colorBlend.Positions[i] = enumerator.Current.Key;
+                }
+                List<Color> values = new List<Color>(gradient.Values);
+                colorBlend.Colors = values.ToArray();
+                brush.InterpolationColors = colorBlend;
+                G.FillRectangle(brush, rect);
+                for (int i = 0; i < size; i++) colorList.Add(bmp.GetPixel(i, 0));
+                brush.Dispose();
+                timer.timestamp("interpolateColors() : end");
             }
-            bitmap.Palette = palette;
-        }
-
-        private static void generateHeatmapColors(List<Color> stepColors)
-        {
-            SortedDictionary<ushort, Color> colors = new SortedDictionary<ushort, Color>();
-
+            timer.stop();
+            Debug.WriteLine(timer.listTimes());
+            return colorList;
         }
 
         /// <summary>
