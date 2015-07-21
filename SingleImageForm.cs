@@ -40,10 +40,13 @@ namespace SarcusImaging
             InitializeComponent();
             initCharts();
             CameraManager.Instance.ImageReady += this.OnImageReady;
-            CameraManager.Instance.ImageReady += this.OnIterationEnded;
+            CameraManager.Instance.IterationEnded += this.OnIterationEnded;
             // init main gradient stripe
+            ImageProcessor.interpolateColors(ImageProcessor.interpolationStepColors, ushort.MaxValue + 1);
             heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
+            heatmapGradient.RotateFlip(RotateFlipType.Rotate180FlipNone);
             gradientPicture.Image = heatmapGradient;
+
         }
 
         public void initCharts()
@@ -77,7 +80,7 @@ namespace SarcusImaging
             InitializeComponent();
             // subscribe to image event list
             CameraManager.Instance.ImageReady += this.OnImageReady;
-            ushort[] pixels = ImageProcessor.generateRandomUshortArray(512, 512);
+            ushort[] pixels = ImageProcessor.generateRandomUshortArray(512, 512, 0);
             Bitmap bitmap = ImageProcessor.convertArrayToHeatmapBitmap(pixels, 512, 512);
             boxPicture.Image = bitmap;
             //Form settingsForm = new ImageSettings(this);
@@ -100,19 +103,27 @@ namespace SarcusImaging
         /// <param name="a"></param>
         public void OnImageReady(object source, ImageReadyArgs a)
         {
+            Debug.WriteLine("OnImageReady(): Image form");
             switch (a.imageType)
             {
-                case (int)SequenceItem.types.TYPE_BIAS:
+                case SequenceItem.types.TYPE_BIAS:
+                    Debug.WriteLine("OnImageReady(): decoded type = bias");
                     biasRawImage = a.pixels;
                     break;
-                case (int)SequenceItem.types.TYPE_BACKGROUND:
+                case SequenceItem.types.TYPE_BACKGROUND:
+                    Debug.WriteLine("OnImageReady(): decoded type = background");
                     backgroundRawImage = a.pixels;
                     break;
-                case (int)SequenceItem.types.TYPE_PROBE:
+                case SequenceItem.types.TYPE_PROBE:
+                    Debug.WriteLine("OnImageReady(): decoded type = probe beam");
                     probeBeamRawImage = a.pixels;
                     break;
-                case (int)SequenceItem.types.TYPE_SEQUENCE:
+                case SequenceItem.types.TYPE_SEQUENCE:
+                    Debug.WriteLine("OnImageReady(): decoded type = atoms");
                     atomsRawImage = a.pixels;
+                    break;
+                default:
+                    Debug.WriteLine("OnImageReady(): decoded type = default");
                     break;
             }
         }
@@ -124,6 +135,7 @@ namespace SarcusImaging
         /// <param name="a"></param>
         public void OnIterationEnded(object source, EventArgs a)
         {
+            Debug.WriteLine("OnIterationEnded(): received event");
             postProcessImages();
             updateAll();
         }
@@ -133,7 +145,13 @@ namespace SarcusImaging
         /// </summary>
         private void postProcessImages() 
         {
-
+            mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
+            for (int i = 0; i < mainRawImage.Length; i++)
+            {
+                int value = atomsRawImage[i] - probeBeamRawImage[i];
+                if (value < 0) value = 0;
+                mainRawImage[i] = (ushort)value;
+            }
         }
 
         /// <summary>
@@ -146,6 +164,8 @@ namespace SarcusImaging
             updateBiasImage();
             updateMainImage();
             updateProbeBeamImage();
+            updateXChart(mainRawImage, 512,512);
+            updateYChart(mainRawImage, 512, 512);
         }
 
         /// <summary>
@@ -153,7 +173,8 @@ namespace SarcusImaging
         /// </summary>
         public void updateMainImage()
         {
-            boxPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
+            if (mainRawImage != null)
+                boxPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
         }
 
         /// <summary>
@@ -161,6 +182,7 @@ namespace SarcusImaging
         /// </summary>
         public void updateBiasImage()
         {
+            if (biasRawImage != null)
             biasPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(biasRawImage, cameraImagingColumns, cameraImagingRows);
         }
 
@@ -169,6 +191,7 @@ namespace SarcusImaging
         /// </summary>
         public void updateBackgroundImage()
         {
+            if (backgroundRawImage != null)
             backgroundPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(backgroundRawImage, cameraImagingColumns, cameraImagingRows);
         }
 
@@ -177,6 +200,7 @@ namespace SarcusImaging
         /// </summary>
         public void updateProbeBeamImage()
         {
+            if (probeBeamRawImage != null)
             probeBeamPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(probeBeamRawImage, cameraImagingColumns, cameraImagingRows);
         }
 
@@ -185,6 +209,7 @@ namespace SarcusImaging
         /// </summary>
         public void updateAtomsImage()
         {
+            if (atomsRawImage != null)
             atomsPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(atomsRawImage, cameraImagingColumns, cameraImagingRows);
         }
 
@@ -275,6 +300,11 @@ namespace SarcusImaging
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

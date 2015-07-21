@@ -14,8 +14,8 @@ namespace SarcusImaging
     static class ImageProcessor
     {
 
-        private static List<Color> interpolationStepColors = new List<Color> { Color.White, Color.Blue, Color.Cyan, Color.Green, Color.Yellow, Color.Red, Color.Black };
-
+        public static List<Color> interpolationStepColors = new List<Color> { Color.Black, Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.White };
+        private static List<Color> colorPalette;
         /// <summary>
         /// Generates bitmap from 8bpp array
         /// </summary>
@@ -36,43 +36,6 @@ namespace SarcusImaging
             return bitmap;
         }
 
-        /// <summary>
-        /// Generates random byte[] array.
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static byte[] generateRandom16BitArray(int width, int height)
-        {
-            Random r = new Random();
-            byte[] pixels = new byte[width * height * 2];
-            for (int i = 0; i < pixels.Length; ++i)
-            {
-                byte value = (byte)r.Next(0, 256);
-                pixels[i] = value;
-            }
-            return pixels; 
-        }
-
-
-        /// <summary>
-        /// Generates random ushort[] array.
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static ushort[] generateRandomUshortArray(int width, int height)
-        {
-            Random r = new Random();
-            ushort[] pixels = new ushort[width * height];
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                ushort value = (ushort) r.Next(0, ushort.MaxValue);
-                pixels[i] = value;
-            }
-            return pixels;
-        }
-
         public static Bitmap convertArrayToBitmap(ushort[] array, int width, int height)
         {
             byte[] pixels = convertShortToByteArray(array, width, height);
@@ -85,9 +48,9 @@ namespace SarcusImaging
             // get boundary values for pixels
             ushort[] minMax = getUshortMinMaxValues(array);
             // ushort range = (ushort) (minMax[1] - minMax[0]);
-            ushort range = ushort.MaxValue;
+            //ushort range = ushort.MaxValue;
             // generate color palette
-            List<Color> heatmapColors = interpolateColors(interpolationStepColors, range + 1);
+            List<Color> heatmapColors = ImageProcessor.colorPalette;
             // create new RGB array
             byte[] pixels = new byte[width * height * 3];
             // assign each pixel value a color
@@ -222,7 +185,7 @@ namespace SarcusImaging
         }
 
 
-        private static List<Color> interpolateColors(List<Color> stepColors, int size)
+        public static List<Color> interpolateColors(List<Color> stepColors, int size)
         {
             SortedDictionary<float, Color> gradient = new SortedDictionary<float, Color>();
             for (int i = 0; i < stepColors.Count; i++)
@@ -255,6 +218,7 @@ namespace SarcusImaging
             }
             timer.stop();
             Debug.WriteLine(timer.listTimes());
+            ImageProcessor.colorPalette = colorList;
             return colorList;
         }
 
@@ -398,6 +362,89 @@ namespace SarcusImaging
             Debug.WriteLine("Getting debug camera image...");
             Debug.WriteLine("Image size = (" + width + "*" + height + ")");
             byte[] pixels = generateRandom16BitArray(width, height);
+            return pixels;
+        }
+
+        /// <summary>
+        /// Generates random byte[] array.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static byte[] generateRandom16BitArray(int width, int height)
+        {
+            Random r = new Random();
+            byte[] pixels = new byte[width * height * 2];
+            for (int i = 0; i < pixels.Length; ++i)
+            {
+                byte value = (byte)r.Next(0, 256);
+                pixels[i] = value;
+            }
+            return pixels;
+        }
+
+
+        /// <summary>
+        /// Generates random ushort[] array.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static ushort[] generateRandomUshortArray(int width, int height, int type)
+        {
+            Random r = new Random();
+            ushort[] pixels = new ushort[width * height];
+
+            switch (type)
+            {
+                case 0:
+                    for (int i = 0; i < pixels.Length; i++)
+                    {
+
+                        pixels[i] = (ushort)r.Next(ushort.MinValue, 10000); ;
+                    }
+                break;
+                case 1:
+                    for (int i = 0; i < pixels.Length; i++)
+                    {
+                        pixels[i] = (ushort)r.Next(10000, 30000);
+                    }
+                break;
+                case 2:
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            if (i + j > width + 100 || i+j < height - 100)
+                            {
+                                 pixels[i] = (ushort)r.Next(ushort.MinValue, 100);
+                            }
+                            else
+                            {
+                                pixels[width * i + j] = (ushort)r.Next(10000, 200000);
+                            }
+                        }
+                    }
+
+                break;
+                case 3:
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            if (i > ((j - 10) + r.Next(0, 10)))
+                            {
+                                pixels[width  * i + j] = 30000;
+                            }
+                            else
+                            {
+                                pixels[i] = (ushort)r.Next(ushort.MinValue, 100); ; ;
+                            }
+                        }
+                    }
+                break;
+            }
+
             return pixels;
         }
     }

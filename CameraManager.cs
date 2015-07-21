@@ -233,7 +233,7 @@ namespace SarcusImaging
                         // camera turn off bulk sequence
                         camera.SequenceBulkDownload = false;
                         // check if image is bias
-                        Boolean bias = (sequenceItem.type != (int)SequenceItem.types.TYPE_BIAS) ? true : false;
+                        Boolean bias = (sequenceItem.type != SequenceItem.types.TYPE_BIAS) ? true : false;
                         // setup time counter for item
                         ImagingTimer timer = new ImagingTimer();
                         timer.start();
@@ -388,10 +388,21 @@ namespace SarcusImaging
         }
 
         /// <summary>
+        /// DEBUG METHOD
+        /// </summary>
+       public void executeDebugSequence() {
+           OnImageReady(ImageProcessor.generateRandomUshortArray(512, 512, 0), SequenceItem.types.TYPE_BACKGROUND);
+           OnImageReady(ImageProcessor.generateRandomUshortArray(512, 512, 1), SequenceItem.types.TYPE_BIAS);
+           OnImageReady(ImageProcessor.generateRandomUshortArray(512, 512, 2), SequenceItem.types.TYPE_PROBE);
+           OnImageReady(ImageProcessor.generateRandomUshortArray(512, 512, 3), SequenceItem.types.TYPE_SEQUENCE);
+           OnIterationEnded();
+       }
+
+        /// <summary>
         /// Event handling method witch gets pixels array, and postprocess it.
         /// </summary>
         /// <param name="pixels"></param>
-        protected virtual void OnImageReady(ushort[] pixels, int imageType)
+        protected virtual void OnImageReady(ushort[] pixels, SequenceItem.types imageType)
         {
             if (ImageReady != null)
             {

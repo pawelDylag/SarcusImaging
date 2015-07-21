@@ -105,7 +105,8 @@ namespace SarcusImaging
             for (int i = 0; i < rows.Count; i++)
             {
                 DataGridViewRow row = rows[i];
-                int type, images, trigger;
+                SequenceItem.types type;
+                int images, trigger;
                 double exposure;
                 String filename;
                 // get type
@@ -113,19 +114,19 @@ namespace SarcusImaging
                 switch (typeValue)
                 {
                     case "Bias":
-                        type = (int)SequenceItem.types.TYPE_BIAS;
+                        type = SequenceItem.types.TYPE_BIAS;
                         break;
                     case "Background":
-                        type = (int)SequenceItem.types.TYPE_BACKGROUND;
+                        type = SequenceItem.types.TYPE_BACKGROUND;
                         break;
                     case "Image":
-                        type = (int)SequenceItem.types.TYPE_SEQUENCE;
+                        type = SequenceItem.types.TYPE_SEQUENCE;
                         break;
                     case "Probe":
-                        type = (int)SequenceItem.types.TYPE_PROBE;
+                        type = SequenceItem.types.TYPE_PROBE;
                         break;
                     default:
-                        type = (int)SequenceItem.types.TYPE_SEQUENCE;
+                        type = SequenceItem.types.TYPE_SEQUENCE;
                         break;
                 }
                 // check exposure time value
@@ -212,9 +213,10 @@ namespace SarcusImaging
                   progressBarIterations.Maximum = sequencePlan.iterations * sequencePlan.size();
               }));
             //CameraManager.Instance.executeSequencePlan(sequencePlan);
-            new SingleImageForm(1).Show();
+            CameraManager.Instance.executeDebugSequence();
             //CameraManager.Instance.measureImagingTimes();
         }
+
 
         public void OnImageReady(object source, ImageReadyArgs a)
         {

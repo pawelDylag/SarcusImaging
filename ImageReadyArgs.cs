@@ -9,9 +9,9 @@ namespace SarcusImaging
     public class ImageReadyArgs : EventArgs
     {
         public ushort[] pixels { get; private set; }
-        public int imageType { get; private set; }
+        public SequenceItem.types imageType { get; set; }
 
-        public ImageReadyArgs(ushort[] pixels, int imageType)
+        public ImageReadyArgs(ushort[] pixels, SequenceItem.types imageType)
         {
             this.pixels = pixels;
             this.imageType = imageType;

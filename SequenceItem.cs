@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SarcusImaging
 {
-    class SequenceItem
+    public class SequenceItem
     {
         public int id { get; set; }
-        public int type { get; set; }
+        public types type { get; set; }
         public double exposureTime { get; set; }
         public int imageCount { get; set; }
         public int triggerType { get; set; }
@@ -19,7 +19,7 @@ namespace SarcusImaging
 
         public enum triggerTypes : int { TRIGGER_NONE = 0, TRIGGER_EACH = 1, TRIGGER_WHOLE = 2, TRIGGER_ALL_WITHOUT_FIRST = 3}
 
-        public SequenceItem(int id, int type, double exposureTime, int imageCount, int triggerType, String filename)
+        public SequenceItem(int id, types type, double exposureTime, int imageCount, int triggerType, String filename)
         {
             this.id = id;
             this.type = type;
