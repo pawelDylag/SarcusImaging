@@ -46,7 +46,22 @@ namespace SarcusImaging
             heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
             heatmapGradient.RotateFlip(RotateFlipType.Rotate180FlipNone);
             gradientPicture.Image = heatmapGradient;
+            boxPicture.MouseMove += BoxPicture_MouseMove;
 
+        }
+
+        /// <summary>
+        /// Show pixel value under the cursor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BoxPicture_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mainRawImage != null)
+            {
+                int index = (e.Y * cameraImagingColumns + e.X);
+                labelCursorValue.Text = "" + mainRawImage[index];
+            }
         }
 
         public void initCharts()
@@ -56,6 +71,7 @@ namespace SarcusImaging
 
             chartY.ChartAreas[0].AxisY2.Maximum = 512;
             chartY.ChartAreas[0].AxisY2.Minimum = 0;
+
         }
 
         /// <summary>
@@ -145,12 +161,15 @@ namespace SarcusImaging
         /// </summary>
         private void postProcessImages() 
         {
-            mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
-            for (int i = 0; i < mainRawImage.Length; i++)
+            if (atomsRawImage != null && biasRawImage != null)
             {
-                int value = atomsRawImage[i] - probeBeamRawImage[i];
-                if (value < 0) value = 0;
-                mainRawImage[i] = (ushort)value;
+                mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
+                for (int i = 0; i < mainRawImage.Length; i++)
+                {
+                    int value = atomsRawImage[i] - biasRawImage[i];
+                    if (value < 0) value = 0;
+                    mainRawImage[i] = (ushort)value;
+                }
             }
         }
 
@@ -164,8 +183,19 @@ namespace SarcusImaging
             updateBiasImage();
             updateMainImage();
             updateProbeBeamImage();
-            updateXChart(mainRawImage, 512,512);
-            updateYChart(mainRawImage, 512, 512);
+            if (mainRawImage != null)
+            {
+                updateXChart(mainRawImage, 512, 512);
+                updateYChart(mainRawImage, 512, 512);
+                updatePixelValues();
+            }
+
+        }
+
+        private void updatePixelValues()
+        {
+            labelMinValue.Text = "" + ImageProcessor.getUshortMinMaxValues(mainRawImage)[0];
+            labelMaxValue.Text = "" + ImageProcessor.getUshortMinMaxValues(mainRawImage)[1];
         }
 
         /// <summary>
@@ -269,11 +299,6 @@ namespace SarcusImaging
             return pixels;
         }
 
-        private void boxPicture_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void SingleImageForm_FormClosed(object sender, EventArgs e)
         {
             // unsubscribe from image events
@@ -305,6 +330,21 @@ namespace SarcusImaging
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
         {
 
         }

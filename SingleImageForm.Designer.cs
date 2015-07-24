@@ -32,14 +32,12 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.boxPicture = new System.Windows.Forms.PictureBox();
             this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartX = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.biasPicture = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -49,11 +47,16 @@
             this.probeBeamPicture = new System.Windows.Forms.PictureBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.atomsPicture = new System.Windows.Forms.PictureBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.labelCursorValue = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labelMaxValue = new System.Windows.Forms.Label();
+            this.labelMinValue = new System.Windows.Forms.Label();
+            this.chart3d = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).BeginInit();
-            this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.backgroundPicture)).BeginInit();
@@ -62,16 +65,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.probeBeamPicture)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.atomsPicture)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart3d)).BeginInit();
             this.SuspendLayout();
             // 
             // boxPicture
             // 
-            this.boxPicture.Location = new System.Drawing.Point(63, 12);
+            this.boxPicture.Location = new System.Drawing.Point(63, 34);
             this.boxPicture.Name = "boxPicture";
             this.boxPicture.Size = new System.Drawing.Size(512, 512);
             this.boxPicture.TabIndex = 0;
             this.boxPicture.TabStop = false;
-            this.boxPicture.Click += new System.EventHandler(this.boxPicture_Click);
             // 
             // chartY
             // 
@@ -106,7 +110,7 @@
             this.chartY.ChartAreas.Add(chartArea1);
             this.chartY.Cursor = System.Windows.Forms.Cursors.Cross;
             this.chartY.Enabled = false;
-            this.chartY.Location = new System.Drawing.Point(581, 12);
+            this.chartY.Location = new System.Drawing.Point(581, 34);
             this.chartY.Name = "chartY";
             this.chartY.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
             series1.ChartArea = "ChartArea1";
@@ -144,7 +148,7 @@
             this.chartX.ChartAreas.Add(chartArea2);
             this.chartX.Cursor = System.Windows.Forms.Cursors.Cross;
             this.chartX.Enabled = false;
-            this.chartX.Location = new System.Drawing.Point(63, 530);
+            this.chartX.Location = new System.Drawing.Point(63, 552);
             this.chartX.Name = "chartX";
             this.chartX.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
             series2.ChartArea = "ChartArea1";
@@ -168,44 +172,15 @@
             this.biasPicture.TabIndex = 5;
             this.biasPicture.TabStop = false;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.comboBox2);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.comboBox1);
-            this.panel1.Location = new System.Drawing.Point(581, 530);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(150, 150);
-            this.panel1.TabIndex = 6;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(0, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Graphs";
-            // 
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
             "Average row value"});
-            this.comboBox2.Location = new System.Drawing.Point(0, 56);
+            this.comboBox2.Location = new System.Drawing.Point(206, 7);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(143, 21);
             this.comboBox2.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Imaging type";
             // 
             // comboBox1
             // 
@@ -213,17 +188,20 @@
             this.comboBox1.Items.AddRange(new object[] {
             "Absorptive",
             "Fluorescent",
-            "Atoms only"});
-            this.comboBox1.Location = new System.Drawing.Point(0, 16);
+            "Atoms ",
+            "Probe beam",
+            "Background",
+            "Bias"});
+            this.comboBox1.Location = new System.Drawing.Point(65, 7);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(143, 21);
+            this.comboBox1.Size = new System.Drawing.Size(135, 21);
             this.comboBox1.TabIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.biasPicture);
-            this.groupBox1.Location = new System.Drawing.Point(936, 218);
+            this.groupBox1.Location = new System.Drawing.Point(936, 240);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(185, 200);
             this.groupBox1.TabIndex = 9;
@@ -234,7 +212,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.backgroundPicture);
-            this.groupBox3.Location = new System.Drawing.Point(742, 218);
+            this.groupBox3.Location = new System.Drawing.Point(742, 240);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(185, 200);
             this.groupBox3.TabIndex = 10;
@@ -257,7 +235,7 @@
             // 
             // gradientPicture
             // 
-            this.gradientPicture.Location = new System.Drawing.Point(25, 12);
+            this.gradientPicture.Location = new System.Drawing.Point(25, 34);
             this.gradientPicture.Name = "gradientPicture";
             this.gradientPicture.Size = new System.Drawing.Size(32, 512);
             this.gradientPicture.TabIndex = 11;
@@ -266,7 +244,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.probeBeamPicture);
-            this.groupBox2.Location = new System.Drawing.Point(936, 12);
+            this.groupBox2.Location = new System.Drawing.Point(936, 34);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(185, 200);
             this.groupBox2.TabIndex = 10;
@@ -288,7 +266,7 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.atomsPicture);
-            this.groupBox4.Location = new System.Drawing.Point(742, 12);
+            this.groupBox4.Location = new System.Drawing.Point(742, 34);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(185, 200);
             this.groupBox4.TabIndex = 10;
@@ -307,17 +285,87 @@
             this.atomsPicture.TabIndex = 5;
             this.atomsPicture.TabStop = false;
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.labelCursorValue);
+            this.groupBox5.Controls.Add(this.label3);
+            this.groupBox5.Location = new System.Drawing.Point(581, 552);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(150, 150);
+            this.groupBox5.TabIndex = 12;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Image info";
+            // 
+            // labelCursorValue
+            // 
+            this.labelCursorValue.AutoSize = true;
+            this.labelCursorValue.Location = new System.Drawing.Point(81, 20);
+            this.labelCursorValue.Name = "labelCursorValue";
+            this.labelCursorValue.Size = new System.Drawing.Size(37, 13);
+            this.labelCursorValue.TabIndex = 1;
+            this.labelCursorValue.Text = "65535";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 20);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Cursor value:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // labelMaxValue
+            // 
+            this.labelMaxValue.AutoSize = true;
+            this.labelMaxValue.BackColor = System.Drawing.Color.Transparent;
+            this.labelMaxValue.Location = new System.Drawing.Point(22, 18);
+            this.labelMaxValue.Name = "labelMaxValue";
+            this.labelMaxValue.Size = new System.Drawing.Size(37, 13);
+            this.labelMaxValue.TabIndex = 3;
+            this.labelMaxValue.Text = "65535";
+            this.labelMaxValue.Click += new System.EventHandler(this.label6_Click);
+            // 
+            // labelMinValue
+            // 
+            this.labelMinValue.AutoSize = true;
+            this.labelMinValue.BackColor = System.Drawing.Color.Transparent;
+            this.labelMinValue.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.labelMinValue.Location = new System.Drawing.Point(22, 549);
+            this.labelMinValue.Name = "labelMinValue";
+            this.labelMinValue.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelMinValue.Size = new System.Drawing.Size(13, 13);
+            this.labelMinValue.TabIndex = 4;
+            this.labelMinValue.Text = "0";
+            // 
+            // chart3d
+            // 
+            chartArea3.Area3DStyle.Enable3D = true;
+            chartArea3.Area3DStyle.IsRightAngleAxes = false;
+            chartArea3.Name = "ChartArea1";
+            this.chart3d.ChartAreas.Add(chartArea3);
+            this.chart3d.Location = new System.Drawing.Point(742, 446);
+            this.chart3d.Name = "chart3d";
+            this.chart3d.Size = new System.Drawing.Size(379, 256);
+            this.chart3d.TabIndex = 13;
+            this.chart3d.Text = "chart";
+            // 
             // SingleImageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1133, 721);
+            this.Controls.Add(this.chart3d);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.labelMaxValue);
+            this.Controls.Add(this.labelMinValue);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.gradientPicture);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.chartX);
             this.Controls.Add(this.chartY);
             this.Controls.Add(this.boxPicture);
@@ -329,8 +377,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.chartY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.backgroundPicture)).EndInit();
@@ -339,7 +385,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.probeBeamPicture)).EndInit();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.atomsPicture)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart3d)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -349,7 +399,6 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartX;
         private System.Windows.Forms.PictureBox biasPicture;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -359,8 +408,12 @@
         private System.Windows.Forms.PictureBox probeBeamPicture;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.PictureBox atomsPicture;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelMaxValue;
+        private System.Windows.Forms.Label labelMinValue;
+        private System.Windows.Forms.Label labelCursorValue;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart3d;
     }
 }

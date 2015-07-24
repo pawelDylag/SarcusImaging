@@ -257,7 +257,8 @@ namespace SarcusImaging
                         timer.stop();
                         Debug.WriteLine(timer.listTimes());
                     }
-
+                    // notify about iteration end
+                    OnIterationEnded();
                 }
                 Debug.WriteLine("executeSequencePlan() : stop");
                 Debug.WriteLine("=============================");
@@ -290,8 +291,8 @@ namespace SarcusImaging
             if (camera != null && isCameraConnected())
             {
                 // SETUP VARIABLES
-                int imageCount = 2;
-                double exposeTime = 1;
+                int imageCount = 3;
+                double exposeTime = 0.5;
                 camera.ImageCount = imageCount;
                 // set camera trigger
                 setCameraTrigger((int) SequenceItem.triggerTypes.TRIGGER_NONE);
@@ -322,40 +323,70 @@ namespace SarcusImaging
                   
                     // if new image is ready
                     timer.timestamp("New image ready " + i + "/" + imageCount);
-                    OnImageReady(getImageToMemory(imgXSize, imgYSize), 0);
+                    OnImageReady(getImageToMemory(imgXSize, imgYSize), (SequenceItem.types) i);
 
                     timer.timestamp("Got image in memory " + i + "/" + imageCount);
                     //timer.timestamp("Got image " + i + "/" + imageCount + " to memory");
                 }
                 timer.timestamp("Got all images");
                 timer.stop();
+                OnIterationEnded();
                 // write results
                 Debug.WriteLine(timer.listTimes());
                 // clear camera
                 camera.StopExposure(false);
+             
+                Debug.WriteLine("measureImagingTimes() : Image count = " + imageCount);
+                Debug.WriteLine("measureImagingTimes() : Sequence counter = " + camera.SequenceCounter);
+                Debug.WriteLine("measureImagingTimes() : Camera status = " + camera.ImagingStatus);
 
+                Debug.WriteLine(Environment.NewLine);
+                Debug.WriteLine("measureImagingTimes() : stop" );
+                Debug.WriteLine("=============================");
+            }
+            else
+            {
+                Debug.WriteLine("measureImagingTimes() : Error starting sequence. No camera object or camera is not connected.");
+                Debug.WriteLine("=============================");
+            }
+
+        }
+
+        public void testBulkMde()
+        {
+            long imgXSize = camera.ImagingColumns;
+            long imgYSize = camera.ImagingRows;
+            if (camera != null && isCameraConnected())
+            {
+                int imageCount = 3;
+                double exposeTime = 0.5;
+                camera.ImageCount = imageCount;
                 // === TEST BULK MODE ===
                 Debug.WriteLine(Environment.NewLine);
                 Debug.WriteLine("measureImagingTimes() : MEASURING BULK MODE");
                 Debug.WriteLine("measureImagingTimes() : Image count = " + imageCount);
+
+                // setup time counter for item
+                ImagingTimer timer = new ImagingTimer();
+                // start new timer
+                timer.start();
                 // camera turn on bulk sequence
                 camera.SequenceBulkDownload = true;
-                // reset timer
-                timer.reset();
+                // turn off bias image option
+                Boolean bias = true;
                 // start new timer
                 timer.start();
 
                 camera.Expose(exposeTime, bias);
                 timer.timestamp("camera.Expose(" + exposeTime * 1000 + "ms)");
                 // wait for new image 
-
-                    while (!hasNewImage())
-                    {
-                        // waiting for new image
-                    }
+                while (!hasNewImage())
+                {
+                    // waiting for new image
+                }
                 // if new image is ready
                 timer.timestamp("Bulk images are ready");
-                //OnImageReady(getImageToMemory(imgXSize, imgYSize));
+                OnImageReady(getImageToMemory(imgXSize, imgYSize), SequenceItem.types.TYPE_BACKGROUND);
                 ushort[] pixels = getBulkImageToMemory(imgXSize, imgYSize, imageCount);
 
                 timer.timestamp("Got bulk images to memory");
@@ -371,20 +402,12 @@ namespace SarcusImaging
                 // reset camera to default 
                 camera.ImageCount = 1;
                 camera.SequenceBulkDownload = true;
-                Debug.WriteLine("measureImagingTimes() : Image count = " + imageCount);
-                Debug.WriteLine("measureImagingTimes() : Sequence counter = " + camera.SequenceCounter);
-                Debug.WriteLine("measureImagingTimes() : Camera status = " + camera.ImagingStatus);
-
-                Debug.WriteLine(Environment.NewLine);
-                Debug.WriteLine("measureImagingTimes() : stop" );
-                Debug.WriteLine("=============================");
             }
             else
             {
                 Debug.WriteLine("measureImagingTimes() : Error starting sequence. No camera object or camera is not connected.");
                 Debug.WriteLine("=============================");
             }
-
         }
 
         /// <summary>

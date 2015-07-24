@@ -47,10 +47,10 @@ namespace SarcusImaging
         {
             // get boundary values for pixels
             ushort[] minMax = getUshortMinMaxValues(array);
-            // ushort range = (ushort) (minMax[1] - minMax[0]);
+            ushort range = (ushort) (minMax[1] - minMax[0]);
             //ushort range = ushort.MaxValue;
             // generate color palette
-            List<Color> heatmapColors = ImageProcessor.colorPalette;
+            List<Color> heatmapColors = ImageProcessor.interpolateColors(ImageProcessor.interpolationStepColors, range + 1);
             // create new RGB array
             byte[] pixels = new byte[width * height * 3];
             // assign each pixel value a color
@@ -63,9 +63,11 @@ namespace SarcusImaging
                     int inIndex = (y * width) + x;
                     // compute index of output array
                     int outIndex = (y * width * 3) + (x * 3);
-
                     // copy colors for each value 
                     ushort index = array[inIndex];
+                    // substract min value from index value
+                    index -= minMax[0];
+                    //COLORS
                     Color color = heatmapColors[index];
                     //R
                     pixels[outIndex] = color.R;
