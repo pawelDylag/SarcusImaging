@@ -1,0 +1,5 @@
+1. Zrobic fitowanie funkcji gaussa do wynikowego zdjecia - znalezc biblioteke, lub zaimplementowac samemu. 
+	Bo wyfitowaniu nalezy wyswietlic parametry, tj. œredni¹ wartoœæ piksela i odchylenie standardowe.
+2. Wyswietlic te wyniki po skonczeniu iteracji
+3. Zapisywanie zdjec - plik z czystymi danymi po obrobce + plik z informacjami i parametrami fita.
+4. Poprawic progress bar w sequence ->  moze polaczyc SequenceForm i SingleImage Form?
