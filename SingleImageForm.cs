@@ -39,15 +39,17 @@ namespace SarcusImaging
         {
             InitializeComponent();
             initCharts();
+            // hook event listeners
             CameraManager.Instance.ImageReady += this.OnImageReady;
             CameraManager.Instance.IterationEnded += this.OnIterationEnded;
+            boxPicture.MouseMove += BoxPicture_MouseMove;
             // init main gradient stripe
             ImageProcessor.interpolateColors(ImageProcessor.interpolationStepColors, ushort.MaxValue + 1);
             heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
             heatmapGradient.RotateFlip(RotateFlipType.Rotate180FlipNone);
             gradientPicture.Image = heatmapGradient;
-            boxPicture.MouseMove += BoxPicture_MouseMove;
-
+            // init comboBoxes
+            comboBoxMode.SelectedItem = "Absorptive";
         }
 
         /// <summary>
@@ -152,8 +154,16 @@ namespace SarcusImaging
         public void OnIterationEnded(object source, EventArgs a)
         {
             Debug.WriteLine("OnIterationEnded(): received event");
+            generateNewImageName();
             postProcessImages();
+            saveMainImageToMemory();
             updateAll();
+        }
+
+        private void generateNewImageName()
+        {
+            String name = string.Format(comboBoxMode.SelectedItem.ToString().ToLower() + "-{0:dd-MM-yyyy_H-mm-ss}.txt", DateTime.Now);
+            labelMainImageName.Text = name;
         }
 
         /// <summary>
@@ -161,14 +171,55 @@ namespace SarcusImaging
         /// </summary>
         private void postProcessImages() 
         {
-            if (atomsRawImage != null && biasRawImage != null)
+            switch (comboBoxMode.SelectedIndex)
             {
-                mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
-                for (int i = 0; i < mainRawImage.Length; i++)
+                case 0:
+                    if (atomsRawImage != null && biasRawImage != null)
+                    {
+                        mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
+                        for (int i = 0; i < mainRawImage.Length; i++)
+                        {
+                            int value = atomsRawImage[i] - biasRawImage[i];
+                            if (value < 0) value = 0;
+                            mainRawImage[i] = (ushort)value;
+                        }
+                    }
+                    break;
+                case 1:
+                    if (atomsRawImage != null && biasRawImage != null && probeBeamRawImage != null  && backgroundRawImage != null)
+                    {
+                        mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
+                        for (int i = 0; i < mainRawImage.Length; i++)
+                        {
+                            int value = atomsRawImage[i] - biasRawImage[i];
+                            if (value < 0) value = 0;
+                            mainRawImage[i] = (ushort)value;
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Saves computed main image to computer memory
+        /// </summary>
+        private void saveMainImageToMemory()
+        {
+            if (mainRawImage != null)
+            {
+                using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(@"C:\Users\Dinnaug\Documents\Visual Studio 2015\Debug\data.txt"))
                 {
-                    int value = atomsRawImage[i] - biasRawImage[i];
-                    if (value < 0) value = 0;
-                    mainRawImage[i] = (ushort)value;
+                    foreach (ushort b in mainRawImage)
+                    {
+                        file.Write(b);
+                        file.Write(' ');
+                    }
                 }
             }
         }
@@ -304,7 +355,6 @@ namespace SarcusImaging
             // unsubscribe from image events
             CameraManager.Instance.ImageReady -= this.OnImageReady;
             CameraManager.Instance.IterationEnded -= this.OnIterationEnded;
-
             openedWindow = null;
         }
 
