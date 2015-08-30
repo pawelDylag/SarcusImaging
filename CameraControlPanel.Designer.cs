@@ -480,7 +480,10 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControlPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "CameraControlPanel";
+            this.ShowIcon = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Closed += new System.EventHandler(this.CameraControlPanel_FormClosed);
             this.gtoupBoxCameraSetup.ResumeLayout(false);
             this.gtoupBoxCameraSetup.PerformLayout();

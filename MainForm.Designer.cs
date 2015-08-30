@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SarcusImaging));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuItemCamera = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCameraOptions = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,6 +119,7 @@
             this.ClientSize = new System.Drawing.Size(1172, 757);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "SarcusImaging";

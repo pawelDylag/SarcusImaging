@@ -1,6 +1,6 @@
 ﻿namespace SarcusImaging
 {
-    partial class SingleImageForm
+    partial class ImageForm
     {
         /// <summary>
         /// Required designer variable.
@@ -346,7 +346,7 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Image mode:";
             // 
-            // SingleImageForm
+            // ImageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -364,8 +364,10 @@
             this.Controls.Add(this.chartX);
             this.Controls.Add(this.chartY);
             this.Controls.Add(this.boxPicture);
-            this.Name = "SingleImageForm";
-            this.Text = "Single image";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "ImageForm";
+            this.ShowIcon = false;
+            this.Text = "Image view";
             this.Closed += new System.EventHandler(this.SingleImageForm_FormClosed);
             this.Load += new System.EventHandler(this.SingleImageForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).EndInit();

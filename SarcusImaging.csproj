@@ -47,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>sarcusImaging_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -94,11 +97,11 @@
     </Compile>
     <Compile Include="SequenceItem.cs" />
     <Compile Include="SequencePlan.cs" />
-    <Compile Include="SingleImageForm.cs">
+    <Compile Include="ImageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SingleImageForm.Designer.cs">
-      <DependentUpon>SingleImageForm.cs</DependentUpon>
+    <Compile Include="ImageForm.Designer.cs">
+      <DependentUpon>ImageForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="dropdownWithLabel.resx">
       <DependentUpon>dropdownWithLabel.cs</DependentUpon>
@@ -122,8 +125,8 @@
     <EmbeddedResource Include="SequenceForm.resx">
       <DependentUpon>SequenceForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SingleImageForm.resx">
-      <DependentUpon>SingleImageForm.cs</DependentUpon>
+    <EmbeddedResource Include="ImageForm.resx">
+      <DependentUpon>ImageForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -168,6 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\grawer_andrzejki.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="sarcusImaging_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

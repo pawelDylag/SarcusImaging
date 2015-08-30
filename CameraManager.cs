@@ -47,9 +47,9 @@ namespace SarcusImaging
             camera = new Camera2();
         }
 
-        //
-        // Singleton pattern instance init
-        //
+        /// <summary>
+        ///  Singleton pattern instance init
+        /// </summary>
         public static CameraManager Instance
         {
             get
@@ -200,7 +200,6 @@ namespace SarcusImaging
             Debug.WriteLine("Image size = (" + imgXSize + "*" + imgYSize + ")");
             // get raw data array from camera
             ushort[] image = getImageToMemory(imgXSize, imgYSize);
-            //System.Diagnostics.Debug.WriteLine("Image array lenght: " + image.Length);
             return image;
         }
 
@@ -466,8 +465,8 @@ namespace SarcusImaging
         private unsafe ushort[] getImageToMemory(long width, long height)
         {
             // Allocating array of image size (width * height)
-            // where pixel is size of unsigned int (4 BYTES)
-            // possible values: 0 to 4,294,967,295 
+            // where pixel is size of unsigned short (2 BYTES)
+            // possible values: 0 to 65535
             ushort[] pixels = new ushort[width * height];
 
             // Gets pointer to allocated array and fixes it, 

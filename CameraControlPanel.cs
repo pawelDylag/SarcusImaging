@@ -138,7 +138,7 @@ namespace SarcusImaging
         {
             openedWindow.Invoke((MethodInvoker)delegate()
             {
-                SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
+                ImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
         }
 
@@ -146,7 +146,7 @@ namespace SarcusImaging
         { 
             openedWindow.Invoke((MethodInvoker)delegate()
             {
-                SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
+                ImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
         }
 

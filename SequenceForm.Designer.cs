@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SequenceForm));
             this.dataGridViewSequence = new System.Windows.Forms.DataGridView();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonRemove = new System.Windows.Forms.Button();
@@ -168,8 +169,11 @@
             this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.dataGridViewSequence);
-            this.MaximizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimizeBox = false;
             this.Name = "SequenceForm";
+            this.ShowIcon = false;
             this.Text = "Sequence setup";
             this.Closed += new System.EventHandler(this.sequenceForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSequence)).EndInit();

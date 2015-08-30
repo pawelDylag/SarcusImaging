@@ -48,7 +48,7 @@ namespace SarcusImaging
             col1.HeaderText = "Type";
             col1.Name = "2";
             row.Add("Bias");
-            row.Add("Image");
+            row.Add("Atoms");
             row.Add("Probe");
             row.Add("Background");
             col1.Items.AddRange(row.ToArray());
@@ -120,7 +120,7 @@ namespace SarcusImaging
                     case "Background":
                         type = SequenceItem.types.TYPE_BACKGROUND;
                         break;
-                    case "Image":
+                    case "Atoms":
                         type = SequenceItem.types.TYPE_SEQUENCE;
                         break;
                     case "Probe":
@@ -179,7 +179,7 @@ namespace SarcusImaging
         /// <param name="e"></param>
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            dataGridViewSequence.Rows.Add("Image","1,0", "1", "No trigger", "img");
+            dataGridViewSequence.Rows.Add("Atoms","1,0", "1", "No trigger", "img");
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace SarcusImaging
             SequencePlan sequencePlan = generateSequencePlan();
             openedWindow.Invoke((MethodInvoker)delegate ()
             {
-                SingleImageForm.ShowForm((SarcusImaging)this.MdiParent);
+                ImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
             buttonStop.Enabled = true;
             progressBarIterations.Maximum = sequencePlan.iterations * sequencePlan.size();

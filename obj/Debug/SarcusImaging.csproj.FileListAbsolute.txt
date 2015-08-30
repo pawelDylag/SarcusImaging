@@ -43,3 +43,18 @@ C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csproj.Gener
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\bin\Debug\SarcusImaging.exe.config
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\Interop.APOGEELib.dll
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.csproj.ResolveComReference.cache
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.exe
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.pdb
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\bin\Debug\SarcusImaging.exe
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\bin\Debug\SarcusImaging.pdb
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.csprojResolveAssemblyReference.cache
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SarcusImaging.resources
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.Properties.Resources.resources
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
+C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.ImageForm.resources

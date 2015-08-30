@@ -12,10 +12,10 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace SarcusImaging
 {
-    public partial class SingleImageForm : Form
+    public partial class ImageForm : Form
     {
 
-        private static SingleImageForm openedWindow = null;
+        private static ImageForm openedWindow = null;
 
         private static Bitmap heatmapGradient;
 
@@ -35,7 +35,7 @@ namespace SarcusImaging
         private static ushort[] biasRawImage;
         private static ushort[] mainRawImage;
 
-        public SingleImageForm()
+        public ImageForm()
         {
             InitializeComponent();
             initCharts();
@@ -87,13 +87,13 @@ namespace SarcusImaging
             }
             else
             {
-                openedWindow = new SingleImageForm();
+                openedWindow = new ImageForm();
                 openedWindow.MdiParent = parentForm;
                 openedWindow.Show();
             }
         }
 
-        public SingleImageForm(int value)
+        public ImageForm(int value)
         {
             InitializeComponent();
             // subscribe to image event list
