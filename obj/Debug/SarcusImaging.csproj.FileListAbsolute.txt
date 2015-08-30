@@ -22,7 +22,6 @@ C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\Sa
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.SingleImageForm.resources
-C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.ImageSettings.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.CameraControlPanel.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
 C:\Users\Paweł\Documents\Visual Studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.dropdownWithLabel.resources
@@ -43,3 +42,4 @@ C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SingleImageF
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
 C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
+C:\Users\Paweł\documents\visual studio 2013\Projects\SarcusImaging\obj\Debug\SarcusImaging.SequenceForm.resources
