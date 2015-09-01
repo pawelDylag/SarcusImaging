@@ -38,6 +38,8 @@ namespace SarcusImaging
         public delegate void IterationEndedEventHandler(object source, EventArgs args);
         public event IterationEndedEventHandler IterationEnded;
 
+        static Thread imagingThread = null;
+
         /// <summary>
         /// Private constructor to avoid creating copies of this class
         /// </summary>
@@ -209,7 +211,9 @@ namespace SarcusImaging
         /// <param name="plan"></param>
         public void executeSequencePlan(SequencePlan plan)
         {
-
+            imagingThread = new Thread(
+            new ThreadStart(() =>
+            {
             Debug.WriteLine("=============================");
             Debug.WriteLine("executeSequencePlan() : start" + Environment.NewLine);
             long imgXSize = camera.ImagingColumns;
@@ -271,6 +275,20 @@ namespace SarcusImaging
             {
                 Debug.WriteLine("executeSequencePlan() : Error starting sequence. No camera object or camera is not connected.");
                 Debug.WriteLine("=============================");
+            }
+            }
+            ));
+            imagingThread.Start();
+        }
+
+        /// <summary>
+        /// Stops imaging thread
+        /// </summary>
+        public static void stopSequence()
+        {
+            if (imagingThread != null)
+            {
+                imagingThread.Abort();
             }
         }
 

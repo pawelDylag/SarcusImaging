@@ -44,12 +44,12 @@ namespace SarcusImaging
             CameraManager.Instance.IterationEnded += this.OnIterationEnded;
             boxPicture.MouseMove += BoxPicture_MouseMove;
             // init main gradient stripe
-            ImageProcessor.interpolateColors(ImageProcessor.interpolationStepColors, ushort.MaxValue + 1);
+            ImageProcessor.colorPalette = ImageProcessor.interpolateColorScheme(ImageProcessor.interpolationStepColors, ushort.MaxValue + 1);
             heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
             heatmapGradient.RotateFlip(RotateFlipType.Rotate180FlipNone);
             gradientPicture.Image = heatmapGradient;
             // init comboBoxes
-            comboBoxMode.SelectedItem = "Absorptive";
+            radioButton1.Select();
         }
 
         /// <summary>
@@ -127,18 +127,22 @@ namespace SarcusImaging
                 case SequenceItem.types.TYPE_BIAS:
                     Debug.WriteLine("OnImageReady(): decoded type = bias");
                     biasRawImage = a.pixels;
+                    updateBiasImage();
                     break;
                 case SequenceItem.types.TYPE_BACKGROUND:
                     Debug.WriteLine("OnImageReady(): decoded type = background");
                     backgroundRawImage = a.pixels;
+                    updateBackgroundImage();
                     break;
                 case SequenceItem.types.TYPE_PROBE:
                     Debug.WriteLine("OnImageReady(): decoded type = probe beam");
                     probeBeamRawImage = a.pixels;
+                    updateProbeBeamImage();
                     break;
                 case SequenceItem.types.TYPE_SEQUENCE:
                     Debug.WriteLine("OnImageReady(): decoded type = atoms");
                     atomsRawImage = a.pixels;
+                    updateAtomsImage();
                     break;
                 default:
                     Debug.WriteLine("OnImageReady(): decoded type = default");
@@ -154,16 +158,62 @@ namespace SarcusImaging
         public void OnIterationEnded(object source, EventArgs a)
         {
             Debug.WriteLine("OnIterationEnded(): received event");
-            generateNewImageName();
             postProcessImages();
+            generateNewImageName();
             saveMainImageToMemory();
-            updateAll();
+            updateAllImages();
+            updateImageInfoViews();
         }
 
+        /// <summary>
+        /// Returns selected radio button for mainImage groupBox
+        /// </summary>
+        /// <returns></returns>
+        private RadioButton getSelectedMainImageRadioButton()
+        {
+            RadioButton result = null;
+            foreach(RadioButton r in groupBoxMainImageType.Controls)
+            {
+                if (r.Checked) result = r;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Creates raw image file name
+        /// </summary>
         private void generateNewImageName()
         {
-            String name = string.Format(comboBoxMode.SelectedItem.ToString().ToLower() + "-{0:dd-MM-yyyy_H-mm-ss}.txt", DateTime.Now);
-            labelMainImageName.Text = name;
+            RadioButton selectedImageType = getSelectedMainImageRadioButton();
+            if (selectedImageType != null)
+            {
+                String name = string.Format(selectedImageType.Name.ToLower() + "-{0:dd-MM-yyyy_H-mm-ss}.txt", DateTime.Now);
+                labelMainImageName.BeginInvoke(
+                new Action(() =>
+                  {
+                       labelMainImageName.Text = name;
+                  }));
+            }
+        }
+
+        /// <summary>
+        /// Updates image info labels and UI views
+        /// </summary>
+        private void updateImageInfoViews()
+        {
+            // update mean and standard deviation information:
+            //double[] meanAndStandardDeviation = ImageProcessor.meanAndStandardDeviation(mainRawImage);
+           // labelMeanValue.Text = meanAndStandardDeviation[0].ToString();
+            //labelStandardDeviation.Text = meanAndStandardDeviation[1].ToString();
+
+            // update charts and pixel values
+            if (mainRawImage != null)
+            {
+                updateXChart(mainRawImage, 512, 512);
+                updateYChart(mainRawImage, 512, 512);
+                updatePixelValues();
+            }
+
         }
 
         /// <summary>
@@ -171,38 +221,42 @@ namespace SarcusImaging
         /// </summary>
         private void postProcessImages() 
         {
-            switch (comboBoxMode.SelectedIndex)
+            // get selected radio button
+            RadioButton selectedImageType = getSelectedMainImageRadioButton();
+            if (selectedImageType != null)
             {
-                case 0:
-                    if (atomsRawImage != null && biasRawImage != null)
-                    {
-                        mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
-                        for (int i = 0; i < mainRawImage.Length; i++)
+                switch (selectedImageType.Name)
+                {
+                    case "Absorptive":
+                        if (atomsRawImage != null && biasRawImage != null)
                         {
-                            int value = atomsRawImage[i] - biasRawImage[i];
-                            if (value < 0) value = 0;
-                            mainRawImage[i] = (ushort)value;
-                        }
-                    }
-                    break;
-                case 1:
-                    if (atomsRawImage != null && biasRawImage != null && probeBeamRawImage != null  && backgroundRawImage != null)
-                    {
-                        mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
-                        for (int i = 0; i < mainRawImage.Length; i++)
-                        {
-                            int value = atomsRawImage[i] - biasRawImage[i];
-                            if (value < 0) value = 0;
-                            mainRawImage[i] = (ushort)value;
-                        }
-                    }
-                    break;
-                case 2:
-                    break;
-                default:
-                    break;
-            }
+                            mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
+                            for (int i = 0; i < mainRawImage.Length; i++)
+                            {
+                                int value = atomsRawImage[i] - biasRawImage[i];
+                                if (value < 0) value = 0;
+                                mainRawImage[i] = (ushort)value;
 
+                            }
+                        }
+                        break;
+                    case "Fluorescent":
+                        if (atomsRawImage != null && biasRawImage != null && probeBeamRawImage != null && backgroundRawImage != null)
+                        {
+                            mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
+                            for (int i = 0; i < mainRawImage.Length; i++)
+                            {
+                                int value = atomsRawImage[i] - biasRawImage[i];
+                                if (value < 0) value = 0;
+                                mainRawImage[i] = (ushort)value;
+                            }
+                        }
+                        break;
+                    default:
+                        mainRawImage = atomsRawImage;
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -227,26 +281,32 @@ namespace SarcusImaging
         /// <summary>
         /// Updates all images
         /// </summary>
-        public void updateAll()
+        public void updateAllImages()
         {
             updateAtomsImage();
             updateBackgroundImage();
             updateBiasImage();
             updateMainImage();
             updateProbeBeamImage();
-            if (mainRawImage != null)
-            {
-                updateXChart(mainRawImage, 512, 512);
-                updateYChart(mainRawImage, 512, 512);
-                updatePixelValues();
-            }
-
         }
 
         private void updatePixelValues()
         {
-            labelMinValue.Text = "" + ImageProcessor.getUshortMinMaxValues(mainRawImage)[0];
-            labelMaxValue.Text = "" + ImageProcessor.getUshortMinMaxValues(mainRawImage)[1];
+            RadioButton selectedImageType = getSelectedMainImageRadioButton();
+            if (selectedImageType != null)
+            {
+                labelMinValue.BeginInvoke(
+                new Action(() =>
+                {
+                    labelMinValue.Text = "" + ImageProcessor.getUshortMinMaxValues(mainRawImage)[0];
+                }));
+
+                labelMaxValue.BeginInvoke(
+                new Action(() =>
+                {
+                    labelMaxValue.Text = "" + ImageProcessor.getUshortMinMaxValues(mainRawImage)[1];
+                }));
+            }
         }
 
         /// <summary>
@@ -395,6 +455,46 @@ namespace SarcusImaging
         }
 
         private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox7_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton5_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton6_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton6_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelMeanValue_Click(object sender, EventArgs e)
         {
 
         }

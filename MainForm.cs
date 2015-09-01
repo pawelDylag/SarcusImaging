@@ -104,7 +104,7 @@ namespace SarcusImaging
                 this.Invoke(new Action<string>(updateCameraStatusTextBox), new object[] { value });
                 return;
             }
-            toolStripTextBoxStatus.Text = value;
+            toolStripStatusLabel1.Text = value;
         }
 
         private void toolStripTextBox1_Click(object sender, EventArgs e)
@@ -124,6 +124,11 @@ namespace SarcusImaging
         private void sequenceSetupToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SequenceForm.ShowForm(this);
+        }
+
+        private void toolStripStatusLabel3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

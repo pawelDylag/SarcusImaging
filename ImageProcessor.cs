@@ -13,9 +13,9 @@ namespace SarcusImaging
     /// </summary>
     static class ImageProcessor
     {
-
         public static List<Color> interpolationStepColors = new List<Color> { Color.Black, Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.White };
-        private static List<Color> colorPalette;
+        public static List<Color> colorPalette;
+
         /// <summary>
         /// Generates bitmap from 8bpp array
         /// </summary>
@@ -26,8 +26,6 @@ namespace SarcusImaging
         public static Bitmap generateBitmap(byte[] pixels, long width, long height, PixelFormat pixelFormat)
         {
             Bitmap bitmap = new Bitmap((int)width, (int)height, pixelFormat);
-            //byte[] image = Convert16BitGrayScaleToRgb32(pixels, (int)width, (int)height);
-           // changeBitmapToGreyscale(bitmap);
             Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
             IntPtr pixelStartAddress = picData.Scan0;
@@ -36,24 +34,24 @@ namespace SarcusImaging
             return bitmap;
         }
 
-        public static Bitmap convertArrayToBitmap(ushort[] array, int width, int height)
-        {
-            byte[] pixels = convertShortToByteArray(array, width, height);
-            return generateBitmap(pixels, width, height, PixelFormat.Format32bppArgb);
-
-        }
-
+        /// <summary>
+        /// Generates heatmap bitmap from given array of camera ushort data.
+        /// </summary>
+        /// <param name="array">Pixels data from camera</param>
+        /// <param name="width">Bitmap width</param>
+        /// <param name="height">Bitmap height</param>
+        /// <returns>Bitmapa</returns>
         public static Bitmap convertArrayToHeatmapBitmap(ushort[] array, int width, int height)
         {
             // get boundary values for pixels
             ushort[] minMax = getUshortMinMaxValues(array);
-            ushort range = (ushort) (minMax[1] - minMax[0]);
-            //ushort range = ushort.MaxValue;
+            // setup pixel data range
+            ushort range = (ushort) (minMax[1] - minMax[0] + 1);
             // generate color palette
-            List<Color> heatmapColors = ImageProcessor.interpolateColors(ImageProcessor.interpolationStepColors, range + 1);
+            List<Color> heatmapColors = ImageProcessor.interpolateColorScheme(ImageProcessor.interpolationStepColors, range);
             // create new RGB array
             byte[] pixels = new byte[width * height * 3];
-            // assign each pixel value a color
+            // Step through the image by row
             for (int y = 0; y < height; y++)
             {
                 // Step through the image by column  
@@ -67,72 +65,19 @@ namespace SarcusImaging
                     ushort index = array[inIndex];
                     // substract min value from index value
                     index -= minMax[0];
-                    //COLORS
+                    // colors
                     Color color = heatmapColors[index];
-                    //R
+                    // R
                     pixels[outIndex] = color.R;
-                    //G
+                    // G
                     pixels[outIndex + 1] = color.G;
-                    //B
+                    // B
                     pixels[outIndex + 2] = color.B;
                 }
             }
+            // return generated Bitmap in 24bpp RGB format
             return generateBitmap(pixels, width, height, PixelFormat.Format24bppRgb);
-
         }
-
-
-        public static Bitmap convertArrayToBitmap(byte[] array, int width, int height)
-        {
-            return generateBitmap(array, width, height, PixelFormat.Format32bppArgb);
-
-        }
-
-        /// <summary>
-        /// Converts 16 bit Greyscale image to 48bit RGB for display.
-        /// </summary>
-        /// <param name="inBuffer"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static byte[] ConvertArrayToRgb24Heatmap(ushort[] pixels, int width, int height)
-        {
-            Debug.WriteLine("ConvertArrayToRgb24Heatmap()");
-            Debug.WriteLine("ConvertArrayToRgb24Heatmap() : input array length: " + pixels.Length);
-            byte[] outBuffer = new byte[width * height * 3];
-            ushort[] minMax = getUshortMinMaxValues(pixels);
-            // Setup conversion constants
-            double range = minMax[1] - minMax[0];
-            double mid = (minMax[1] + minMax[1]) / 2.0;
-            Debug.WriteLine("ConvertArrayToRgb24Heatmap() : input array MIN =  " + minMax[0] + ", MAX = " + minMax[1] + ", RANGE = " + range + ", MID = " + mid);
-            Debug.WriteLine("ConvertArrayToRgb24Heatmap() : output array length: " + outBuffer.Length);
-            // Step through the image by row  
-            for (int y = 0; y < height; y++)
-            {
-                // Step through the image by column  
-                for (int x = 0; x < width; x++)
-                {
-                    // Get inbuffer index and outbuffer index 
-                    int inIndex = (y * width) + x;
-                    int outIndex = (y * width * 3) + (x * 3);
-                    
-                    
-                    // color value conversion here
-
-                    //R
-                    outBuffer[outIndex] = 0;
-
-                    //G
-                    outBuffer[outIndex + 1] = 0;
-
-                    //B
-                    outBuffer[outIndex + 2] = 0;
-
-                }
-            }
-            return outBuffer;
-        }
-
 
         /// <summary>
         ///  Converts LOSELESS short[x] array to byte[2x] array.
@@ -174,6 +119,10 @@ namespace SarcusImaging
             return result;
         }
 
+        /// <summary>
+        /// Changes bitmap color palette to greyscale
+        /// </summary>
+        /// <param name="bitmap">Bitmap</param>
         public static void changeBitmapToGreyscale(Bitmap bitmap)
         {
             ColorPalette palette = bitmap.Palette;
@@ -186,30 +135,45 @@ namespace SarcusImaging
             bitmap.Palette = palette;
         }
 
-
-        public static List<Color> interpolateColors(List<Color> stepColors, int size)
+        /// <summary>
+        /// Interpolate given color scheme into gradient list
+        /// </summary>
+        /// <param name="colorScheme"> List with color scheme</param>
+        /// <param name="size">Number of interpolated colors</param>
+        /// <returns></returns>
+        public static List<Color> interpolateColorScheme(List<Color> colorScheme, int size)
         {
+            // create sorted dictionary for quick color peek. Populate it with data.
             SortedDictionary<float, Color> gradient = new SortedDictionary<float, Color>();
-            for (int i = 0; i < stepColors.Count; i++)
-                gradient.Add(1f * i / (stepColors.Count - 1), stepColors[i]);
+            for (int i = 0; i < colorScheme.Count; i++)
+                gradient.Add(1f * i / (colorScheme.Count - 1), colorScheme[i]);
+            // create result list with for interpolated colors
             List<Color> colorList = new List<Color>();
+            // setup interpolation timer for development purposes
             ImagingTimer timer = new ImagingTimer();
             timer.start();
+            // use Bitmap and Graphics from bitmap
             using (Bitmap bmp = new Bitmap(size, 1))
             using (Graphics G = Graphics.FromImage(bmp))
             {
+                // cretae timer timestamp
                 timer.timestamp("interpolateColors() : start ");
+                // create empty rectangle canvas
                 Rectangle rect = new Rectangle(Point.Empty, bmp.Size);
+                // use LinearGradientBrush class for gradient computation
                 LinearGradientBrush brush = new LinearGradientBrush
                                         (rect, Color.Empty, Color.Empty, 0, false);
+                // setup ColorBlend object
                 ColorBlend colorBlend = new ColorBlend();
                 colorBlend.Positions = new float[gradient.Count];
+                // enumarete through gradient step colors
                 SortedDictionary<float, Color>.Enumerator enumerator = gradient.GetEnumerator();
                 for (int i = 0; i < gradient.Count; i++) 
                 {
                     enumerator.MoveNext();
                     colorBlend.Positions[i] = enumerator.Current.Key;
                 }
+                // blend colors and copy them to result color list
                 List<Color> values = new List<Color>(gradient.Values);
                 colorBlend.Colors = values.ToArray();
                 brush.InterpolationColors = colorBlend;
@@ -220,7 +184,7 @@ namespace SarcusImaging
             }
             timer.stop();
             Debug.WriteLine(timer.listTimes());
-            ImageProcessor.colorPalette = colorList;
+            // return interpolated colors
             return colorList;
         }
 
@@ -338,6 +302,10 @@ namespace SarcusImaging
             return minMax;
         }
 
+        /// <summary>
+        /// Debug func for printing array min and max
+        /// </summary>
+        /// <param name="array"></param>
         public static void printByteArrayMinMax(byte[] array)
         {
             byte resultMin = array[0];
@@ -356,7 +324,13 @@ namespace SarcusImaging
             Debug.WriteLine("Image pixel min value = " + resultMin);
             Debug.WriteLine("Image pixel max value = " + resultMax);
         }
-
+        
+        /// <summary>
+        /// Debug function for generating random image
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static byte[] generateRandomImage(int x, int y)
         {
             int width = x;
@@ -387,7 +361,9 @@ namespace SarcusImaging
 
 
         /// <summary>
-        /// Generates random ushort[] array.
+        /// Generates random ushort[] array. 
+        /// Randomisation factor is different for each image type. 
+        /// This provides different images for further post-process testing.
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
@@ -448,6 +424,36 @@ namespace SarcusImaging
             }
 
             return pixels;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <returns></returns>
+        public static double[] meanAndStandardDeviation(ushort[] dataset)
+        {
+            double[] result = new double[2];
+            double mean = 0.0;
+            double sum = 0.0;
+            int k = 1;
+            foreach (ushort v in dataset)
+            {
+                //double v = Convert.ToDouble(value);
+                double previousMean = mean;
+                mean += (v - previousMean) / k;
+                sum += (v - previousMean) * (v - mean);
+                k++;
+            }
+            // save mean 
+            result[0] = mean;
+            // save standard deviation
+            result[1] = Math.Sqrt(sum / (k - 2));
+            // Write debug info
+            Debug.WriteLine("meanAndStandardDeviation() : mean = " + result[0] + ", standardDeviation = " + result[1]);
+            // return mean and standard deviation
+            return result;
         }
     }
 }

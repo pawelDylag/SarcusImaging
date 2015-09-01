@@ -377,6 +377,7 @@ namespace SarcusImaging
         private void CameraControlPanel_FormClosed(object sender, EventArgs e)
         {
             openedWindow = null;
+            CameraManager.Instance.ImageReady -= this.OnImageReady;
         }
 
         private void radioButton8_CheckedChanged(object sender, EventArgs e)

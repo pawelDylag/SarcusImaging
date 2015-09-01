@@ -220,7 +220,11 @@ namespace SarcusImaging
         /// <param name="a"></param>
         public void OnImageReady(object source, ImageReadyArgs a)
         {
-            progressBarIterations.PerformStep();
+            progressBarIterations.BeginInvoke(
+              new Action(() =>
+              {
+                  progressBarIterations.PerformStep();
+              }));
         }
 
         /// <summary>
@@ -262,6 +266,21 @@ namespace SarcusImaging
         private void progressBarIterations_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            progressBarIterations.BeginInvoke(
+              new Action(() =>
+              {
+                  progressBarIterations.Value = 0;
+              }));
+            buttonStop.BeginInvoke(
+             new Action(() =>
+             {
+                 buttonStop.Enabled = false; ;
+                 CameraManager.stopSequence();
+             }));
         }
     }
 }
