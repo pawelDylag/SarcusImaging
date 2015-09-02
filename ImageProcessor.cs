@@ -13,8 +13,17 @@ namespace SarcusImaging
     /// </summary>
     static class ImageProcessor
     {
-        public static List<Color> interpolationStepColors = new List<Color> { Color.Black, Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.White };
-        public static List<Color> colorPalette;
+        // main heatmap color palette
+        private static readonly Color[] HEATMAP_COLOR_PALETTE = new Color[7] {Color.White, Color.Blue, Color.Cyan, Color.Green, Color.Yellow, Color.Red, Color.Black};
+        
+        // main heatmap color positions
+        private static readonly float[] HEATMAP_COLOR_POSITIONS = new float[7] { 0, 1 / 6f, 2 / 6f, 3 / 6f, 4 / 6f, 5 / 6f, 1 };
+      
+        // main heatmap height
+        private static readonly int HEATMAP_GRADIENT_HEIGHT = 5;
+
+        // main heatmap object. It is used to compute image pixel values from 0-65535 greyscale range into colorful heatmap.
+        public static Bitmap heatmapGradient;
 
         /// <summary>
         /// Generates bitmap from 8bpp array
@@ -23,14 +32,15 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static Bitmap generateBitmap(byte[] pixels, long width, long height, PixelFormat pixelFormat)
+        public static Bitmap generateBitmap(byte[] pixels, int width, int height, PixelFormat pixelFormat)
         {
-            Bitmap bitmap = new Bitmap((int)width, (int)height, pixelFormat);
-            Rectangle dimension = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+            Bitmap bitmap = new Bitmap(width, height, pixelFormat);
+            Rectangle dimension = new Rectangle(Point.Empty, bitmap.Size);
+            BitmapData picData = bitmap.LockBits(dimension, ImageLockMode.WriteOnly, pixelFormat);
             IntPtr pixelStartAddress = picData.Scan0;
             System.Runtime.InteropServices.Marshal.Copy(pixels, 0, pixelStartAddress, pixels.Length);
             bitmap.UnlockBits(picData);
+            bitmap.Save("generateBitmap.png");
             return bitmap;
         }
 
@@ -48,8 +58,8 @@ namespace SarcusImaging
             // setup pixel data range
             ushort range = (ushort) (minMax[1] - minMax[0] + 1);
             // generate color palette
-            List<Color> heatmapColors = ImageProcessor.interpolateColorScheme(range);
-            Debug.WriteLine("convertArrayToHeatmapBitmap() : range = " + range + ", min = " + minMax[0] + ", max = " + minMax[1] + ", colors in list = " + heatmapColors.Count);
+            Bitmap heatmapColors = getResizedHeatmapGradient(range);
+            Debug.WriteLine("convertArrayToHeatmapBitmap() : range = " + range + ", min = " + minMax[0] + ", max = " + minMax[1]);
             // create new RGB array
             byte[] pixels = new byte[width * height * 3];
             // Step through the image by row
@@ -67,7 +77,7 @@ namespace SarcusImaging
                     // substract min value from index value
                     index -= minMax[0];
                     // colors
-                    Color color = heatmapColors[index];
+                    Color color = heatmapColors.GetPixel(index, HEATMAP_GRADIENT_HEIGHT - 1 );
                     // R
                     pixels[outIndex] = color.R;
                     // G
@@ -78,46 +88,6 @@ namespace SarcusImaging
             }
             // return generated Bitmap in 24bpp RGB format
             return generateBitmap(pixels, width, height, PixelFormat.Format24bppRgb);
-        }
-
-        /// <summary>
-        ///  Converts LOSELESS short[x] array to byte[2x] array.
-        /// </summary>
-        /// <param name="pixels"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
-        public static byte[] convertShortToByte(ushort[] pixels, long width, long height)
-        {
-            Debug.WriteLine("convertShortToByte()");
-            byte[] result = new byte[width * height * 2];
-            Debug.WriteLine("convertShortToByte() -> Array lenght: " + result.Length);
-            int inBytesPerPixel = 2;
-            int outBytesPerPixel = 1;
-
-            int inStep = (int)width * inBytesPerPixel;
-            int outStep = (int)width * outBytesPerPixel;
-
-            // Step through the image by row  
-            for (int y = 0; y < height; y++)
-            {
-                // Step through the image by column  
-                for (int x = 0; x < width; x++)
-                {
-                    // Get inbuffer index and outbuffer index 
-                    int inIndex = (y * inStep) + (x * inBytesPerPixel);
-                    int outIndex = (y * outStep) + (x * outBytesPerPixel);
-
-                    ushort pixel = pixels[inIndex];
-
-                    byte lobyte = (byte)pixel;
-                    byte hibyte = (byte)(pixel >> 8);
-                        
-                    result[outIndex] = hibyte;
-                    result[outIndex + 1] = lobyte;
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -136,72 +106,15 @@ namespace SarcusImaging
             bitmap.Palette = palette;
         }
 
-        /// <summary>
-        /// Interpolate given color scheme into gradient list
-        /// </summary>
-        /// <param name="colorScheme"> List with color scheme</param>
-        /// <param name="size">Number of interpolated colors</param>
-        /// <returns></returns>
-        public static List<Color> interpolateColorScheme(List<Color> colorScheme, int size)
-        {
-            // create sorted dictionary for quick color peek. Populate it with data.
-            SortedDictionary<float, Color> gradient = new SortedDictionary<float, Color>();
-            for (int i = 0; i < colorScheme.Count; i++)
-                gradient.Add(1f * i / (colorScheme.Count - 1), colorScheme[i]);
-            // create result list with for interpolated colors
-            List<Color> colorList = new List<Color>(size);
-            // setup interpolation timer for development purposes
-            ImagingTimer timer = new ImagingTimer();
-            timer.start();
-            // use Bitmap and Graphics from bitmap
-            using (Bitmap bmp = new Bitmap(size, 1))
-            using (Graphics G = Graphics.FromImage(bmp))
-            {
-                // cretae timer timestamp
-                timer.timestamp("interpolateColors() : start ");
-                // create empty rectangle canvas
-                Rectangle rect = new Rectangle(Point.Empty, bmp.Size);
-                // use LinearGradientBrush class for gradient computation
-                LinearGradientBrush brush = new LinearGradientBrush
-                                        (rect, Color.Empty, Color.Empty, 0, false);
-                // setup ColorBlend object
-                ColorBlend colorBlend = new ColorBlend();
-                colorBlend.Positions = new float[gradient.Count];
-                // enumarete through gradient step colors
-                SortedDictionary<float, Color>.Enumerator enumerator = gradient.GetEnumerator();
-                for (int i = 0; i < gradient.Count; i++) 
-                {
-                    enumerator.MoveNext();
-                    colorBlend.Positions[i] = enumerator.Current.Key;
-                }
-                // blend colors and copy them to result color list
-                List<Color> values = new List<Color>(gradient.Values);
-                colorBlend.Colors = values.ToArray();
-                brush.InterpolationColors = colorBlend;
-                G.FillRectangle(brush, rect);
-                for (int i = 0; i < size; i++) colorList.Add(bmp.GetPixel(i, 0));
-                brush.Dispose();
-                timer.timestamp("interpolateColors() : end");
-            }
-            timer.stop();
-            Debug.WriteLine(timer.listTimes());
-            // return interpolated colors
-            return colorList;
-        }
-
 
         /// <summary>
-        /// Interpolate given color scheme into gradient list
+        /// Method for initial heatmap generation
         /// </summary>
-        /// <param name="colorScheme"> List with color scheme</param>
-        /// <param name="size">Number of interpolated colors</param>
         /// <returns></returns>
-        public static List<Color> interpolateColorScheme(int size)
+        public static Bitmap generateHeatmapGradient()
         {
-            // create result list with for interpolated colors
-            List<Color> colorList = new List<Color>();
             // use Bitmap and Graphics from bitmap
-            using (Bitmap bmp = new Bitmap(size, 200))
+            Bitmap bmp = new Bitmap(ushort.MaxValue, HEATMAP_GRADIENT_HEIGHT);
             using (Graphics G = Graphics.FromImage(bmp))
             {
                 // create empty rectangle canvas
@@ -211,33 +124,43 @@ namespace SarcusImaging
                                         (rect, Color.Empty, Color.Empty, 0, false);
                 // setup ColorBlend object
                 ColorBlend colorBlend = new ColorBlend();
-                colorBlend.Positions = new float[7];
-                colorBlend.Positions[0] = 0;
-                colorBlend.Positions[1] = 1 / 6f;
-                colorBlend.Positions[2] = 2 / 6f;
-                colorBlend.Positions[3] = 3 / 6f;
-                colorBlend.Positions[4] = 4 / 6f;
-                colorBlend.Positions[5] = 5 / 6f;
-                colorBlend.Positions[6] = 1;
+                // setup gradient colors
+                colorBlend.Colors = HEATMAP_COLOR_PALETTE;
+                // setup color positions
+                colorBlend.Positions = HEATMAP_COLOR_POSITIONS;
                 // blend colors and copy them to result color list
-                colorBlend.Colors = new Color[7];
-                colorBlend.Colors[0] = Color.Black;
-                colorBlend.Colors[1] = Color.Blue;
-                colorBlend.Colors[2] = Color.Cyan;
-                colorBlend.Colors[3] = Color.Green;
-                colorBlend.Colors[4] = Color.Yellow;
-                colorBlend.Colors[5] = Color.Red;
-                colorBlend.Colors[6] = Color.White;
                 brush.InterpolationColors = colorBlend;
                 G.FillRectangle(brush, rect);
-                bmp.Save("gradient_debug_image_sarcus.png", ImageFormat.Png);
-                for (int i = 0; i < size; i++) colorList.Add(bmp.GetPixel(i, 0));
+                // release brush object 
                 brush.Dispose();
             }
-
-            // return interpolated colors
-            return colorList;
+            return bmp;
         }
+
+        /// <summary>
+        /// Generate main heatmap object and save it in memory. 
+        /// </summary>
+        public static void initHeatmapGradient()
+        {
+            Bitmap gradient = generateHeatmapGradient();
+            heatmapGradient = gradient;
+            Debug.WriteLine("initHeatmapGradient() : bitmap size = " + heatmapGradient.Size + " , format =" + heatmapGradient.PixelFormat);
+        }
+
+        /// <summary>
+        /// Returns resized heatmap for given size. 
+        /// </summary>
+        /// <param name="newWidth"></param>
+        /// <returns></returns>
+        public static Bitmap getResizedHeatmapGradient(ushort size)
+        {
+            ushort scaledWidth = (ushort) (size + Math.Ceiling(size / 512.0));
+            heatmapGradient.Save("beforeResizedHeatmap.png");
+            Bitmap result = new Bitmap(heatmapGradient, new Size(scaledWidth, HEATMAP_GRADIENT_HEIGHT));
+            result.Save("afterResizedHeatmap.png");
+            return result;
+        }
+
 
         /// <summary>
         /// LOSSY conversion of short[] to byte[]. The offset of conversion is defined with offset parameter.
@@ -467,10 +390,20 @@ namespace SarcusImaging
                             }
                             else
                             {
-                                pixels[i] = (ushort)r.Next(ushort.MinValue, 100); ; ;
+                                pixels[i] = (ushort)r.Next(ushort.MinValue, 100);
                             }
                         }
                     }
+                break;
+                case 4:
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        pixels[width * i + j] = (ushort)(i + j +r.Next(0, 10));
+
+                    }
+                }
                 break;
             }
 

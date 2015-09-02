@@ -13,5 +13,4 @@ http://jonisalonen.com/2013/deriving-welfords-method-for-computing-variance/
 
 - Dol zdjecia jest jego lewa strona - poprawic
 - Zrobic on sequence start Args i przekazywac je do progress bara w toolStripe
-- naprawic czarny pasek w kolorwaniu obrazow
-- 
+- Dolny chart pokazuje wartosci absolutne, a nie w zakresie obrazka

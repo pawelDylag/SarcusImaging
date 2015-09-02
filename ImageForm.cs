@@ -16,8 +16,6 @@ namespace SarcusImaging
     {
         private static ImageForm openedWindow = null;
 
-        private static Bitmap heatmapGradient;
-
         private static readonly int heatmapGradientHeight = 512;
         private static readonly int heatmapGradientWidth = 16;
 
@@ -32,9 +30,11 @@ namespace SarcusImaging
         private static ushort[] biasRawImage;
         private static ushort[] mainRawImage;
 
+        // final image rotation
         private static readonly RotateFlipType IMAGE_ROTATION = RotateFlipType.Rotate90FlipNone;
-        // default data save directory
-        private static readonly String SAVE_DIRECTORY = @"C:\Users\Dinnaug\Documents\Visual Studio 2015\Debug\data.txt";
+        // heatmap gradient stripe rotation
+        private static readonly RotateFlipType GRADIENT_STRIPE_ROTATION = RotateFlipType.Rotate180FlipNone;
+
 
         public ImageForm()
         {
@@ -44,12 +44,18 @@ namespace SarcusImaging
             CameraManager.Instance.ImageReady += this.OnImageReady;
             CameraManager.Instance.IterationEnded += this.OnIterationEnded;
             boxPicture.MouseMove += BoxPicture_MouseMove;
-            // init main gradient stripe
-            //ImageProcessor.colorPalette = ImageProcessor.interpolateColorScheme(ImageProcessor.interpolationStepColors, ushort.MaxValue);
-            heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
-            gradientPicture.Image = heatmapGradient;
+            // init main gradient color palette for values 0-65535
+            ImageProcessor.initHeatmapGradient();
+            // generate gradient stripe
+            Bitmap gradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradientValues(), heatmapGradientWidth, heatmapGradientHeight);
+            // rotate gradient stripe for UI
+            //gradient.RotateFlip(GRADIENT_STRIPE_ROTATION);
+            gradient.Save("heatmapGradientStripe.png");
+            // set gradient stripe picture 
+            gradientPicture.Image = gradient;
             // init comboBoxes
             radioButton1.Select();
+   
         }
 
         /// <summary>
@@ -94,6 +100,7 @@ namespace SarcusImaging
                 openedWindow.MdiParent = parentForm;
                 openedWindow.Show();
                 openedWindow.Location = new Point(250, 250);
+
             }
         }
 
@@ -330,7 +337,7 @@ namespace SarcusImaging
             if (mainRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(IMAGE_ROTATION);
+                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
                 boxPicture.Image = image;
             }
         }
@@ -343,7 +350,7 @@ namespace SarcusImaging
             if (biasRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(biasRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(IMAGE_ROTATION);
+                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
                 biasPicture.Image = image;
             }
         }
@@ -356,7 +363,7 @@ namespace SarcusImaging
             if (backgroundRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(backgroundRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(IMAGE_ROTATION);
+                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
                 backgroundPicture.Image = image;
             }
         }
@@ -369,7 +376,7 @@ namespace SarcusImaging
             if (probeBeamRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(probeBeamRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(IMAGE_ROTATION);
+                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
                 probeBeamPicture.Image = image;
             }
         }
@@ -382,7 +389,7 @@ namespace SarcusImaging
             if (atomsRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(atomsRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(IMAGE_ROTATION);
+                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
                 atomsPicture.Image = image;
             }
         }
@@ -424,7 +431,7 @@ namespace SarcusImaging
         /// Generates heatmap gradient for display
         /// </summary>
         /// <returns></returns>
-        private ushort[] generateHeatmapGradient()
+        private ushort[] generateHeatmapGradientValues()
         {
             ushort[] pixels = new ushort[heatmapGradientHeight * heatmapGradientWidth];
             // Step through the image by row
@@ -529,7 +536,12 @@ namespace SarcusImaging
 
         private void labelMeanValue_Click(object sender, EventArgs e)
         {
-
+            if (SarcusImaging.DEBUG_MODE)
+            {
+                mainRawImage = ImageProcessor.generateRandomUshortArray(512, 512, 4);
+                updateMainImage();
+                updateImageInfoViews();
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)

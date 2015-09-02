@@ -14,12 +14,20 @@ namespace SarcusImaging
 {
     public partial class SarcusImaging : Form
     {
+
+        // debug switch
+        public static readonly bool DEBUG_MODE = true;
+
         Thread updateCameraStatus = null;
 
         public SarcusImaging()
         {
             InitializeComponent();
             startCameraStatusUpdates();
+            if (DEBUG_MODE)
+            {
+                ImageForm.ShowForm((SarcusImaging)this.MdiParent);
+            }
         }
 
 
