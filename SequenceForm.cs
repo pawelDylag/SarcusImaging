@@ -21,7 +21,6 @@ namespace SarcusImaging
             InitializeComponent();
             initList();
             CameraManager.Instance.SequenceEnded += this.OnSequenceEnded;
-            CameraManager.Instance.ImageReady += this.OnImageReady;
         }
 
         /// <summary>
@@ -204,28 +203,11 @@ namespace SarcusImaging
                 ImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
             buttonStop.Enabled = true;
-            progressBarIterations.Maximum = sequencePlan.iterations * sequencePlan.size();
-            progressBarIterations.Value = 0;
-            progressBarIterations.Step = 1;
             CameraManager.Instance.executeSequencePlan(sequencePlan);
             //CameraManager.Instance.executeDebugSequence();
             //CameraManager.Instance.measureImagingTimes();
         }
 
-
-        /// <summary>
-        /// Perform action after camera image is ready
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="a"></param>
-        public void OnImageReady(object source, ImageReadyArgs a)
-        {
-            progressBarIterations.BeginInvoke(
-              new Action(() =>
-              {
-                  progressBarIterations.PerformStep();
-              }));
-        }
 
         /// <summary>
         /// Perform action after whole sequence has ended
@@ -234,16 +216,10 @@ namespace SarcusImaging
         /// <param name="a"></param>
         public void OnSequenceEnded(object source, EventArgs a)
         {
-            progressBarIterations.BeginInvoke(
-              new Action(() =>
-              {
-                  progressBarIterations.Value = 0;
-              }));
             buttonStop.BeginInvoke(
              new Action(() =>
              {
                  buttonStop.Enabled = false; ;
-                 CameraManager.Instance.stopExposure();
              }));
         }
 
@@ -270,16 +246,11 @@ namespace SarcusImaging
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            progressBarIterations.BeginInvoke(
-              new Action(() =>
-              {
-                  progressBarIterations.Value = 0;
-              }));
             buttonStop.BeginInvoke(
              new Action(() =>
              {
                  buttonStop.Enabled = false; ;
-                 CameraManager.stopSequence();
+                 CameraManager.Instance.stopSequence();
              }));
         }
     }

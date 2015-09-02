@@ -14,26 +14,27 @@ namespace SarcusImaging
 {
     public partial class ImageForm : Form
     {
-
         private static ImageForm openedWindow = null;
 
         private static Bitmap heatmapGradient;
 
         private static readonly int heatmapGradientHeight = 512;
-        private static readonly int heatmapGradientWidth = 32;
+        private static readonly int heatmapGradientWidth = 16;
 
         // TODO: Get rows and columns from camera object
         private static int cameraImagingRows = 512;
         private static int cameraImagingColumns = 512;
 
-        /// <summary>
-        /// Raw image data for postprocessing 
-        /// </summary>
+        // Raw image data for postprocessing 
         private static ushort[] atomsRawImage;
         private static ushort[] probeBeamRawImage;
         private static ushort[] backgroundRawImage;
         private static ushort[] biasRawImage;
         private static ushort[] mainRawImage;
+
+        private static readonly RotateFlipType IMAGE_ROTATION = RotateFlipType.Rotate90FlipNone;
+        // default data save directory
+        private static readonly String SAVE_DIRECTORY = @"C:\Users\Dinnaug\Documents\Visual Studio 2015\Debug\data.txt";
 
         public ImageForm()
         {
@@ -44,9 +45,8 @@ namespace SarcusImaging
             CameraManager.Instance.IterationEnded += this.OnIterationEnded;
             boxPicture.MouseMove += BoxPicture_MouseMove;
             // init main gradient stripe
-            ImageProcessor.colorPalette = ImageProcessor.interpolateColorScheme(ImageProcessor.interpolationStepColors, ushort.MaxValue + 1);
+            //ImageProcessor.colorPalette = ImageProcessor.interpolateColorScheme(ImageProcessor.interpolationStepColors, ushort.MaxValue);
             heatmapGradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradient(), heatmapGradientWidth, heatmapGradientHeight);
-            heatmapGradient.RotateFlip(RotateFlipType.Rotate180FlipNone);
             gradientPicture.Image = heatmapGradient;
             // init comboBoxes
             radioButton1.Select();
@@ -66,6 +66,9 @@ namespace SarcusImaging
             }
         }
 
+        /// <summary>
+        /// Initialize main picture charts
+        /// </summary>
         public void initCharts()
         {
             chartX.ChartAreas[0].AxisX.Maximum = 512;
@@ -90,19 +93,8 @@ namespace SarcusImaging
                 openedWindow = new ImageForm();
                 openedWindow.MdiParent = parentForm;
                 openedWindow.Show();
+                openedWindow.Location = new Point(250, 250);
             }
-        }
-
-        public ImageForm(int value)
-        {
-            InitializeComponent();
-            // subscribe to image event list
-            CameraManager.Instance.ImageReady += this.OnImageReady;
-            ushort[] pixels = ImageProcessor.generateRandomUshortArray(512, 512, 0);
-            Bitmap bitmap = ImageProcessor.convertArrayToHeatmapBitmap(pixels, 512, 512);
-            boxPicture.Image = bitmap;
-            //Form settingsForm = new ImageSettings(this);
-            //settingsForm.Show();
         }
 
         /// <summary>
@@ -148,6 +140,7 @@ namespace SarcusImaging
                     Debug.WriteLine("OnImageReady(): decoded type = default");
                     break;
             }
+
         }
 
         /// <summary>
@@ -160,7 +153,7 @@ namespace SarcusImaging
             Debug.WriteLine("OnIterationEnded(): received event");
             postProcessImages();
             generateNewImageName();
-            saveMainImageToMemory();
+            saveMainRawImageToMemory();
             updateAllImages();
             updateImageInfoViews();
         }
@@ -187,7 +180,7 @@ namespace SarcusImaging
             RadioButton selectedImageType = getSelectedMainImageRadioButton();
             if (selectedImageType != null)
             {
-                String name = string.Format(selectedImageType.Name.ToLower() + "-{0:dd-MM-yyyy_H-mm-ss}.txt", DateTime.Now);
+                String name = string.Format(selectedImageType.Text.ToLower() + "-{0:dd-MM-yyyy_H-mm-ss}.txt", DateTime.Now);
                 labelMainImageName.BeginInvoke(
                 new Action(() =>
                   {
@@ -201,19 +194,27 @@ namespace SarcusImaging
         /// </summary>
         private void updateImageInfoViews()
         {
-            // update mean and standard deviation information:
-            //double[] meanAndStandardDeviation = ImageProcessor.meanAndStandardDeviation(mainRawImage);
-           // labelMeanValue.Text = meanAndStandardDeviation[0].ToString();
-            //labelStandardDeviation.Text = meanAndStandardDeviation[1].ToString();
-
-            // update charts and pixel values
-            if (mainRawImage != null)
-            {
-                updateXChart(mainRawImage, 512, 512);
-                updateYChart(mainRawImage, 512, 512);
-                updatePixelValues();
+            //update mean and standard deviation information:
+            if (mainRawImage != null) {
+                double[] meanAndStandardDeviation = ImageProcessor.meanAndStandardDeviation(mainRawImage);
+                labelMeanValue.BeginInvoke(
+                   new Action(() =>
+                   {
+                       labelMeanValue.Text = meanAndStandardDeviation[0].ToString();
+                   }));
+                labelStandardDeviation.BeginInvoke(
+                    new Action(() =>
+                    {
+                        labelStandardDeviation.Text = meanAndStandardDeviation[1].ToString();
+                    }));
+                // update charts and pixel values
+                if (mainRawImage != null)
+                {
+                    updateXChart(mainRawImage, 512, 512);
+                    updateYChart(mainRawImage, 512, 512);
+                    updatePixelValues();
+                }
             }
-
         }
 
         /// <summary>
@@ -262,7 +263,7 @@ namespace SarcusImaging
         /// <summary>
         /// Saves computed main image to computer memory
         /// </summary>
-        private void saveMainImageToMemory()
+        private void saveMainRawImageToMemory()
         {
             if (mainRawImage != null)
             {
@@ -275,6 +276,18 @@ namespace SarcusImaging
                         file.Write(' ');
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Save bitmap image to memory. This is the final heatmap image, not raw camera data.
+        /// </summary>
+        /// <param name="image"></param>
+        private void saveBitmapImageToMemory(Bitmap image, String filename)
+        {
+            if (image != null)
+            {
+                image.Save(filename);
             }
         }
 
@@ -315,7 +328,11 @@ namespace SarcusImaging
         public void updateMainImage()
         {
             if (mainRawImage != null)
-                boxPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
+            {
+                Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
+                image.RotateFlip(IMAGE_ROTATION);
+                boxPicture.Image = image;
+            }
         }
 
         /// <summary>
@@ -324,7 +341,11 @@ namespace SarcusImaging
         public void updateBiasImage()
         {
             if (biasRawImage != null)
-            biasPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(biasRawImage, cameraImagingColumns, cameraImagingRows);
+            {
+                Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(biasRawImage, cameraImagingColumns, cameraImagingRows);
+                image.RotateFlip(IMAGE_ROTATION);
+                biasPicture.Image = image;
+            }
         }
 
         /// <summary>
@@ -333,7 +354,11 @@ namespace SarcusImaging
         public void updateBackgroundImage()
         {
             if (backgroundRawImage != null)
-            backgroundPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(backgroundRawImage, cameraImagingColumns, cameraImagingRows);
+            {
+                Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(backgroundRawImage, cameraImagingColumns, cameraImagingRows);
+                image.RotateFlip(IMAGE_ROTATION);
+                backgroundPicture.Image = image;
+            }
         }
 
         /// <summary>
@@ -342,7 +367,11 @@ namespace SarcusImaging
         public void updateProbeBeamImage()
         {
             if (probeBeamRawImage != null)
-            probeBeamPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(probeBeamRawImage, cameraImagingColumns, cameraImagingRows);
+            {
+                Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(probeBeamRawImage, cameraImagingColumns, cameraImagingRows);
+                image.RotateFlip(IMAGE_ROTATION);
+                probeBeamPicture.Image = image;
+            }
         }
 
         /// <summary>
@@ -351,7 +380,11 @@ namespace SarcusImaging
         public void updateAtomsImage()
         {
             if (atomsRawImage != null)
-            atomsPicture.Image = ImageProcessor.convertArrayToHeatmapBitmap(atomsRawImage, cameraImagingColumns, cameraImagingRows);
+            {
+                Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(atomsRawImage, cameraImagingColumns, cameraImagingRows);
+                image.RotateFlip(IMAGE_ROTATION);
+                atomsPicture.Image = image;
+            }
         }
 
         public void updateXChart (ushort[] data, int width, int height)
@@ -402,7 +435,7 @@ namespace SarcusImaging
                 {
                     // compute index of input array
                     int inIndex = (y * heatmapGradientWidth) + x;
-                    ushort step = (ushort)(ushort.MaxValue / heatmapGradientHeight); // = 127
+                    ushort step =   (ushort) Math.Floor((double)(ushort.MaxValue / heatmapGradientHeight)); // = 127
                     ushort colorValue = (ushort) (step * y);
                     pixels[inIndex] = colorValue;
                 }
@@ -495,6 +528,11 @@ namespace SarcusImaging
         }
 
         private void labelMeanValue_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

@@ -11,6 +11,7 @@ http://jonisalonen.com/2013/deriving-welfords-method-for-computing-variance/
 
 1.09.2015:
 
-1. Dol zdjecia jest jego lewa strona - poprawic
-2. stopowanie watku obrazowania
-3. Zrobic on sequence start Args i przekazywac je do progress bara w toolStripe
+- Dol zdjecia jest jego lewa strona - poprawic
+- Zrobic on sequence start Args i przekazywac je do progress bara w toolStripe
+- naprawic czarny pasek w kolorwaniu obrazow
+- 

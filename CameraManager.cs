@@ -84,20 +84,20 @@ namespace SarcusImaging
             if (cameraFinder != null)
             {
                 cameraFinder.DlgCheckUsb = true;
-                System.Diagnostics.Debug.WriteLine("Showing camera selection dialog");
+                Debug.WriteLine("Showing camera selection dialog");
                 cameraFinder.ShowDialog(true);
                 if (cameraFinder.ValidSelection)
                 {
                     // if user selected valid camera
-                    System.Diagnostics.Debug.WriteLine("Succesfully selected camera");
-                    System.Diagnostics.Debug.WriteLine("SelectedInterface: " + cameraFinder.SelectedInterface.ToString());
+                    Debug.WriteLine("Succesfully selected camera");
+                    Debug.WriteLine("SelectedInterface: " + cameraFinder.SelectedInterface.ToString());
                     camera.Init(cameraFinder.SelectedInterface, cameraFinder.SelectedCamIdOne, cameraFinder.SelectedCamIdTwo, 0);
-                    System.Diagnostics.Debug.WriteLine(camera.ToString());
+                    Debug.WriteLine(camera.ToString());
                     result = true;
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("Camera not selected");
+                    Debug.WriteLine("Camera not selected");
                 }
             }
             return result;
@@ -110,7 +110,7 @@ namespace SarcusImaging
         /// <param name="light"></param>
         public void startExposure(Double time, bool light)
         {
-            System.Diagnostics.Debug.WriteLine("Exposing manually camera (time: " + time + ", light: " + light);
+            Debug.WriteLine("Exposing manually camera (time: " + time + ", light: " + light);
             camera.Expose(time, light);
         }
 
@@ -284,11 +284,12 @@ namespace SarcusImaging
         /// <summary>
         /// Stops imaging thread
         /// </summary>
-        public static void stopSequence()
+        public void stopSequence()
         {
             if (imagingThread != null)
             {
                 imagingThread.Abort();
+                stopExposure();
             }
         }
 

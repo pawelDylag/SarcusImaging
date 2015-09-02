@@ -48,7 +48,8 @@ namespace SarcusImaging
             // setup pixel data range
             ushort range = (ushort) (minMax[1] - minMax[0] + 1);
             // generate color palette
-            List<Color> heatmapColors = ImageProcessor.interpolateColorScheme(ImageProcessor.interpolationStepColors, range);
+            List<Color> heatmapColors = ImageProcessor.interpolateColorScheme(range);
+            Debug.WriteLine("convertArrayToHeatmapBitmap() : range = " + range + ", min = " + minMax[0] + ", max = " + minMax[1] + ", colors in list = " + heatmapColors.Count);
             // create new RGB array
             byte[] pixels = new byte[width * height * 3];
             // Step through the image by row
@@ -148,7 +149,7 @@ namespace SarcusImaging
             for (int i = 0; i < colorScheme.Count; i++)
                 gradient.Add(1f * i / (colorScheme.Count - 1), colorScheme[i]);
             // create result list with for interpolated colors
-            List<Color> colorList = new List<Color>();
+            List<Color> colorList = new List<Color>(size);
             // setup interpolation timer for development purposes
             ImagingTimer timer = new ImagingTimer();
             timer.start();
@@ -184,6 +185,56 @@ namespace SarcusImaging
             }
             timer.stop();
             Debug.WriteLine(timer.listTimes());
+            // return interpolated colors
+            return colorList;
+        }
+
+
+        /// <summary>
+        /// Interpolate given color scheme into gradient list
+        /// </summary>
+        /// <param name="colorScheme"> List with color scheme</param>
+        /// <param name="size">Number of interpolated colors</param>
+        /// <returns></returns>
+        public static List<Color> interpolateColorScheme(int size)
+        {
+            // create result list with for interpolated colors
+            List<Color> colorList = new List<Color>();
+            // use Bitmap and Graphics from bitmap
+            using (Bitmap bmp = new Bitmap(size, 200))
+            using (Graphics G = Graphics.FromImage(bmp))
+            {
+                // create empty rectangle canvas
+                Rectangle rect = new Rectangle(Point.Empty, bmp.Size);
+                // use LinearGradientBrush class for gradient computation
+                LinearGradientBrush brush = new LinearGradientBrush
+                                        (rect, Color.Empty, Color.Empty, 0, false);
+                // setup ColorBlend object
+                ColorBlend colorBlend = new ColorBlend();
+                colorBlend.Positions = new float[7];
+                colorBlend.Positions[0] = 0;
+                colorBlend.Positions[1] = 1 / 6f;
+                colorBlend.Positions[2] = 2 / 6f;
+                colorBlend.Positions[3] = 3 / 6f;
+                colorBlend.Positions[4] = 4 / 6f;
+                colorBlend.Positions[5] = 5 / 6f;
+                colorBlend.Positions[6] = 1;
+                // blend colors and copy them to result color list
+                colorBlend.Colors = new Color[7];
+                colorBlend.Colors[0] = Color.Black;
+                colorBlend.Colors[1] = Color.Blue;
+                colorBlend.Colors[2] = Color.Cyan;
+                colorBlend.Colors[3] = Color.Green;
+                colorBlend.Colors[4] = Color.Yellow;
+                colorBlend.Colors[5] = Color.Red;
+                colorBlend.Colors[6] = Color.White;
+                brush.InterpolationColors = colorBlend;
+                G.FillRectangle(brush, rect);
+                bmp.Save("gradient_debug_image_sarcus.png", ImageFormat.Png);
+                for (int i = 0; i < size; i++) colorList.Add(bmp.GetPixel(i, 0));
+                brush.Dispose();
+            }
+
             // return interpolated colors
             return colorList;
         }
@@ -428,7 +479,8 @@ namespace SarcusImaging
 
 
         /// <summary>
-        /// 
+        /// Returns mean and standard deviation of given dataset.
+        /// Calculated using Welford's algorithm 
         /// </summary>
         /// <param name="dataset"></param>
         /// <returns></returns>
