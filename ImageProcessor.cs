@@ -3,7 +3,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing.Drawing2D;
+using Accord.Statistics;
+using Accord.Statistics.Distributions.Univariate;
 
 
 namespace SarcusImaging
@@ -14,7 +17,7 @@ namespace SarcusImaging
     static class ImageProcessor
     {
         // main heatmap color palette
-        private static readonly Color[] HEATMAP_COLOR_PALETTE = new Color[7] {Color.White, Color.Blue, Color.Cyan, Color.Green, Color.Yellow, Color.Red, Color.Black};
+        private static readonly Color[] HEATMAP_COLOR_PALETTE = new Color[7] {Color.Black, Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.White};
         
         // main heatmap color positions
         private static readonly float[] HEATMAP_COLOR_POSITIONS = new float[7] { 0, 1 / 6f, 2 / 6f, 3 / 6f, 4 / 6f, 5 / 6f, 1 };
@@ -249,6 +252,65 @@ namespace SarcusImaging
             return result;
         }
 
+        /// <summary>
+        /// Returns array with average pixel data from Y Axis
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static long[] getImageSumY(ushort[] pixels, int width, int height)
+        {
+            Debug.WriteLine("getImageYAveragePixelValue()");
+            long[] result = new long[width];
+
+            // Step through the image by colum  
+            for (int x = 0; x < width; x++)
+            {
+                // Step through the image by width
+                long sum = 0;
+                for (int y = 0; y < height; y++)
+                {
+                    // Get inbuffer index and outbuffer index 
+                    int index = x + (width * y);
+                    sum += pixels[index];
+                }
+                // calculate average value of colum
+                result[x] = sum;
+            }
+            return result;
+        }
+
+
+        /// <summary>
+        /// Returns array with average pixel data from Y Axis
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static long[] getImageSumOfX(ushort[] pixels, int width, int height)
+        {
+            Debug.WriteLine("getImageYAveragePixelValue()");
+            long[] result = new long[width];
+
+            // Step through the image by colum  
+            for (int y = 0; y < height; y++)
+            {
+                // Step through the image by width
+                long sum = 0;
+                for (int x = 0; x < width; x++)
+                {
+                    // Get inbuffer index and outbuffer index 
+                    int index = x + (width * y);
+                    sum += pixels[index];
+                }
+                // calculate average value of colum
+                result[y] = sum;
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// Returns array with two values MIN and MAX
@@ -440,5 +502,84 @@ namespace SarcusImaging
             // return mean and standard deviation
             return result;
         }
+
+        /// <summary>
+        /// Returns mean and standard deviation of given dataset.
+        /// Calculated using Welford's algorithm 
+        /// </summary>
+        /// <param name="dataset"></param>
+        /// <returns></returns>
+        public static double[] meanAndStandardDeviationForDoubles(double[] dataset)
+        {
+            double[] result = new double[2];
+            double mean = 0.0;
+            double sum = 0.0;
+            int k = 1;
+            foreach (double v in dataset)
+            {
+                double previousMean = mean;
+                mean += (v - previousMean) / k;
+                sum += (v - previousMean) * (v - mean);
+                k++;
+            }
+            // save mean 
+            result[0] = mean;
+            // save standard deviation
+            result[1] = Math.Sqrt(sum / (k - 2));
+            // Write debug info
+            Debug.WriteLine("meanAndStandardDeviation() : mean = " + result[0] + ", standardDeviation = " + result[1]);
+            // return mean and standard deviation
+            return result;
+        }
+
+        /// <summary>
+        /// Finds center of mass of given raw pixel data
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        public static void findCenterOfMass(ushort[] pixels, int width, int height)
+        {
+            // declare result values
+            int centerX, centerY;
+            int sizeX, sizeY;
+            // find sum of rows
+            long[] sumX = getImageSumOfX(pixels, width, height);
+            // find minimal row sum value for substraction
+            long minX = sumX.Min();
+            // find sum of columns
+            long[] sumY = getImageSumY(pixels, width, height);
+            // find minimal column sum value for substraction
+            long minY = sumY.Min();
+            // substract minimum value from range for optimization
+            // also find non-positive values and zeroe them
+            for( int i = 0; i < width; i++)
+            {
+                // substract minimal value
+                sumX[i] -= minX;
+                sumY[i] -= minY;
+                // check non-positives
+                if (sumX[i] < 0)
+                    sumX[i] = 0;
+                if (sumY[i] < 0)
+                    sumY[i] = 0;
+            }
+            // generate range from 1 to width
+            int[] x = Enumerable.Range(1, width).ToArray();
+            // generate range from 1 to height
+            int[] y = Enumerable.Range(1, height).ToArray();
+            // compute center X and Y values
+            long ax, ay;
+            long sumRangeX, sumRangeY;
+            for (int i = 0; i < width; i++)
+            {
+                ax = sumX[i] * x[i];
+                ay = sumY[i] * y[i];
+            }
+
+        }
+
+
+
     }
 }

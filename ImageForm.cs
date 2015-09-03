@@ -7,11 +7,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Accord.Statistics.Distributions.Univariate;
+using Accord.Statistics.Distributions.Fitting;
 
 namespace SarcusImaging
 {
+    /// <summary>
+    /// Form class for displaying images with info in UI
+    /// </summary>
     public partial class ImageForm : Form
     {
         private static ImageForm openedWindow = null;
@@ -19,7 +25,7 @@ namespace SarcusImaging
         private static readonly int heatmapGradientHeight = 512;
         private static readonly int heatmapGradientWidth = 16;
 
-        // TODO: Get rows and columns from camera object
+        // Camera imaging rows and columns
         private static int cameraImagingRows = 512;
         private static int cameraImagingColumns = 512;
 
@@ -36,6 +42,10 @@ namespace SarcusImaging
         private static readonly RotateFlipType GRADIENT_STRIPE_ROTATION = RotateFlipType.Rotate180FlipNone;
 
 
+        /// <summary>
+        /// Class constructor. 
+        /// Handles object initialization and gradient computing
+        /// </summary>
         public ImageForm()
         {
             InitializeComponent();
@@ -450,6 +460,79 @@ namespace SarcusImaging
             return pixels;
         }
 
+        /// <summary>
+        /// Debug method for loading test camera data for mean and standard deviation tests
+        /// </summary>
+        private void loadTestDataOnClick()
+        {
+            if (SarcusImaging.DEBUG_MODE)
+            {
+                try
+                {
+                    int width = 512;
+                    int height = 512;
+                    int index = 0;
+                    ushort[] rawData = new ushort[width * height];
+                    StreamReader sr = new StreamReader("danetestowe2.txt");
+                    // Step through the image by row
+                    for (int x = 0; x < width; x++)
+                    { 
+                        // Step through the image by column  
+                        for (int y = 0; y < height; y++)
+                        {
+                            // compute index of input array
+                            String line = sr.ReadLine();
+                            double value;
+                            if (Double.TryParse(line, out value))
+                            rawData[index++] = (ushort)value; 
+                        }
+                    }
+                    mainRawImage = rawData;
+                    updateMainImage();
+                    gaussianX(rawData, width, height);
+                    gaussianY(rawData, width, height);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error while fitting gaussian distribution:");
+                    Console.WriteLine(e.Message);
+                }
+
+            }
+        }
+
+        private void gaussianX(ushort[] pixels, int width , int height)
+        {
+            double[] sumX = Array.ConvertAll(ImageProcessor.getImageSumOfX(pixels, width, height), item => (double)item);
+            double[] weights = Array.ConvertAll(Enumerable.Range(1, 512).ToArray(), item => (double)item);
+            double minX = sumX.Min();
+            double variable = 512 * 0.3 * 0.5 * 32000;
+            sumX = Array.ConvertAll(sumX, item => item - variable);
+            double sumOfSums = sumX.Sum();
+            sumX = Array.ConvertAll(sumX, item => item / sumOfSums);
+            var gaussianDistribution = new NormalDistribution();
+            Console.WriteLine("fitting gaussian...");
+            gaussianDistribution.Fit(weights, sumX);
+            Console.WriteLine("fitting done!");
+            Console.WriteLine("Mean= " + gaussianDistribution.Mean + " , variance= " + Math.Sqrt(gaussianDistribution.Variance));
+        }
+
+        private void gaussianY(ushort[] pixels, int width, int height)
+        {
+            double[] sumY = Array.ConvertAll(ImageProcessor.getImageSumY(pixels, width, height), item => (double)item);
+            double[] weights = Array.ConvertAll(Enumerable.Range(1, 512).ToArray(), item => (double)item);
+            double minY = sumY.Min();
+            double variable = 512 * 0.3 * 0.5 * 32000;
+            sumY = Array.ConvertAll(sumY, item => item - variable);
+            double sumOfSums = sumY.Sum();
+            sumY = Array.ConvertAll(sumY, item => item / sumOfSums);
+            var gaussianDistribution = new NormalDistribution();
+            Console.WriteLine("fitting gaussian...");
+            gaussianDistribution.Fit(weights, sumY);
+            Console.WriteLine("fitting done!");
+            Console.WriteLine("Mean= " + gaussianDistribution.Mean + " , variance= " + Math.Sqrt(gaussianDistribution.Variance));
+        }
+
         private void SingleImageForm_FormClosed(object sender, EventArgs e)
         {
             // unsubscribe from image events
@@ -536,17 +619,19 @@ namespace SarcusImaging
 
         private void labelMeanValue_Click(object sender, EventArgs e)
         {
-            if (SarcusImaging.DEBUG_MODE)
-            {
-                mainRawImage = ImageProcessor.generateRandomUshortArray(512, 512, 4);
-                updateMainImage();
-                updateImageInfoViews();
-            }
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonTest_Click(object sender, EventArgs e)
+        {
+            if (SarcusImaging.DEBUG_MODE)
+            {
+                loadTestDataOnClick();
+            }
         }
     }
 }

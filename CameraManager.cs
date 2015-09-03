@@ -370,6 +370,9 @@ namespace SarcusImaging
 
         }
 
+        /// <summary>
+        /// Debug method for testing camera bulk sequence
+        /// </summary>
         public void testBulkMde()
         {
             long imgXSize = camera.ImagingColumns;
@@ -716,6 +719,11 @@ namespace SarcusImaging
         }
 
 
+        /// <summary>
+        /// Sets camera image count in one sequence
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Boolean setImageCount(int value)
         {
             Boolean result = false;

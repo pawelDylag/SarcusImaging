@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.boxPicture = new System.Windows.Forms.PictureBox();
             this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartX = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -62,6 +62,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.buttonTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).BeginInit();
@@ -90,44 +91,44 @@
             // 
             this.chartY.BackColor = System.Drawing.Color.Transparent;
             this.chartY.BorderlineColor = System.Drawing.Color.Transparent;
-            chartArea9.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea9.AxisX2.IsLabelAutoFit = false;
-            chartArea9.AxisX2.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont) 
+            chartArea3.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+            chartArea3.AxisX2.IsLabelAutoFit = false;
+            chartArea3.AxisX2.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont) 
             | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30) 
             | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.WordWrap)));
-            chartArea9.AxisX2.LabelStyle.Angle = -45;
-            chartArea9.AxisX2.LabelStyle.Enabled = false;
-            chartArea9.AxisX2.LineColor = System.Drawing.Color.Transparent;
-            chartArea9.AxisX2.MajorGrid.Enabled = false;
-            chartArea9.AxisY.MajorGrid.Enabled = false;
-            chartArea9.AxisY.MajorGrid.Interval = 0D;
-            chartArea9.AxisY.MajorTickMark.Enabled = false;
-            chartArea9.AxisY2.IsLabelAutoFit = false;
-            chartArea9.AxisY2.LabelStyle.Angle = 45;
-            chartArea9.AxisY2.LabelStyle.Enabled = false;
-            chartArea9.AxisY2.LineColor = System.Drawing.Color.Transparent;
-            chartArea9.AxisY2.MajorGrid.Enabled = false;
-            chartArea9.BorderColor = System.Drawing.Color.Transparent;
-            chartArea9.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea9.InnerPlotPosition.Auto = false;
-            chartArea9.InnerPlotPosition.Height = 100F;
-            chartArea9.InnerPlotPosition.Width = 100F;
-            chartArea9.Name = "ChartArea1";
-            chartArea9.Position.Auto = false;
-            chartArea9.Position.Height = 100F;
-            chartArea9.Position.Width = 100F;
-            this.chartY.ChartAreas.Add(chartArea9);
+            chartArea3.AxisX2.LabelStyle.Angle = -45;
+            chartArea3.AxisX2.LabelStyle.Enabled = false;
+            chartArea3.AxisX2.LineColor = System.Drawing.Color.Transparent;
+            chartArea3.AxisX2.MajorGrid.Enabled = false;
+            chartArea3.AxisY.MajorGrid.Enabled = false;
+            chartArea3.AxisY.MajorGrid.Interval = 0D;
+            chartArea3.AxisY.MajorTickMark.Enabled = false;
+            chartArea3.AxisY2.IsLabelAutoFit = false;
+            chartArea3.AxisY2.LabelStyle.Angle = 45;
+            chartArea3.AxisY2.LabelStyle.Enabled = false;
+            chartArea3.AxisY2.LineColor = System.Drawing.Color.Transparent;
+            chartArea3.AxisY2.MajorGrid.Enabled = false;
+            chartArea3.BorderColor = System.Drawing.Color.Transparent;
+            chartArea3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            chartArea3.InnerPlotPosition.Auto = false;
+            chartArea3.InnerPlotPosition.Height = 100F;
+            chartArea3.InnerPlotPosition.Width = 100F;
+            chartArea3.Name = "ChartArea1";
+            chartArea3.Position.Auto = false;
+            chartArea3.Position.Height = 100F;
+            chartArea3.Position.Width = 100F;
+            this.chartY.ChartAreas.Add(chartArea3);
             this.chartY.Cursor = System.Windows.Forms.Cursors.Cross;
             this.chartY.Enabled = false;
             this.chartY.Location = new System.Drawing.Point(581, 34);
             this.chartY.Name = "chartY";
             this.chartY.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series9.Name = "AverageY";
-            series9.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series9.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.chartY.Series.Add(series9);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series3.Name = "AverageY";
+            series3.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series3.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            this.chartY.Series.Add(series3);
             this.chartY.Size = new System.Drawing.Size(150, 512);
             this.chartY.TabIndex = 2;
             this.chartY.Text = "chartYAxis";
@@ -136,35 +137,35 @@
             // 
             this.chartX.BackColor = System.Drawing.Color.Transparent;
             this.chartX.BorderlineColor = System.Drawing.Color.Transparent;
-            chartArea10.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea10.AxisX.LabelStyle.Enabled = false;
-            chartArea10.AxisX.LineColor = System.Drawing.Color.Transparent;
-            chartArea10.AxisX.MajorGrid.Enabled = false;
-            chartArea10.AxisX.MinorGrid.Interval = double.NaN;
-            chartArea10.AxisX.MinorTickMark.Enabled = true;
-            chartArea10.AxisY.LabelStyle.Enabled = false;
-            chartArea10.AxisY.LineColor = System.Drawing.Color.Transparent;
-            chartArea10.AxisY.MajorGrid.Enabled = false;
-            chartArea10.BorderColor = System.Drawing.Color.Transparent;
-            chartArea10.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea10.InnerPlotPosition.Auto = false;
-            chartArea10.InnerPlotPosition.Height = 100F;
-            chartArea10.InnerPlotPosition.Width = 100F;
-            chartArea10.Name = "ChartArea1";
-            chartArea10.Position.Auto = false;
-            chartArea10.Position.Height = 100F;
-            chartArea10.Position.Width = 100F;
-            this.chartX.ChartAreas.Add(chartArea10);
+            chartArea4.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+            chartArea4.AxisX.LabelStyle.Enabled = false;
+            chartArea4.AxisX.LineColor = System.Drawing.Color.Transparent;
+            chartArea4.AxisX.MajorGrid.Enabled = false;
+            chartArea4.AxisX.MinorGrid.Interval = double.NaN;
+            chartArea4.AxisX.MinorTickMark.Enabled = true;
+            chartArea4.AxisY.LabelStyle.Enabled = false;
+            chartArea4.AxisY.LineColor = System.Drawing.Color.Transparent;
+            chartArea4.AxisY.MajorGrid.Enabled = false;
+            chartArea4.BorderColor = System.Drawing.Color.Transparent;
+            chartArea4.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            chartArea4.InnerPlotPosition.Auto = false;
+            chartArea4.InnerPlotPosition.Height = 100F;
+            chartArea4.InnerPlotPosition.Width = 100F;
+            chartArea4.Name = "ChartArea1";
+            chartArea4.Position.Auto = false;
+            chartArea4.Position.Height = 100F;
+            chartArea4.Position.Width = 100F;
+            this.chartX.ChartAreas.Add(chartArea4);
             this.chartX.Cursor = System.Windows.Forms.Cursors.Cross;
             this.chartX.Enabled = false;
             this.chartX.Location = new System.Drawing.Point(63, 552);
             this.chartX.Name = "chartX";
             this.chartX.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series10.Legend = "Legend1";
-            series10.Name = "AverageX";
-            this.chartX.Series.Add(series10);
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series4.Legend = "Legend1";
+            series4.Name = "AverageX";
+            this.chartX.Series.Add(series4);
             this.chartX.Size = new System.Drawing.Size(512, 150);
             this.chartX.TabIndex = 3;
             this.chartX.Text = "chartXAxis";
@@ -473,11 +474,22 @@
             this.label3.TabIndex = 17;
             this.label3.Text = "Name:";
             // 
+            // buttonTest
+            // 
+            this.buttonTest.Location = new System.Drawing.Point(1020, 552);
+            this.buttonTest.Name = "buttonTest";
+            this.buttonTest.Size = new System.Drawing.Size(101, 23);
+            this.buttonTest.TabIndex = 18;
+            this.buttonTest.Text = "Load test data";
+            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
+            // 
             // ImageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1133, 721);
+            this.Controls.Add(this.buttonTest);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBoxFit);
@@ -553,5 +565,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button buttonTest;
     }
 }
