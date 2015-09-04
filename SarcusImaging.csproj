@@ -53,17 +53,8 @@
     <ApplicationIcon>sarcusImaging_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accord, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>packages\Accord.3.0.2\lib\net45\Accord.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Accord.Math, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>packages\Accord.Math.3.0.2\lib\net45\Accord.Math.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Accord.Statistics, Version=3.0.2.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>packages\Accord.Statistics.3.0.2\lib\net45\Accord.Statistics.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="alglibnet2">
+      <HintPath>..\csharp\alglibnet2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,12 +71,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraManager.cs" />
+    <Compile Include="FitParams.cs" />
     <Compile Include="dropdownWithLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="dropdownWithLabel.Designer.cs">
       <DependentUpon>dropdownWithLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FitParamsDialogBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FitParamsDialogBox.Designer.cs">
+      <DependentUpon>FitParamsDialogBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FitResults.cs" />
     <Compile Include="ImageProcessor.cs" />
     <Compile Include="ImageReadyArgs.cs" />
     <Compile Include="ImagingTimer.cs" />
@@ -119,6 +118,9 @@
     </Compile>
     <EmbeddedResource Include="dropdownWithLabel.resx">
       <DependentUpon>dropdownWithLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FitParamsDialogBox.resx">
+      <DependentUpon>FitParamsDialogBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

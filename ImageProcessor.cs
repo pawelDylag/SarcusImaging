@@ -5,8 +5,7 @@ using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing.Drawing2D;
-using Accord.Statistics;
-using Accord.Statistics.Distributions.Univariate;
+
 
 
 namespace SarcusImaging
@@ -43,7 +42,6 @@ namespace SarcusImaging
             IntPtr pixelStartAddress = picData.Scan0;
             System.Runtime.InteropServices.Marshal.Copy(pixels, 0, pixelStartAddress, pixels.Length);
             bitmap.UnlockBits(picData);
-            bitmap.Save("generateBitmap.png");
             return bitmap;
         }
 
@@ -195,26 +193,26 @@ namespace SarcusImaging
         }
 
         /// <summary>
-        /// Returns array with average pixel datas from X Axis
+        /// Returns array with average pixel datas from Y Axis
         /// </summary>
         /// <param name="pixels"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static ushort[] getImageXAveragePixelValue (ushort[] pixels, int width, int height)
+        public static ushort[] getImageYAveragePixelValue (ushort[] pixels, int width, int height)
         {
             Debug.WriteLine("getImageXAveragePixelValue()");
             ushort[] result = new ushort[width];
           
-            // Step through the image by colum  
-            for (int y = 0; y < width; y++)
+            // Step through the image by row  
+            for (int y = 0; y < height; y++)
             {
                 // Step through the image by width
                 ulong average = 0;  
-                for (int x = 0; x < height; x++)
+                for (int x = 0; x < width; x++)
                 {
                     // Get inbuffer index and outbuffer index 
-                    int index = y + (width * x);
+                    int index = x + (width * y);
                     average += pixels[index];
                 }
                 // calculate average value of colum
@@ -224,30 +222,30 @@ namespace SarcusImaging
         }
 
         /// <summary>
-        /// Returns array with average pixel data from Y Axis
+        /// Returns array with average pixel data from X Axis
         /// </summary>
         /// <param name="pixels"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static ushort[] getImageYAveragePixelValue(ushort[] pixels, int width, int height)
+        public static ushort[] getImageXAveragePixelValue(ushort[] pixels, int width, int height)
         {
             Debug.WriteLine("getImageYAveragePixelValue()");
             ushort[] result = new ushort[width];
 
             // Step through the image by colum  
-            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
             {
                 // Step through the image by width
                 ulong average = 0;
-                for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
                 {
                     // Get inbuffer index and outbuffer index 
                     int index = x + (width * y);
                     average += pixels[index];
                 }
                 // calculate average value of colum
-                result[height - y - 1] = (ushort)(average / (uint)width);
+                result[x] = (ushort)(average / (uint)width);
             }
             return result;
         }
@@ -259,16 +257,16 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static long[] getImageSumY(ushort[] pixels, int width, int height)
+        public static double[] getImageSumY(ushort[] pixels, int width, int height)
         {
             Debug.WriteLine("getImageYAveragePixelValue()");
-            long[] result = new long[width];
+            double[] result = new double[width];
 
             // Step through the image by colum  
             for (int x = 0; x < width; x++)
             {
                 // Step through the image by width
-                long sum = 0;
+                double sum = 0;
                 for (int y = 0; y < height; y++)
                 {
                     // Get inbuffer index and outbuffer index 
@@ -289,16 +287,16 @@ namespace SarcusImaging
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static long[] getImageSumOfX(ushort[] pixels, int width, int height)
+        public static double[] getImageSumOfX(ushort[] pixels, int width, int height)
         {
             Debug.WriteLine("getImageYAveragePixelValue()");
-            long[] result = new long[width];
+            double[] result = new double[width];
 
             // Step through the image by colum  
             for (int y = 0; y < height; y++)
             {
                 // Step through the image by width
-                long sum = 0;
+                double sum = 0;
                 for (int x = 0; x < width; x++)
                 {
                     // Get inbuffer index and outbuffer index 
@@ -544,13 +542,13 @@ namespace SarcusImaging
             int centerX, centerY;
             int sizeX, sizeY;
             // find sum of rows
-            long[] sumX = getImageSumOfX(pixels, width, height);
+            double[] sumX = getImageSumOfX(pixels, width, height);
             // find minimal row sum value for substraction
-            long minX = sumX.Min();
+            double minX = sumX.Min();
             // find sum of columns
-            long[] sumY = getImageSumY(pixels, width, height);
+            double[] sumY = getImageSumY(pixels, width, height);
             // find minimal column sum value for substraction
-            long minY = sumY.Min();
+            double minY = sumY.Min();
             // substract minimum value from range for optimization
             // also find non-positive values and zeroe them
             for( int i = 0; i < width; i++)
@@ -569,8 +567,8 @@ namespace SarcusImaging
             // generate range from 1 to height
             int[] y = Enumerable.Range(1, height).ToArray();
             // compute center X and Y values
-            long ax, ay;
-            long sumRangeX, sumRangeY;
+            double ax, ay;
+            double sumRangeX, sumRangeY;
             for (int i = 0; i < width; i++)
             {
                 ax = sumX[i] * x[i];
@@ -579,6 +577,109 @@ namespace SarcusImaging
 
         }
 
+        /// <summary>
+        /// Main data fitting function. Consists of running two fittings against each axis.
+        /// Returns container object with result data. <see cref="FitResults"/> 
+        /// </summary>
+        /// <param name="pixels"></param>
+        /// <param name="imageWidth"></param>
+        /// <param name="imageHeight"></param>
+        /// <param name="fitParams"></param>
+        /// <returns></returns>
+        public static FitResults fitData(ushort[] pixels, int imageWidth, int imageHeight, FitParams fitParams)
+        {
+            // create fitting results object
+            FitResults fitResults = new FitResults();
+            // create stopwatch object for data fitting 
+            Stopwatch watch = new Stopwatch();
+            // create range data
+            double[,] range = new double[imageWidth, 1];
+            for (int i = 0; i < imageWidth; i++)
+            {
+                range[i, 0] = i + 1;
+            }
+
+            // get sum of X axis
+            double[] sum = getImageSumOfX(pixels, imageWidth, imageHeight);
+            // start time observation
+            watch.Start();
+            // fit X axis
+            double[] rawResultX = fit(range, sum, imageWidth, imageWidth, fitParams);
+            // stop observation X
+            watch.Stop();
+            // put results in FitResults object
+            fitResults.fromRawDataX(rawResultX);
+            fitResults.fitTimeX = watch.ElapsedMilliseconds;
+
+            // get sum of Y axis
+            sum = getImageSumY(pixels, imageWidth, imageHeight);
+            // start time observation
+            watch.Restart();
+            // fit Y axis
+            double[] rawResultY = fit(range, sum, imageWidth, imageWidth, fitParams);
+            // stop observation Y
+            watch.Stop();
+            // put results in FitResults object
+            fitResults.fromRawDataY(rawResultY);
+            fitResults.fitTimeY = watch.ElapsedMilliseconds;
+
+            return fitResults;
+        }
+
+
+        /// <summary>
+        /// This function runs ALGLIB methods for gaussian curve fitting algorithm.
+        /// W need to provide additional fitting parameters as a double[] fitParams parameter.
+        /// Notice, that result double[] has an additional last place for resultCode!
+        /// </summary>
+        /// <param name="range"> 1 - width range of 1d fitting </param>
+        /// <param name="pixels"> X, or Y summed data of image pixels </param>
+        /// <param name="width"> image width </param>
+        /// <param name="height"> image height </param>
+        /// <param name="parameters"> array of params for gauss fitting algorithm </param>
+        /// <param name="epsf"> Stopping criterion </param>
+        /// <param name="epsx"> Stop condition -> |V|=<epsX </param>
+        /// <param name="maxits">Maximum iterations. If equals to 0, then iterations are automatic</param>
+        /// <param name="diffstep"> differentiation step </param>
+        /// <returns></returns>
+        public static double[] fit(double[,] range, double[] pixels, int width, int height, FitParams fitParams)
+        {
+            // make array for results + one place for fitting result code
+            double[] results = new double[FitParams.NUMBER_OF_PARAMS];
+            //double[] y = pixels;
+            //double[] c = new double[] { 0.3, 215, 148, 0.2 };
+            // declare result data objects
+            int resultCode = FitResults.FIT_ERROR_RESULT;
+            alglib.lsfitstate state;
+            alglib.lsfitreport rep;
+            // run main fitting algorithm
+            try {
+                alglib.lsfitcreatef(range, pixels, fitParams.getInitialParams(), fitParams.diffStep, out state);
+                alglib.lsfitsetcond(state, fitParams.epsF, fitParams.epsX, fitParams.maxIterations);
+                alglib.lsfitfit(state, function_cx_1_func, null, null);
+                alglib.lsfitresults(state, out resultCode, out results, out rep);
+            } catch (Exception e)
+            {
+                Debug.WriteLine("fit() : " + e.StackTrace);
+            }
+            // add result Code to results
+            Array.Resize(ref results, FitParams.NUMBER_OF_PARAMS + 1);
+            results[FitParams.NUMBER_OF_PARAMS] = resultCode;
+            return results;
+        }
+
+        /// <summary>
+        /// Mathematical function for gauss curve fitting algorithm
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="x"></param>
+        /// <param name="func"></param>
+        /// <param name="obj"></param>
+        public static void function_cx_1_func(double[] c, double[] x, ref double func, object obj)
+        {
+            //x is a position on X-axis and c is adjustable parameter
+            func = c[0] * Math.Exp(-(x[0] - c[1]) * (x[0] - c[1]) / (c[2] * c[2])) + c[3];
+        }
 
 
     }

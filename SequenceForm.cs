@@ -131,7 +131,7 @@ namespace SarcusImaging
                 }
                 // check exposure time value
                 String exposureValue = (String)row.Cells[1].Value;
-                if (!Double.TryParse(exposureValue, out exposure))
+                if (!Double.TryParse(exposureValue.Replace('.',','), out exposure))
                 {
                     Debug.WriteLine("generateSequencePlan() : double.TryParse error for value: " + exposureValue);
                 }

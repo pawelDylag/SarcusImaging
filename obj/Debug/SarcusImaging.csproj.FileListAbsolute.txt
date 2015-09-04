@@ -59,9 +59,5 @@ C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusIma
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.ImageForm.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.ImageForm.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.dll.config
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.dll
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.Math.dll
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.Statistics.dll
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.xml
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.Math.xml
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.Statistics.xml
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.FitParamsDialogBox.resources
+C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\alglibnet2.dll

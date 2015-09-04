@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Accord.Statistics.Distributions.Univariate;
-using Accord.Statistics.Distributions.Fitting;
 
 namespace SarcusImaging
 {
@@ -36,6 +34,9 @@ namespace SarcusImaging
         private static ushort[] biasRawImage;
         private static ushort[] mainRawImage;
 
+        // User fit settings from fit params dialog 
+        private FitParams fitParams;
+
         // final image rotation
         private static readonly RotateFlipType IMAGE_ROTATION = RotateFlipType.Rotate90FlipNone;
         // heatmap gradient stripe rotation
@@ -59,7 +60,7 @@ namespace SarcusImaging
             // generate gradient stripe
             Bitmap gradient = ImageProcessor.convertArrayToHeatmapBitmap(generateHeatmapGradientValues(), heatmapGradientWidth, heatmapGradientHeight);
             // rotate gradient stripe for UI
-            //gradient.RotateFlip(GRADIENT_STRIPE_ROTATION);
+            gradient.RotateFlip(GRADIENT_STRIPE_ROTATION);
             gradient.Save("heatmapGradientStripe.png");
             // set gradient stripe picture 
             gradientPicture.Image = gradient;
@@ -211,25 +212,26 @@ namespace SarcusImaging
         /// </summary>
         private void updateImageInfoViews()
         {
-            //update mean and standard deviation information:
             if (mainRawImage != null) {
-                double[] meanAndStandardDeviation = ImageProcessor.meanAndStandardDeviation(mainRawImage);
-                labelMeanValue.BeginInvoke(
-                   new Action(() =>
-                   {
-                       labelMeanValue.Text = meanAndStandardDeviation[0].ToString();
-                   }));
-                labelStandardDeviation.BeginInvoke(
-                    new Action(() =>
-                    {
-                        labelStandardDeviation.Text = meanAndStandardDeviation[1].ToString();
-                    }));
+                updateXChart(mainRawImage, 512, 512);
+                updateYChart(mainRawImage, 512, 512);
                 // update charts and pixel values
-                if (mainRawImage != null)
+                if (!checkBoxDisableFit.Checked)
                 {
-                    updateXChart(mainRawImage, 512, 512);
-                    updateYChart(mainRawImage, 512, 512);
                     updatePixelValues();
+                    fitParams = new FitParams();
+                    fitParams.amplitude = 0.3 * 32000;
+                    fitParams.center = 215;
+                    fitParams.width = 148;
+                    fitParams.background = 0.2 * 32000;
+                    fitParams.epsF = 0;
+                    fitParams.epsX = 0;
+                    fitParams.maxIterations = 0;
+                    fitParams.diffStep = 0.00001;
+                    FitResults fitResults = ImageProcessor.fitData(mainRawImage, 512, 512, fitParams);
+                    drawFitSquare(fitResults);
+                    updateFitDataViews(fitResults);
+
                 }
             }
         }
@@ -316,8 +318,8 @@ namespace SarcusImaging
             updateAtomsImage();
             updateBackgroundImage();
             updateBiasImage();
-            updateMainImage();
             updateProbeBeamImage();
+            updateMainImage();
         }
 
         private void updatePixelValues()
@@ -465,73 +467,102 @@ namespace SarcusImaging
         /// </summary>
         private void loadTestDataOnClick()
         {
-            if (SarcusImaging.DEBUG_MODE)
-            {
-                try
+            int width = 512;
+            int height = 512;
+            int index = 0;
+            ushort[] rawData = new ushort[width * height];
+            StreamReader sr = new StreamReader("danetestowe2.txt");
+            // Step through the image by row
+            for (int x = 0; x < width; x++)
+            { 
+                // Step through the image by column  
+                for (int y = 0; y < height; y++)
                 {
-                    int width = 512;
-                    int height = 512;
-                    int index = 0;
-                    ushort[] rawData = new ushort[width * height];
-                    StreamReader sr = new StreamReader("danetestowe2.txt");
-                    // Step through the image by row
-                    for (int x = 0; x < width; x++)
-                    { 
-                        // Step through the image by column  
-                        for (int y = 0; y < height; y++)
-                        {
-                            // compute index of input array
-                            String line = sr.ReadLine();
-                            double value;
-                            if (Double.TryParse(line, out value))
-                            rawData[index++] = (ushort)value; 
-                        }
-                    }
-                    mainRawImage = rawData;
-                    updateMainImage();
-                    gaussianX(rawData, width, height);
-                    gaussianY(rawData, width, height);
+                    // compute index of input array
+                    String line = sr.ReadLine();
+                    ushort value;
+                    if (ushort.TryParse(line, out value))
+                    rawData[index++] = value; 
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error while fitting gaussian distribution:");
-                    Console.WriteLine(e.Message);
-                }
+            }
 
+            mainRawImage = rawData;
+            updateMainImage();
+            updateImageInfoViews();
+
+        }
+
+        /// <summary>
+        /// Launch fitting operation and display results on screen
+        /// </summary>
+        private void generateAndDisplayFitData ()
+        {
+            if (mainRawImage != null && fitParams != null)
+            {
+                
             }
         }
 
-        private void gaussianX(ushort[] pixels, int width , int height)
+        private void drawFitSquare(FitResults fit)
         {
-            double[] sumX = Array.ConvertAll(ImageProcessor.getImageSumOfX(pixels, width, height), item => (double)item);
-            double[] weights = Array.ConvertAll(Enumerable.Range(1, 512).ToArray(), item => (double)item);
-            double minX = sumX.Min();
-            double variable = 512 * 0.3 * 0.5 * 32000;
-            sumX = Array.ConvertAll(sumX, item => item - variable);
-            double sumOfSums = sumX.Sum();
-            sumX = Array.ConvertAll(sumX, item => item / sumOfSums);
-            var gaussianDistribution = new NormalDistribution();
-            Console.WriteLine("fitting gaussian...");
-            gaussianDistribution.Fit(weights, sumX);
-            Console.WriteLine("fitting done!");
-            Console.WriteLine("Mean= " + gaussianDistribution.Mean + " , variance= " + Math.Sqrt(gaussianDistribution.Variance));
+            Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
+            //image.RotateFlip(GRADIENT_STRIPE_ROTATION);
+            using (Graphics g = Graphics.FromImage(image))
+            {
+
+                g.DrawRectangle(new Pen(Color.Black), (int)fit.centerX, (int)fit.centerY, (int)fit.widthX, (int)fit.widthY);
+            }
+            boxPicture.Image = image;
         }
 
-        private void gaussianY(ushort[] pixels, int width, int height)
+        /// <summary>
+        /// Update text views with fit result data
+        /// </summary>
+        /// <param name="fitResults"></param>
+        private void updateFitDataViews(FitResults fitResults)
         {
-            double[] sumY = Array.ConvertAll(ImageProcessor.getImageSumY(pixels, width, height), item => (double)item);
-            double[] weights = Array.ConvertAll(Enumerable.Range(1, 512).ToArray(), item => (double)item);
-            double minY = sumY.Min();
-            double variable = 512 * 0.3 * 0.5 * 32000;
-            sumY = Array.ConvertAll(sumY, item => item - variable);
-            double sumOfSums = sumY.Sum();
-            sumY = Array.ConvertAll(sumY, item => item / sumOfSums);
-            var gaussianDistribution = new NormalDistribution();
-            Console.WriteLine("fitting gaussian...");
-            gaussianDistribution.Fit(weights, sumY);
-            Console.WriteLine("fitting done!");
-            Console.WriteLine("Mean= " + gaussianDistribution.Mean + " , variance= " + Math.Sqrt(gaussianDistribution.Variance));
+            labelParams1.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams1.Text = fitResults.amplitudeX.ToString();
+               }));
+            labelParams2.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams2.Text = fitResults.centerX.ToString();
+               }));
+            labelParams3.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams3.Text = fitResults.widthX.ToString();
+               }));
+            labelParams4.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams4.Text = fitResults.backgroundX.ToString();
+               }));
+            labelParams5.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams5.Text = fitResults.amplitudeY.ToString();
+               }));
+            labelParams6.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams6.Text = fitResults.centerY.ToString();
+               }));
+            labelParams7.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams7.Text = fitResults.widthY.ToString();
+               }));
+            labelParams8.BeginInvoke(
+               new Action(() =>
+               {
+                   labelParams8.Text = fitResults.backgroundY.ToString();
+               }));
         }
+
 
         private void SingleImageForm_FormClosed(object sender, EventArgs e)
         {
@@ -628,10 +659,20 @@ namespace SarcusImaging
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            if (SarcusImaging.DEBUG_MODE)
+            if (!SarcusImaging.DEBUG_MODE)
             {
                 loadTestDataOnClick();
             }
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
