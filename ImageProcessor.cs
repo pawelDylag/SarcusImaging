@@ -251,7 +251,7 @@ namespace SarcusImaging
         }
 
         /// <summary>
-        /// Returns array with average pixel data from Y Axis
+        /// Returns array with sum of pixel data from Y Axis
         /// </summary>
         /// <param name="pixels"></param>
         /// <param name="width"></param>
@@ -262,7 +262,7 @@ namespace SarcusImaging
             Debug.WriteLine("getImageYAveragePixelValue()");
             double[] result = new double[width];
 
-            // Step through the image by colum  
+            // Step through the image by row  
             for (int x = 0; x < width; x++)
             {
                 // Step through the image by width
@@ -281,7 +281,7 @@ namespace SarcusImaging
 
 
         /// <summary>
-        /// Returns array with average pixel data from Y Axis
+        /// Returns array with sum of pixel data from Y Axis
         /// </summary>
         /// <param name="pixels"></param>
         /// <param name="width"></param>
