@@ -95,7 +95,7 @@ namespace SarcusImaging
         /// Changes bitmap color palette to greyscale
         /// </summary>
         /// <param name="bitmap">Bitmap</param>
-        public static void changeBitmapToGreyscale(Bitmap bitmap)
+        public static void changeBitmapPaletteToGreyscale(Bitmap bitmap)
         {
             ColorPalette palette = bitmap.Palette;
             Color[] colors = palette.Entries;
@@ -166,9 +166,9 @@ namespace SarcusImaging
         /// <summary>
         /// LOSSY conversion from ushort[] to greyscale bitmap. 
         /// </summary>
-        /// <param name="original"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
+        /// <param name="original">Pixels array</param>
+        /// <param name="width">Image width</param>
+        /// <param name="height">Image height</param>
         /// <returns></returns>
         public static Bitmap convertArrayToGreyscaleBitmap(ushort[] original, long width, long height)
         {
@@ -193,7 +193,7 @@ namespace SarcusImaging
                 result[i] = (byte)value;       
             }
             Bitmap bitmap = generateBitmap(result, (int)width, (int)height, PixelFormat.Format8bppIndexed);
-            changeBitmapToGreyscale(bitmap);
+            changeBitmapPaletteToGreyscale(bitmap);
             return bitmap;
         }
 

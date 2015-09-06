@@ -49,7 +49,6 @@
             this.labelMainImageName = new System.Windows.Forms.Label();
             this.groupBoxFit = new System.Windows.Forms.GroupBox();
             this.buttonFitParameters = new System.Windows.Forms.Button();
-            this.listBoxFit = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.labelParams2 = new System.Windows.Forms.Label();
@@ -75,6 +74,7 @@
             this.groupBoxMainImageType = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).BeginInit();
@@ -285,8 +285,8 @@
             // 
             // groupBoxFit
             // 
+            this.groupBoxFit.Controls.Add(this.richTextBox1);
             this.groupBoxFit.Controls.Add(this.buttonFitParameters);
-            this.groupBoxFit.Controls.Add(this.listBoxFit);
             this.groupBoxFit.Controls.Add(this.tableLayoutPanel1);
             this.groupBoxFit.Controls.Add(this.checkBoxDisableFit);
             this.groupBoxFit.Location = new System.Drawing.Point(742, 446);
@@ -306,14 +306,6 @@
             this.buttonFitParameters.TabIndex = 10;
             this.buttonFitParameters.Text = "Parameters";
             this.buttonFitParameters.UseVisualStyleBackColor = true;
-            // 
-            // listBoxFit
-            // 
-            this.listBoxFit.FormattingEnabled = true;
-            this.listBoxFit.Location = new System.Drawing.Point(9, 145);
-            this.listBoxFit.Name = "listBoxFit";
-            this.listBoxFit.Size = new System.Drawing.Size(373, 69);
-            this.listBoxFit.TabIndex = 9;
             // 
             // tableLayoutPanel1
             // 
@@ -643,6 +635,14 @@
             this.chartY.TabIndex = 20;
             this.chartY.Text = "chartY";
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(9, 147);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(373, 67);
+            this.richTextBox1.TabIndex = 11;
+            this.richTextBox1.Text = "";
+            // 
             // ImageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -731,7 +731,6 @@
         private System.Windows.Forms.Label labelParams5;
         private System.Windows.Forms.Label labelParams8;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ListBox listBoxFit;
         private System.Windows.Forms.Button buttonFitParameters;
         private System.Windows.Forms.CheckBox checkBoxDisableFit;
         private System.Windows.Forms.RadioButton radioButton1;
@@ -740,5 +739,6 @@
         private System.Windows.Forms.GroupBox groupBoxMainImageType;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartY;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }

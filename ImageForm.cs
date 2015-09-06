@@ -501,8 +501,8 @@ namespace SarcusImaging
             {
                 fitParams = new FitParams();
                 fitParams.amplitude = 0.3 * 32000;
-                fitParams.center = 215;
-                fitParams.width = 148;
+                fitParams.center = 258;
+                fitParams.width = 258;
                 fitParams.background = 0.2 * 32000;
                 fitParams.epsF = 0;
                 fitParams.epsX = 0;
@@ -578,6 +578,11 @@ namespace SarcusImaging
                new Action(() =>
                {
                    labelParams8.Text = fitResults.backgroundY.ToString();
+               }));
+            richTextBox1.BeginInvoke(
+               new Action(() =>
+               {
+                   richTextBox1.Text = "Fit time: x = " + fitResults.fitTimeX + "ms, y = " + fitResults.fitTimeY + "ms";
                }));
         }
 
