@@ -33,7 +33,6 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.boxPicture = new System.Windows.Forms.PictureBox();
-            this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartX = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.biasPicture = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -48,13 +47,6 @@
             this.labelMaxValue = new System.Windows.Forms.Label();
             this.labelMinValue = new System.Windows.Forms.Label();
             this.labelMainImageName = new System.Windows.Forms.Label();
-            this.groupBoxMainImageType = new System.Windows.Forms.GroupBox();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.groupBoxFit = new System.Windows.Forms.GroupBox();
             this.buttonFitParameters = new System.Windows.Forms.Button();
             this.listBoxFit = new System.Windows.Forms.ListBox();
@@ -77,8 +69,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.buttonTest = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.groupBoxMainImageType = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -89,9 +86,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.probeBeamPicture)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.atomsPicture)).BeginInit();
-            this.groupBoxMainImageType.SuspendLayout();
             this.groupBoxFit.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.groupBoxMainImageType.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartY)).BeginInit();
             this.SuspendLayout();
             // 
             // boxPicture
@@ -103,27 +102,19 @@
             this.boxPicture.TabIndex = 0;
             this.boxPicture.TabStop = false;
             // 
-            // chartY
+            // chartX
             // 
-            this.chartY.BackColor = System.Drawing.Color.Transparent;
-            this.chartY.BorderlineColor = System.Drawing.Color.Transparent;
+            this.chartX.BackColor = System.Drawing.Color.Transparent;
+            this.chartX.BorderlineColor = System.Drawing.Color.Transparent;
             chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea1.AxisX2.IsLabelAutoFit = false;
-            chartArea1.AxisX2.LabelAutoFitStyle = ((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles)((((System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.IncreaseFont | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.DecreaseFont) 
-            | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30) 
-            | System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.WordWrap)));
-            chartArea1.AxisX2.LabelStyle.Angle = -45;
-            chartArea1.AxisX2.LabelStyle.Enabled = false;
-            chartArea1.AxisX2.LineColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX2.MajorGrid.Enabled = false;
+            chartArea1.AxisX.LabelStyle.Enabled = false;
+            chartArea1.AxisX.LineColor = System.Drawing.Color.Transparent;
+            chartArea1.AxisX.MajorGrid.Enabled = false;
+            chartArea1.AxisX.MinorGrid.Interval = double.NaN;
+            chartArea1.AxisX.MinorTickMark.Enabled = true;
+            chartArea1.AxisY.LabelStyle.Enabled = false;
+            chartArea1.AxisY.LineColor = System.Drawing.Color.Transparent;
             chartArea1.AxisY.MajorGrid.Enabled = false;
-            chartArea1.AxisY.MajorGrid.Interval = 0D;
-            chartArea1.AxisY.MajorTickMark.Enabled = false;
-            chartArea1.AxisY2.IsLabelAutoFit = false;
-            chartArea1.AxisY2.LabelStyle.Angle = 45;
-            chartArea1.AxisY2.LabelStyle.Enabled = false;
-            chartArea1.AxisY2.LineColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisY2.MajorGrid.Enabled = false;
             chartArea1.BorderColor = System.Drawing.Color.Transparent;
             chartArea1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
             chartArea1.InnerPlotPosition.Auto = false;
@@ -133,55 +124,17 @@
             chartArea1.Position.Auto = false;
             chartArea1.Position.Height = 100F;
             chartArea1.Position.Width = 100F;
-            this.chartY.ChartAreas.Add(chartArea1);
-            this.chartY.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.chartY.Enabled = false;
-            this.chartY.Location = new System.Drawing.Point(581, 34);
-            this.chartY.Name = "chartY";
-            this.chartY.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series1.Name = "AverageY";
-            series1.XAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series1.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.chartY.Series.Add(series1);
-            this.chartY.Size = new System.Drawing.Size(150, 512);
-            this.chartY.TabIndex = 2;
-            this.chartY.Text = "chartYAxis";
-            // 
-            // chartX
-            // 
-            this.chartX.BackColor = System.Drawing.Color.Transparent;
-            this.chartX.BorderlineColor = System.Drawing.Color.Transparent;
-            chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea2.AxisX.LabelStyle.Enabled = false;
-            chartArea2.AxisX.LineColor = System.Drawing.Color.Transparent;
-            chartArea2.AxisX.MajorGrid.Enabled = false;
-            chartArea2.AxisX.MinorGrid.Interval = double.NaN;
-            chartArea2.AxisX.MinorTickMark.Enabled = true;
-            chartArea2.AxisY.LabelStyle.Enabled = false;
-            chartArea2.AxisY.LineColor = System.Drawing.Color.Transparent;
-            chartArea2.AxisY.MajorGrid.Enabled = false;
-            chartArea2.BorderColor = System.Drawing.Color.Transparent;
-            chartArea2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-            chartArea2.InnerPlotPosition.Auto = false;
-            chartArea2.InnerPlotPosition.Height = 100F;
-            chartArea2.InnerPlotPosition.Width = 100F;
-            chartArea2.Name = "ChartArea1";
-            chartArea2.Position.Auto = false;
-            chartArea2.Position.Height = 100F;
-            chartArea2.Position.Width = 100F;
-            this.chartX.ChartAreas.Add(chartArea2);
+            this.chartX.ChartAreas.Add(chartArea1);
             this.chartX.Cursor = System.Windows.Forms.Cursors.Cross;
             this.chartX.Enabled = false;
             this.chartX.Location = new System.Drawing.Point(63, 552);
             this.chartX.Name = "chartX";
             this.chartX.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series2.Legend = "Legend1";
-            series2.Name = "AverageX";
-            this.chartX.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series1.Legend = "Legend1";
+            series1.Name = "AverageX";
+            this.chartX.Series.Add(series1);
             this.chartX.Size = new System.Drawing.Size(512, 150);
             this.chartX.TabIndex = 3;
             this.chartX.Text = "chartXAxis";
@@ -290,11 +243,12 @@
             this.labelCursorValue.AutoSize = true;
             this.labelCursorValue.BackColor = System.Drawing.Color.Transparent;
             this.labelCursorValue.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.labelCursorValue.Location = new System.Drawing.Point(538, 18);
+            this.labelCursorValue.Location = new System.Drawing.Point(49, 23);
             this.labelCursorValue.Name = "labelCursorValue";
             this.labelCursorValue.Size = new System.Drawing.Size(10, 13);
             this.labelCursorValue.TabIndex = 1;
             this.labelCursorValue.Text = "-";
+            this.labelCursorValue.Click += new System.EventHandler(this.labelCursorValue_Click);
             // 
             // labelMaxValue
             // 
@@ -329,89 +283,6 @@
             this.labelMainImageName.TabIndex = 13;
             this.labelMainImageName.Text = "-";
             // 
-            // groupBoxMainImageType
-            // 
-            this.groupBoxMainImageType.Controls.Add(this.radioButton6);
-            this.groupBoxMainImageType.Controls.Add(this.radioButton5);
-            this.groupBoxMainImageType.Controls.Add(this.radioButton4);
-            this.groupBoxMainImageType.Controls.Add(this.radioButton3);
-            this.groupBoxMainImageType.Controls.Add(this.radioButton2);
-            this.groupBoxMainImageType.Controls.Add(this.radioButton1);
-            this.groupBoxMainImageType.Location = new System.Drawing.Point(581, 549);
-            this.groupBoxMainImageType.Name = "groupBoxMainImageType";
-            this.groupBoxMainImageType.Size = new System.Drawing.Size(150, 153);
-            this.groupBoxMainImageType.TabIndex = 15;
-            this.groupBoxMainImageType.TabStop = false;
-            this.groupBoxMainImageType.Text = "Main image";
-            // 
-            // radioButton6
-            // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(6, 133);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(45, 17);
-            this.radioButton6.TabIndex = 6;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "Bias";
-            this.radioButton6.UseVisualStyleBackColor = true;
-            this.radioButton6.CheckedChanged += new System.EventHandler(this.radioButton6_CheckedChanged_1);
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(6, 111);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(83, 17);
-            this.radioButton5.TabIndex = 5;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "Background";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton5_CheckedChanged);
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(6, 88);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(82, 17);
-            this.radioButton4.TabIndex = 4;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Probe beam";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(6, 65);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(54, 17);
-            this.radioButton3.TabIndex = 3;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Atoms";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 42);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(80, 17);
-            this.radioButton2.TabIndex = 2;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Fluorescent";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(75, 17);
-            this.radioButton1.TabIndex = 1;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Absorbtive";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
             // groupBoxFit
             // 
             this.groupBoxFit.Controls.Add(this.buttonFitParameters);
@@ -423,7 +294,7 @@
             this.groupBoxFit.Size = new System.Drawing.Size(388, 256);
             this.groupBoxFit.TabIndex = 16;
             this.groupBoxFit.TabStop = false;
-            this.groupBoxFit.Text = "Fit parameters:";
+            this.groupBoxFit.Text = "Fit parameters";
             this.groupBoxFit.Enter += new System.EventHandler(this.groupBox7_Enter);
             // 
             // buttonFitParameters
@@ -651,11 +522,11 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(463, 18);
+            this.label1.Location = new System.Drawing.Point(6, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
+            this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Cursor value:";
+            this.label1.Text = "Value:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label3
@@ -678,27 +549,120 @@
             this.buttonTest.UseVisualStyleBackColor = true;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(6, 19);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(75, 17);
+            this.radioButton1.TabIndex = 1;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Absorbtive";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(6, 42);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(80, 17);
+            this.radioButton2.TabIndex = 2;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Fluorescent";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(6, 65);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(58, 17);
+            this.radioButton3.TabIndex = 3;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Normal";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxMainImageType
+            // 
+            this.groupBoxMainImageType.Controls.Add(this.radioButton3);
+            this.groupBoxMainImageType.Controls.Add(this.radioButton2);
+            this.groupBoxMainImageType.Controls.Add(this.radioButton1);
+            this.groupBoxMainImageType.Location = new System.Drawing.Point(581, 549);
+            this.groupBoxMainImageType.Name = "groupBoxMainImageType";
+            this.groupBoxMainImageType.Size = new System.Drawing.Size(150, 90);
+            this.groupBoxMainImageType.TabIndex = 15;
+            this.groupBoxMainImageType.TabStop = false;
+            this.groupBoxMainImageType.Text = "Main image";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Controls.Add(this.labelCursorValue);
+            this.groupBox5.Location = new System.Drawing.Point(581, 643);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(150, 59);
+            this.groupBox5.TabIndex = 19;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Cursor";
+            // 
+            // chartY
+            // 
+            this.chartY.BackColor = System.Drawing.Color.Transparent;
+            this.chartY.BorderlineColor = System.Drawing.Color.Transparent;
+            chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+            chartArea2.AxisX.LabelStyle.Enabled = false;
+            chartArea2.AxisX.LineColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisX.MajorGrid.Enabled = false;
+            chartArea2.AxisX.MinorGrid.Interval = double.NaN;
+            chartArea2.AxisX.MinorTickMark.Enabled = true;
+            chartArea2.AxisY.LabelStyle.Enabled = false;
+            chartArea2.AxisY.LineColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisY.MajorGrid.Enabled = false;
+            chartArea2.BorderColor = System.Drawing.Color.Transparent;
+            chartArea2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
+            chartArea2.InnerPlotPosition.Auto = false;
+            chartArea2.InnerPlotPosition.Height = 100F;
+            chartArea2.InnerPlotPosition.Width = 100F;
+            chartArea2.Name = "ChartArea1";
+            chartArea2.Position.Auto = false;
+            chartArea2.Position.Height = 100F;
+            chartArea2.Position.Width = 100F;
+            this.chartY.ChartAreas.Add(chartArea2);
+            this.chartY.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.chartY.Enabled = false;
+            this.chartY.Location = new System.Drawing.Point(581, 34);
+            this.chartY.Name = "chartY";
+            this.chartY.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SemiTransparent;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series2.Legend = "Legend1";
+            series2.Name = "AverageY";
+            this.chartY.Series.Add(series2);
+            this.chartY.Size = new System.Drawing.Size(150, 512);
+            this.chartY.TabIndex = 20;
+            this.chartY.Text = "chartY";
+            // 
             // ImageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1142, 721);
+            this.Controls.Add(this.chartY);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.buttonTest);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBoxFit);
             this.Controls.Add(this.groupBoxMainImageType);
             this.Controls.Add(this.labelMainImageName);
             this.Controls.Add(this.labelMaxValue);
             this.Controls.Add(this.labelMinValue);
-            this.Controls.Add(this.labelCursorValue);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.gradientPicture);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chartX);
-            this.Controls.Add(this.chartY);
             this.Controls.Add(this.boxPicture);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ImageForm";
@@ -707,7 +671,6 @@
             this.Closed += new System.EventHandler(this.SingleImageForm_FormClosed);
             this.Load += new System.EventHandler(this.SingleImageForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -718,12 +681,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.probeBeamPicture)).EndInit();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.atomsPicture)).EndInit();
-            this.groupBoxMainImageType.ResumeLayout(false);
-            this.groupBoxMainImageType.PerformLayout();
             this.groupBoxFit.ResumeLayout(false);
             this.groupBoxFit.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.groupBoxMainImageType.ResumeLayout(false);
+            this.groupBoxMainImageType.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartY)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -732,7 +698,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox boxPicture;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartY;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartX;
         private System.Windows.Forms.PictureBox biasPicture;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -747,14 +712,7 @@
         private System.Windows.Forms.Label labelMinValue;
         private System.Windows.Forms.Label labelCursorValue;
         private System.Windows.Forms.Label labelMainImageName;
-        private System.Windows.Forms.GroupBox groupBoxMainImageType;
         private System.Windows.Forms.GroupBox groupBoxFit;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Label labelParams1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelParams2;
@@ -776,5 +734,11 @@
         private System.Windows.Forms.ListBox listBoxFit;
         private System.Windows.Forms.Button buttonFitParameters;
         private System.Windows.Forms.CheckBox checkBoxDisableFit;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.GroupBox groupBoxMainImageType;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartY;
     }
 }

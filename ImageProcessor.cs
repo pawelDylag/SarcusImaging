@@ -164,22 +164,25 @@ namespace SarcusImaging
 
 
         /// <summary>
-        /// LOSSY conversion of short[] to byte[]. The offset of conversion is defined with offset parameter.
+        /// LOSSY conversion from ushort[] to greyscale bitmap. 
         /// </summary>
         /// <param name="original"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public static byte[] convertShortToByteArray(ushort[] original, long width, long height)
+        public static Bitmap convertArrayToGreyscaleBitmap(ushort[] original, long width, long height)
         {
-            Debug.WriteLine("convertShortToByteArray()");
             // calculate result array size
             int size = (int)height * (int)width;
             // create scale and offset func
             ushort[] minMax = getUshortMinMaxValues(original);
             float maxByteSize = (float)Byte.MaxValue;
-            // CO JESLI MIN = MAX ??
-            float scale = maxByteSize / (minMax[1] - minMax[0]);
+            // setup scale variable and check dividing by 0 condition.
+            float scale;
+            if (minMax[0] == minMax[1])
+                scale = maxByteSize;
+            else 
+                scale = maxByteSize / (minMax[1] - minMax[0]);
             Debug.WriteLine("convertShortToByteArray() : min = " + minMax[0] + ", max = " + minMax[1] + ", scale = " + scale);
             // create result array
             byte[] result = new byte[size];
@@ -189,7 +192,9 @@ namespace SarcusImaging
                 float value = (original[i] - minMax[0]) * scale;
                 result[i] = (byte)value;       
             }
-            return result;
+            Bitmap bitmap = generateBitmap(result, (int)width, (int)height, PixelFormat.Format8bppIndexed);
+            changeBitmapToGreyscale(bitmap);
+            return bitmap;
         }
 
         /// <summary>

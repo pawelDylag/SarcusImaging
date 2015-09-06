@@ -16,7 +16,7 @@ namespace SarcusImaging
     {
 
         // debug switch
-        public static readonly bool DEBUG_MODE = false;
+        public static readonly bool DEBUG_MODE = true;
 
         Thread updateCameraStatus = null;
 
@@ -24,10 +24,6 @@ namespace SarcusImaging
         {
             InitializeComponent();
             startCameraStatusUpdates();
-            if (DEBUG_MODE)
-            {
-                ImageForm.ShowForm((SarcusImaging)this.MdiParent);
-            }
         }
 
 
@@ -69,6 +65,11 @@ namespace SarcusImaging
         private void menuCameraOptions_Click(object sender, EventArgs e)
         {
             CameraControlPanel.ShowForm(this);
+            if (DEBUG_MODE)
+            {
+                ImageForm.ShowForm((SarcusImaging)this);
+                SequenceForm.ShowForm((SarcusImaging)this);
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

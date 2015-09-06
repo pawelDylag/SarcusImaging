@@ -34,11 +34,15 @@ namespace SarcusImaging
         private static ushort[] biasRawImage;
         private static ushort[] mainRawImage;
 
-        // User fit settings from fit params dialog 
+        // Main image bitmap object for drawing fit rectangles on it
+        private static Bitmap mainImageBitmap;
+
+        // User fit settings from fit params dialog and fit results 
         private FitParams fitParams;
+        private FitResults fitResults;
 
         // final image rotation
-        private static readonly RotateFlipType IMAGE_ROTATION = RotateFlipType.Rotate90FlipNone;
+        private static readonly RotateFlipType IMAGE_ROTATION = RotateFlipType.RotateNoneFlipY;
         // heatmap gradient stripe rotation
         private static readonly RotateFlipType GRADIENT_STRIPE_ROTATION = RotateFlipType.Rotate180FlipNone;
 
@@ -54,7 +58,6 @@ namespace SarcusImaging
             // hook event listeners
             CameraManager.Instance.ImageReady += this.OnImageReady;
             CameraManager.Instance.IterationEnded += this.OnIterationEnded;
-            boxPicture.MouseMove += BoxPicture_MouseMove;
             // init main gradient color palette for values 0-65535
             ImageProcessor.initHeatmapGradient();
             // generate gradient stripe
@@ -69,19 +72,6 @@ namespace SarcusImaging
    
         }
 
-        /// <summary>
-        /// Show pixel value under the cursor
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BoxPicture_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (mainRawImage != null)
-            {
-                int index = (e.Y * cameraImagingColumns + e.X);
-                labelCursorValue.Text = "" + mainRawImage[index];
-            }
-        }
 
         /// <summary>
         /// Initialize main picture charts
@@ -91,8 +81,8 @@ namespace SarcusImaging
             chartX.ChartAreas[0].AxisX.Maximum = 512;
             chartX.ChartAreas[0].AxisX.Minimum = 0;
 
-            chartY.ChartAreas[0].AxisY2.Maximum = 512;
-            chartY.ChartAreas[0].AxisY2.Minimum = 0;
+            chartY.ChartAreas[0].AxisY.Maximum = 512;
+            chartY.ChartAreas[0].AxisY.Minimum = 0;
 
         }
 
@@ -169,7 +159,7 @@ namespace SarcusImaging
         public void OnIterationEnded(object source, EventArgs a)
         {
             Debug.WriteLine("OnIterationEnded(): received event");
-            postProcessImages();
+            postProcessMainImage();
             generateNewImageName();
             saveMainRawImageToMemory();
             updateAllImages();
@@ -219,18 +209,7 @@ namespace SarcusImaging
                 if (!checkBoxDisableFit.Checked)
                 {
                     updatePixelValues();
-                    fitParams = new FitParams();
-                    fitParams.amplitude = 0.3 * 32000;
-                    fitParams.center = 215;
-                    fitParams.width = 148;
-                    fitParams.background = 0.2 * 32000;
-                    fitParams.epsF = 0;
-                    fitParams.epsX = 0;
-                    fitParams.maxIterations = 0;
-                    fitParams.diffStep = 0.00001;
-                    FitResults fitResults = ImageProcessor.fitData(mainRawImage, 512, 512, fitParams);
-                    drawFitSquare(fitResults);
-                    updateFitDataViews(fitResults);
+
 
                 }
             }
@@ -239,9 +218,9 @@ namespace SarcusImaging
         /// <summary>
         /// Generates result image from iteration sequence
         /// </summary>
-        private void postProcessImages() 
+        private void postProcessMainImage() 
         {
-            // get selected radio button
+            // get selected image postprocess type via button
             RadioButton selectedImageType = getSelectedMainImageRadioButton();
             if (selectedImageType != null)
             {
@@ -277,6 +256,15 @@ namespace SarcusImaging
                         break;
                 }
             }
+            // run fitting algorithms, get fitResults in return
+            fitResults = generateAndDisplayFitData();
+            // convert raw data to bitmap 
+            mainImageBitmap = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
+            // draw fit result rectangle on image bitmap
+            drawFitRectangle(mainImageBitmap, fitResults);
+            // rotate image bitmap to match user coords
+            mainImageBitmap.RotateFlip(IMAGE_ROTATION);
+            mainImageBitmap.Save("bitmapColor.png");
         }
 
         /// <summary>
@@ -322,10 +310,12 @@ namespace SarcusImaging
             updateMainImage();
         }
 
+        /// <summary>
+        /// Update
+        /// </summary>
         private void updatePixelValues()
         {
-            RadioButton selectedImageType = getSelectedMainImageRadioButton();
-            if (selectedImageType != null)
+            if (mainRawImage != null)
             {
                 labelMinValue.BeginInvoke(
                 new Action(() =>
@@ -341,16 +331,15 @@ namespace SarcusImaging
             }
         }
 
+
         /// <summary>
-        /// Updates main image
+        /// Updates main image with bitmap object
         /// </summary>
         public void updateMainImage()
         {
-            if (mainRawImage != null)
+            if (mainImageBitmap != null)
             {
-                Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
-                boxPicture.Image = image;
+                boxPicture.Image = mainImageBitmap;
             }
         }
 
@@ -362,7 +351,7 @@ namespace SarcusImaging
             if (biasRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(biasRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
+                image.RotateFlip(IMAGE_ROTATION);
                 biasPicture.Image = image;
             }
         }
@@ -375,7 +364,7 @@ namespace SarcusImaging
             if (backgroundRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(backgroundRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
+                image.RotateFlip(IMAGE_ROTATION);
                 backgroundPicture.Image = image;
             }
         }
@@ -388,7 +377,7 @@ namespace SarcusImaging
             if (probeBeamRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(probeBeamRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
+                image.RotateFlip(IMAGE_ROTATION);
                 probeBeamPicture.Image = image;
             }
         }
@@ -401,7 +390,7 @@ namespace SarcusImaging
             if (atomsRawImage != null)
             {
                 Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(atomsRawImage, cameraImagingColumns, cameraImagingRows);
-                image.RotateFlip(GRADIENT_STRIPE_ROTATION);
+                image.RotateFlip(IMAGE_ROTATION);
                 atomsPicture.Image = image;
             }
         }
@@ -485,34 +474,63 @@ namespace SarcusImaging
                     rawData[index++] = value; 
                 }
             }
-
+            generateNewImageName();
+            atomsRawImage = rawData;
+            updateAtomsImage();
             mainRawImage = rawData;
+            postProcessMainImage();
             updateMainImage();
             updateImageInfoViews();
+            biasRawImage = ImageProcessor.generateRandomUshortArray(512, 512, 0);
+            updateBiasImage();
+            probeBeamRawImage = rawData;
+            updateProbeBeamImage();
+            backgroundRawImage = ImageProcessor.generateRandomUshortArray(512, 512, 0); ;
+            updateBackgroundImage();
+
 
         }
 
         /// <summary>
         /// Launch fitting operation and display results on screen
         /// </summary>
-        private void generateAndDisplayFitData ()
+        private FitResults generateAndDisplayFitData ()
         {
-            if (mainRawImage != null && fitParams != null)
+            FitResults result = new FitResults();
+            if (mainRawImage != null)
             {
-                
+                fitParams = new FitParams();
+                fitParams.amplitude = 0.3 * 32000;
+                fitParams.center = 215;
+                fitParams.width = 148;
+                fitParams.background = 0.2 * 32000;
+                fitParams.epsF = 0;
+                fitParams.epsX = 0;
+                fitParams.maxIterations = 0;
+                fitParams.diffStep = 0.00001;
+                // main fitting procedure
+                result = ImageProcessor.fitData(mainRawImage, 512, 512, fitParams);
+                // display results on screen
+                updateFitDataViews(result);
             }
+            return result;
         }
 
-        private void drawFitSquare(FitResults fit)
+        /// <summary>
+        /// Draws rectangle with fit width, height and central point
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="fit"></param>
+        /// <returns></returns>
+        private Bitmap drawFitRectangle(Bitmap bitmap, FitResults fit)
         {
-            Bitmap image = ImageProcessor.convertArrayToHeatmapBitmap(mainRawImage, cameraImagingColumns, cameraImagingRows);
-            //image.RotateFlip(GRADIENT_STRIPE_ROTATION);
-            using (Graphics g = Graphics.FromImage(image))
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
-
-                g.DrawRectangle(new Pen(Color.Black), (int)fit.centerX, (int)fit.centerY, (int)fit.widthX, (int)fit.widthY);
+                int centerY = (int)fit.centerY - ((int)fit.widthY)/2;
+                int centerX = (int)fit.centerX - ((int)fit.widthX) / 2;
+                g.DrawRectangle(new Pen(Color.Black), centerY , centerX, (int)fit.widthY, (int)fit.widthX);
             }
-            boxPicture.Image = image;
+            return bitmap;
         }
 
         /// <summary>
@@ -659,10 +677,11 @@ namespace SarcusImaging
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            if (!SarcusImaging.DEBUG_MODE)
+            if (SarcusImaging.DEBUG_MODE)
             {
                 loadTestDataOnClick();
             }
+            buttonTest.Visible = false;
         }
 
         private void label8_Click(object sender, EventArgs e)
@@ -671,6 +690,21 @@ namespace SarcusImaging
         }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void chartY_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelCursorValue_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
         }
