@@ -76,4 +76,3 @@ C:\Users\Paweł\Documents\GitHub\SarcusImaging\obj\Debug\SarcusImaging.pdb
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\bin\Debug\SarcusImaging.exe.config
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\bin\Debug\SarcusImaging.exe
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\bin\Debug\SarcusImaging.pdb
-C:\Users\Paweł\Documents\GitHub\SarcusImaging\bin\Debug\alglibnet2.dll

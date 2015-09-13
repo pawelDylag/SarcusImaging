@@ -16,7 +16,7 @@ namespace SarcusImaging
     {
 
         // debug switch
-        public static readonly bool DEBUG_MODE = true;
+        public static readonly bool DEBUG_MODE = false;
 
         Thread updateCameraStatus = null;
 

@@ -22,7 +22,7 @@ namespace SarcusImaging
             // lock control tabs while camera is not selected
             if (!CameraManager.Instance.isCameraConnected())
             {
-                //lockTabs(true);
+                lockTabs(true);
             }
             setDefaultConfiguration();
         }
