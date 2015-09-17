@@ -203,9 +203,12 @@ namespace SarcusImaging
                 ImageForm.ShowForm((SarcusImaging)this.MdiParent);
             });
             buttonStop.Enabled = true;
-            CameraManager.Instance.executeSequencePlan(sequencePlan);
-            //CameraManager.Instance.executeDebugSequence();
-            //CameraManager.Instance.measureImagingTimes();
+            if (sequencePlan != null && sequencePlan.size() > 0)
+            {
+                CameraManager.Instance.executeSequencePlan(sequencePlan);
+            }
+            
+
         }
 
 

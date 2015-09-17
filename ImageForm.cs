@@ -224,7 +224,8 @@ namespace SarcusImaging
             RadioButton selectedImageType = getSelectedMainImageRadioButton();
             if (selectedImageType != null)
             {
-                switch (selectedImageType.Name)
+                Debug.WriteLine(" SelectedImagetype = " + selectedImageType.Text);
+                switch (selectedImageType.Text)
                 {
                     case "Absorptive":
                         if (atomsRawImage != null && biasRawImage != null)
@@ -238,21 +239,39 @@ namespace SarcusImaging
 
                             }
                         }
+                        else if (atomsRawImage != null)
+                        {
+                            mainRawImage = atomsRawImage;
+                        }
+                        else mainRawImage = biasRawImage;
                         break;
                     case "Fluorescent":
-                        if (atomsRawImage != null && biasRawImage != null && probeBeamRawImage != null && backgroundRawImage != null)
+                        if (atomsRawImage != null && biasRawImage != null && backgroundRawImage != null)
                         {
                             mainRawImage = new ushort[cameraImagingColumns * cameraImagingRows];
                             for (int i = 0; i < mainRawImage.Length; i++)
                             {
-                                int value = atomsRawImage[i] - biasRawImage[i];
+                                int value = backgroundRawImage[i] - biasRawImage[i];
                                 if (value < 0) value = 0;
                                 mainRawImage[i] = (ushort)value;
                             }
                         }
+                        else if (biasRawImage != null)
+                        {
+                            mainRawImage = biasRawImage;
+                        }
+                        else mainRawImage = atomsRawImage;
                         break;
                     default:
-                        mainRawImage = atomsRawImage;
+                        if (atomsRawImage != null && biasRawImage != null)
+                        {
+                            mainRawImage = atomsRawImage;
+                        } 
+                        else if  (biasRawImage != null)
+                        {
+                            mainRawImage = biasRawImage;
+                        }
+                        else mainRawImage = atomsRawImage;
                         break;
                 }
             }
@@ -682,11 +701,11 @@ namespace SarcusImaging
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            if (SarcusImaging.DEBUG_MODE)
+            if (!SarcusImaging.DEBUG_MODE)
             {
                 loadTestDataOnClick();
             }
-            buttonTest.Visible = false;
+            buttonTest.Visible = true;
         }
 
         private void label8_Click(object sender, EventArgs e)
@@ -712,6 +731,11 @@ namespace SarcusImaging
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+        
         }
     }
 }

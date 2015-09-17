@@ -903,41 +903,17 @@
   <data name="&gt;&gt;numericUpDownTimeSequence.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="progressBarSequence.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 118</value>
-  </data>
-  <data name="progressBarSequence.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="progressBarSequence.Size" type="System.Drawing.Size, System.Drawing">
-    <value>195, 15</value>
-  </data>
-  <data name="progressBarSequence.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;progressBarSequence.Name" xml:space="preserve">
-    <value>progressBarSequence</value>
-  </data>
-  <data name="&gt;&gt;progressBarSequence.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;progressBarSequence.Parent" xml:space="preserve">
-    <value>groupBoxImage</value>
-  </data>
-  <data name="&gt;&gt;progressBarSequence.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="buttonStartSequence.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="buttonStartSequence.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 143</value>
+    <value>37, 111</value>
   </data>
   <data name="buttonStartSequence.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonStartSequence.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 21</value>
+    <value>70, 53</value>
   </data>
   <data name="buttonStartSequence.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -955,19 +931,19 @@
     <value>groupBoxImage</value>
   </data>
   <data name="&gt;&gt;buttonStartSequence.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="buttonStopSequence.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="buttonStopSequence.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 143</value>
+    <value>111, 111</value>
   </data>
   <data name="buttonStopSequence.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="buttonStopSequence.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 21</value>
+    <value>70, 53</value>
   </data>
   <data name="buttonStopSequence.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -985,7 +961,7 @@
     <value>groupBoxImage</value>
   </data>
   <data name="&gt;&gt;buttonStopSequence.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="textBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>11, 33</value>
@@ -1009,7 +985,7 @@
     <value>groupBoxImage</value>
   </data>
   <data name="&gt;&gt;textBox1.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1039,7 +1015,7 @@
     <value>groupBoxImage</value>
   </data>
   <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1069,7 +1045,7 @@
     <value>groupBoxImage</value>
   </data>
   <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="numericUpDownImageCount.Location" type="System.Drawing.Point, System.Drawing">
     <value>130, 62</value>
@@ -1090,7 +1066,7 @@
     <value>groupBoxImage</value>
   </data>
   <data name="&gt;&gt;numericUpDownImageCount.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="groupBoxImage.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>

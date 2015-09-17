@@ -48,6 +48,7 @@
             this.labelMinValue = new System.Windows.Forms.Label();
             this.labelMainImageName = new System.Windows.Forms.Label();
             this.groupBoxFit = new System.Windows.Forms.GroupBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.buttonFitParameters = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
@@ -74,7 +75,6 @@
             this.groupBoxMainImageType = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.chartY = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.boxPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.biasPicture)).BeginInit();
@@ -296,6 +296,15 @@
             this.groupBoxFit.TabStop = false;
             this.groupBoxFit.Text = "Fit parameters";
             this.groupBoxFit.Enter += new System.EventHandler(this.groupBox7_Enter);
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(9, 147);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(373, 67);
+            this.richTextBox1.TabIndex = 11;
+            this.richTextBox1.Text = "";
             // 
             // buttonFitParameters
             // 
@@ -533,7 +542,7 @@
             // 
             // buttonTest
             // 
-            this.buttonTest.Location = new System.Drawing.Point(1011, 8);
+            this.buttonTest.Location = new System.Drawing.Point(1020, 8);
             this.buttonTest.Name = "buttonTest";
             this.buttonTest.Size = new System.Drawing.Size(101, 23);
             this.buttonTest.TabIndex = 18;
@@ -549,7 +558,7 @@
             this.radioButton1.Size = new System.Drawing.Size(75, 17);
             this.radioButton1.TabIndex = 1;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Absorbtive";
+            this.radioButton1.Text = "Absorptive";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
@@ -634,14 +643,6 @@
             this.chartY.Size = new System.Drawing.Size(150, 512);
             this.chartY.TabIndex = 20;
             this.chartY.Text = "chartY";
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(9, 147);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(373, 67);
-            this.richTextBox1.TabIndex = 11;
-            this.richTextBox1.Text = "";
             // 
             // ImageForm
             // 

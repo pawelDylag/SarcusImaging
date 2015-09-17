@@ -67,6 +67,7 @@ namespace SarcusImaging
                 comboBoxLedOptions.SelectedIndex = 0;
                 comboBoxStatusLedA.SelectedIndex = 0;
                 comboBoxStatusLedB.SelectedIndex = 0;
+                ((SarcusImaging)MdiParent).lockTabs(false);
             }
         }
 
@@ -77,7 +78,6 @@ namespace SarcusImaging
         {
             updateTextBoxModel();
             updateTextBoxCameraConnectionStatus();
-            CameraManager.Instance.ImageReady += this.OnImageReady;
         }
 
         private void setLedMode(APOGEELib.Apn_LedMode mode)
@@ -377,7 +377,6 @@ namespace SarcusImaging
         private void CameraControlPanel_FormClosed(object sender, EventArgs e)
         {
             openedWindow = null;
-            CameraManager.Instance.ImageReady -= this.OnImageReady;
         }
 
         private void radioButton8_CheckedChanged(object sender, EventArgs e)
@@ -437,52 +436,20 @@ namespace SarcusImaging
 
         private void buttonStartSequence_Click(object sender, EventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("buttonStartSequence_Click()");
-            //int imageCount = (int) numericUpDownImageCount.Value;
-            //double exposeTime = (double)numericUpDownTimeSequence.Value;
-            //// set progress bar 
-            //progressBarSequence.Style = ProgressBarStyle.Blocks;
-            //progressBarSequence.Maximum = imageCount;
-            //progressBarSequence.Value = 0;
-            //progressBarSequence.Step = 1;
-            //// unlock "stop" button
-            //buttonStopSequence.Enabled = true;
-            //// show image form if not visible
+
             showImageForm();
-            // start imaging bg thread
-            Thread backgroundThread = new Thread(
-            new ThreadStart(() =>
+            // start imaging sequence
+            SequencePlan plan = new SequencePlan();
+            plan.addItem(new SequenceItem(0, SequenceItem.types.TYPE_SEQUENCE, (double) numericUpDownTimeSequence.Value, (int) numericUpDownImageCount.Value, 0, "debug"));
+            plan.iterations = 1;
+            CameraManager.Instance.executeSequencePlan(plan);
+            // lock again stop button
+            buttonStopSequence.BeginInvoke(
+            new Action(() =>
             {
-                // start imaging sequence
-                // CameraManager.Instance.startSequence(exposeTime, true, imageCount);
-                SequencePlan plan = new SequencePlan();
-                plan.setDebugPlan();
-                CameraManager.Instance.executeSequencePlan(plan);
-                // lock again stop button
-                buttonStopSequence.BeginInvoke(
-                new Action(() =>
-                {
-                    buttonStopSequence.Enabled = false;
-                }));
+                buttonStopSequence.Enabled = false;
+            }));
 
-                // Set progress bar value to 0
-                progressBarSequence.BeginInvoke(
-                new Action(() =>
-                { 
-                    progressBarSequence.Value = 0;
-                }));
-            }
-            ));
-            backgroundThread.Start();
-        }
-
-        public void OnImageReady(object source, ImageReadyArgs a)
-        {
-            progressBarSequence.BeginInvoke(
-                new Action(() =>
-                {
-                    progressBarSequence.PerformStep();
-                }));
         }
 
         private void buttonStop_Click(object sender, EventArgs e)

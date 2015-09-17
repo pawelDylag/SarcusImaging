@@ -58,8 +58,6 @@ C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusIma
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.csproj.GenerateResource.Cache
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\SarcusImaging\obj\Debug\SarcusImaging.ImageForm.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.ImageForm.resources
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\Accord.dll.config
-C:\Users\Dinnaug\Source\Repos\SarcusImaging\obj\Debug\SarcusImaging.FitParamsDialogBox.resources
 C:\Users\Dinnaug\Source\Repos\SarcusImaging\bin\Debug\alglibnet2.dll
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\obj\Debug\SarcusImaging.csprojResolveAssemblyReference.cache
 C:\Users\Paweł\Documents\GitHub\SarcusImaging\obj\Debug\Interop.APOGEELib.dll

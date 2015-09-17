@@ -24,6 +24,7 @@ namespace SarcusImaging
         {
             InitializeComponent();
             startCameraStatusUpdates();
+            lockTabs(true);
         }
 
 
@@ -69,6 +70,20 @@ namespace SarcusImaging
             {
                 ImageForm.ShowForm((SarcusImaging)this);
                 SequenceForm.ShowForm((SarcusImaging)this);
+            }
+        }
+
+        public void lockTabs(bool locked)
+        {
+            if (locked)
+            {
+                sequenceSetupToolStripMenuItem.Enabled = false;
+                imageViewToolStripMenuItem.Enabled = false;
+            }
+            else
+            {
+                sequenceSetupToolStripMenuItem.Enabled = true;
+                imageViewToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -137,6 +152,16 @@ namespace SarcusImaging
         private void toolStripStatusLabel3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void sequenceSetupToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            SequenceForm.ShowForm(this);
+        }
+
+        private void imageViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImageForm.ShowForm(this);
         }
     }
 }

@@ -63,7 +63,6 @@
             this.groupBoxImage = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.numericUpDownTimeSequence = new System.Windows.Forms.NumericUpDown();
-            this.progressBarSequence = new System.Windows.Forms.ProgressBar();
             this.buttonStartSequence = new System.Windows.Forms.Button();
             this.buttonStopSequence = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -354,7 +353,6 @@
             // 
             this.groupBoxImage.Controls.Add(this.label8);
             this.groupBoxImage.Controls.Add(this.numericUpDownTimeSequence);
-            this.groupBoxImage.Controls.Add(this.progressBarSequence);
             this.groupBoxImage.Controls.Add(this.buttonStartSequence);
             this.groupBoxImage.Controls.Add(this.buttonStopSequence);
             this.groupBoxImage.Controls.Add(this.textBox1);
@@ -386,12 +384,6 @@
             0,
             0,
             0});
-            // 
-            // progressBarSequence
-            // 
-            resources.ApplyResources(this.progressBarSequence, "progressBarSequence");
-            this.progressBarSequence.Name = "progressBarSequence";
-            this.progressBarSequence.Click += new System.EventHandler(this.progressBarSequence_Click);
             // 
             // buttonStartSequence
             // 
@@ -552,7 +544,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button buttonStartSequence;
         private System.Windows.Forms.Button buttonStopSequence;
-        private System.Windows.Forms.ProgressBar progressBarSequence;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown numericUpDownTimeSequence;
 

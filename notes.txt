@@ -1,16 +1,7 @@
-1. Zrobic fitowanie funkcji gaussa do wynikowego zdjecia - znalezc biblioteke, lub zaimplementowac samemu. 
-	Bo wyfitowaniu nalezy wyswietlic parametry, tj. średnią wartość piksela i odchylenie standardowe.
-2. Wyswietlic te wyniki po skonczeniu iteracji
-3. Zapisywanie zdjec - plik z czystymi danymi po obrobce + plik z informacjami i parametrami fita.
-4. Poprawic progress bar w sequence ->  moze polaczyc SequenceForm i SingleImage Form?
+Poprawki na dzien 17.09.2015
 
-
-Linki:
-http://jonisalonen.com/2013/deriving-welfords-method-for-computing-variance/
-http://jonisalonen.com/2013/deriving-welfords-method-for-computing-variance/
-
-1.09.2015:
-
-- Dol zdjecia jest jego lewa strona - poprawic
-- Zrobic on sequence start Args i przekazywac je do progress bara w toolStripe
-- Dolny chart pokazuje wartosci absolutne, a nie w zakresie obrazka
+- Miejsca po przecinku w fitowaniu
+- Dzialania na obrazach - absorptive, fluorescent i tak dalej - co jesli zdjecia sa pojedyncze? 
+Sam Bias? Albo najpierw bias+atoms a potem atoms - wtedy brany jest stary bias. Ogarnąć to!
+- ujemne wartości fitu - nie rysuje sie kwadrat 
+- Fit progress nie dziala - dodac EventHandler

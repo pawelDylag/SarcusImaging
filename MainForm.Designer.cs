@@ -32,12 +32,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuItemCamera = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCameraOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sequenceSetupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -58,7 +60,9 @@
             // menuItemCamera
             // 
             this.menuItemCamera.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCameraOptions});
+            this.menuCameraOptions,
+            this.sequenceSetupToolStripMenuItem,
+            this.imageViewToolStripMenuItem});
             this.menuItemCamera.Name = "menuItemCamera";
             this.menuItemCamera.Size = new System.Drawing.Size(60, 20);
             this.menuItemCamera.Text = "Camera";
@@ -67,9 +71,15 @@
             // menuCameraOptions
             // 
             this.menuCameraOptions.Name = "menuCameraOptions";
-            this.menuCameraOptions.Size = new System.Drawing.Size(152, 22);
+            this.menuCameraOptions.Size = new System.Drawing.Size(157, 22);
             this.menuCameraOptions.Text = "Control Panel";
             this.menuCameraOptions.Click += new System.EventHandler(this.menuCameraOptions_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
             // 
             // statusStrip
             // 
@@ -114,11 +124,19 @@
             this.toolStripProgressBar.Size = new System.Drawing.Size(200, 16);
             this.toolStripProgressBar.ToolTipText = "Imaging progress";
             // 
-            // aboutToolStripMenuItem
+            // sequenceSetupToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.sequenceSetupToolStripMenuItem.Name = "sequenceSetupToolStripMenuItem";
+            this.sequenceSetupToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.sequenceSetupToolStripMenuItem.Text = "Sequence setup";
+            this.sequenceSetupToolStripMenuItem.Click += new System.EventHandler(this.sequenceSetupToolStripMenuItem_Click_1);
+            // 
+            // imageViewToolStripMenuItem
+            // 
+            this.imageViewToolStripMenuItem.Name = "imageViewToolStripMenuItem";
+            this.imageViewToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.imageViewToolStripMenuItem.Text = "Image view";
+            this.imageViewToolStripMenuItem.Click += new System.EventHandler(this.imageViewToolStripMenuItem_Click);
             // 
             // SarcusImaging
             // 
@@ -156,6 +174,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sequenceSetupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem imageViewToolStripMenuItem;
     }
 }
 
