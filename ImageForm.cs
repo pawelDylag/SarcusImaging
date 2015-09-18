@@ -236,7 +236,6 @@ namespace SarcusImaging
                                 int value = atomsRawImage[i] - biasRawImage[i];
                                 if (value < 0) value = 0;
                                 mainRawImage[i] = (ushort)value;
-
                             }
                         }
                         else if (atomsRawImage != null)
@@ -293,8 +292,8 @@ namespace SarcusImaging
         {
             if (mainRawImage != null)
             {
-                using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\Users\Dinnaug\Documents\Visual Studio 2015\Debug\data.txt"))
+                using (StreamWriter file =
+                new StreamWriter(@"C:\Users\Dinnaug\Documents\Visual Studio 2015\Debug\data.txt"))
                 {
                     foreach (ushort b in mainRawImage)
                     {
@@ -545,7 +544,7 @@ namespace SarcusImaging
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                int centerY = (int)fit.centerY - ((int)fit.widthY)/2;
+                int centerY = (int)fit.centerY - ((int)fit.widthY) / 2;
                 int centerX = (int)fit.centerX - ((int)fit.widthX) / 2;
                 g.DrawRectangle(new Pen(Color.Black), centerY , centerX, (int)fit.widthY, (int)fit.widthX);
             }
@@ -558,45 +557,45 @@ namespace SarcusImaging
         /// <param name="fitResults"></param>
         private void updateFitDataViews(FitResults fitResults)
         {
-            labelParams1.BeginInvoke(
+            textParams1.BeginInvoke(
                new Action(() =>
                {
-                   labelParams1.Text = fitResults.amplitudeX.ToString();
+                   textParams1.Text = Math.Round(fitResults.amplitudeX, 2).ToString();
                }));
-            labelParams2.BeginInvoke(
+            textParams2.BeginInvoke(
                new Action(() =>
                {
-                   labelParams2.Text = fitResults.centerX.ToString();
+                   textParams2.Text = Math.Round(fitResults.centerX, 2).ToString();
                }));
-            labelParams3.BeginInvoke(
+            textParams3.BeginInvoke(
                new Action(() =>
                {
-                   labelParams3.Text = fitResults.widthX.ToString();
+                   textParams3.Text = Math.Round(fitResults.widthX, 2).ToString();
                }));
-            labelParams4.BeginInvoke(
+            textParams4.BeginInvoke(
                new Action(() =>
                {
-                   labelParams4.Text = fitResults.backgroundX.ToString();
+                   textParams4.Text = Math.Round(fitResults.backgroundX, 2).ToString();
                }));
-            labelParams5.BeginInvoke(
+            textParams5.BeginInvoke(
                new Action(() =>
                {
-                   labelParams5.Text = fitResults.amplitudeY.ToString();
+                   textParams5.Text = Math.Round(fitResults.amplitudeY, 2).ToString();
                }));
-            labelParams6.BeginInvoke(
+            textParams6.BeginInvoke(
                new Action(() =>
                {
-                   labelParams6.Text = fitResults.centerY.ToString();
+                   textParams6.Text = Math.Round(fitResults.centerY, 2).ToString();
                }));
-            labelParams7.BeginInvoke(
+            textParams7.BeginInvoke(
                new Action(() =>
                {
-                   labelParams7.Text = fitResults.widthY.ToString();
+                   textParams7.Text = Math.Round(fitResults.widthY, 2).ToString();
                }));
-            labelParams8.BeginInvoke(
+            textParams8.BeginInvoke(
                new Action(() =>
                {
-                   labelParams8.Text = fitResults.backgroundY.ToString();
+                   textParams8.Text = Math.Round(fitResults.backgroundY, 2).ToString();
                }));
             richTextBox1.BeginInvoke(
                new Action(() =>
