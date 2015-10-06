@@ -1,8 +1,12 @@
-Poprawki na dzien 17.09.2015
+Poprawki do wykonania na dzien 17.09.2015
 
 - Miejsca po przecinku w fitowaniu
 - Dzialania na obrazach - absorptive, fluorescent i tak dalej - co jesli zdjecia sa pojedyncze? 
 Sam Bias? Albo najpierw bias+atoms a potem atoms - wtedy brany jest stary bias. Ogarnąć to!
 - ujemne wartości fitu - nie rysuje sie kwadrat 
 - Fit progress nie dziala - dodac EventHandler
-- Observer i Reactive na asynchroniczne przetwarzanie danych 
+- Observer i Reactive na asynchroniczne przetwarzanie danych
+
+Poprawki do wykonania w dniu 06.10.2015
+
+- disconnect camery o ponowne laczenie powoduje crash przy robieniu zdjec

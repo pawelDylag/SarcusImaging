@@ -106,6 +106,18 @@ namespace SarcusImaging
         }
 
         /// <summary>
+        /// This method ensures that only one dialog is opened at given time
+        /// </summary>
+        public static void hideForm()
+        {
+            if (openedWindow != null)
+            {
+                openedWindow.Close();
+                openedWindow = null;
+            }
+        }
+
+        /// <summary>
         /// Shows bitmap inside pictureBox
         /// </summary>
         /// <param name="bitmap"></param>

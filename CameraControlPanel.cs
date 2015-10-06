@@ -142,20 +142,37 @@ namespace SarcusImaging
             });
         }
 
-        private void showImageForm()
-        { 
-            openedWindow.Invoke((MethodInvoker)delegate()
+        private void showImageForm(Boolean show)
+        {
+            if (show) {
+                openedWindow.Invoke((MethodInvoker)delegate ()
+                {
+                    ImageForm.ShowForm((SarcusImaging)this.MdiParent);
+                });
+            } else
             {
-                ImageForm.ShowForm((SarcusImaging)this.MdiParent);
-            });
+                openedWindow.Invoke((MethodInvoker)delegate ()
+                {
+                    ImageForm.hideForm();
+                });
+            }
         }
 
-        private void showSequenceForm()
+        private void showSequenceForm(Boolean show)
         {
-            openedWindow.Invoke((MethodInvoker)delegate ()
+            if (show)
             {
-                SequenceForm.ShowForm((SarcusImaging)this.MdiParent);
-            });
+                openedWindow.Invoke((MethodInvoker)delegate ()
+                {
+                    SequenceForm.ShowForm((SarcusImaging)this.MdiParent);
+                });
+            } else
+            {
+                openedWindow.Invoke((MethodInvoker)delegate ()
+                {
+                    SequenceForm.hideForm();
+                });
+            }
         }
 
 
@@ -217,16 +234,40 @@ namespace SarcusImaging
         private void buttonFindNewCamera_Click(object sender, EventArgs e)
         {
             CameraManager cameraManager = CameraManager.Instance;
-            bool isSelected = cameraManager.showCameraSelectionDialog();
-            if (isSelected)
+            if (!cameraManager.isCameraConnected())
             {
-                lockTabs(false);
-                showImageForm();
-                showSequenceForm();
+                bool isSelected = cameraManager.showCameraSelectionDialog();
+                if (isSelected)
+                {
+                    lockTabs(false);
+                    showImageForm(true);
+                    showSequenceForm(true);
+                    changeConnectButtonState(false);
+                    updateTextBoxModel();
+                    updateTextBoxCameraConnectionStatus();
+                    ((SarcusImaging)MdiParent).startCameraStatusUpdates();
+                }
+            } else
+            {
+                ((SarcusImaging)MdiParent).stopCameraStatusUpdates();
+                showImageForm(false);
+                showSequenceForm(false);
+                cameraManager.disconnectCamera();
+                changeConnectButtonState(true);
+                lockTabs(true);
             }
-            updateTextBoxModel();
-            updateTextBoxCameraConnectionStatus();
-
+        }
+        
+        /// <summary>
+        /// Changes connect button text depending on camera connection status
+        /// </summary>
+        /// <param name="boolean"></param>
+        private void changeConnectButtonState(Boolean boolean)
+        {
+            if (boolean)
+                buttonFindNewCamera.Text = "Connect";
+            else
+                buttonFindNewCamera.Text = "Disconnect";
         }
 
         private void radioButton5_CheckedChanged(object sender, EventArgs e)
@@ -437,7 +478,7 @@ namespace SarcusImaging
         private void buttonStartSequence_Click(object sender, EventArgs e)
         {
 
-            showImageForm();
+            showImageForm(true);
             // start imaging sequence
             SequencePlan plan = new SequencePlan();
             plan.addItem(new SequenceItem(0, SequenceItem.types.TYPE_SEQUENCE, (double) numericUpDownTimeSequence.Value, (int) numericUpDownImageCount.Value, 0, "debug"));

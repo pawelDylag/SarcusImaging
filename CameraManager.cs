@@ -66,6 +66,23 @@ namespace SarcusImaging
         }
 
         /// <summary>
+        /// Performs camera disconnection
+        /// </summary>
+        /// <returns>True if disconnection was successful</returns>
+        public Boolean disconnectCamera()
+        {
+            Boolean result = false;
+            if (isCameraConnected())
+            {
+                camera.Close();
+                camera = new Camera2();
+                cameraFinder = new CamDiscover();
+                result = true;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Getter of camera object
         /// </summary>
         /// <returns></returns>

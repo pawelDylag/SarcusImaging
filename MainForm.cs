@@ -23,7 +23,6 @@ namespace SarcusImaging
         public SarcusImaging()
         {
             InitializeComponent();
-            startCameraStatusUpdates();
             lockTabs(true);
         }
 
@@ -97,7 +96,7 @@ namespace SarcusImaging
 
         }
 
-        private void startCameraStatusUpdates() {
+        public void startCameraStatusUpdates() {
             this.updateCameraStatus = new Thread(
             new ThreadStart(() =>
             {
@@ -112,7 +111,7 @@ namespace SarcusImaging
             updateCameraStatus.Start();
         }
 
-        private void stopCameraStatusUpdates()
+        public void stopCameraStatusUpdates()
         {
             if (this.updateCameraStatus != null)
             {

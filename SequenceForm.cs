@@ -40,6 +40,18 @@ namespace SarcusImaging
             }
         }
 
+        /// <summary>
+        /// Hides form 
+        /// </summary>
+        public static void hideForm()
+        {
+            if (openedWindow != null)
+            {
+                openedWindow.Close();
+                openedWindow = null;
+            }
+        }
+
         private void initList()
         {
             ArrayList row = new ArrayList();
